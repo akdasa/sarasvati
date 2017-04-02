@@ -87,3 +87,7 @@ class DatabasePlugin(Plugin):
     def get(self):
         pass
 
+
+class CommandsPlugin:
+    def get_commands(self):
+        pass

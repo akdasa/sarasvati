@@ -2,4 +2,8 @@ from api.plugins import DatabasePlugin
 
 
 class LocalDatabasePlugin(DatabasePlugin):
-    pass
+    def create(self):
+        print("created")
+
+    def delete(self):
+        print("deleted")
