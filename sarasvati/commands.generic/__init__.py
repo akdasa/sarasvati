@@ -1,8 +1,19 @@
 from api.plugins import CommandsPlugin
-from .commands import CreateCommand, DeleteCommand
+from .commands import CreateCommand, DeleteCommand, SetTitleCommand, ActivateThoughtCommand
 
 
 class GenericCommandsPlugin(CommandsPlugin):
-    def get_commands(self):
-        return [CreateCommand, DeleteCommand]
+    def parse(self, prompt, api):
+        tokens = prompt.split(" ")
+        command_name = tokens[0]
 
+        if command_name == "title":
+            return SetTitleCommand(api.active_thought, tokens[1])
+        elif command_name == "create":
+            return CreateCommand(tokens[1])
+        elif command_name == "delete":
+            thought = api.database.find(tokens[1])
+            return DeleteCommand(thought)
+        elif command_name == "activate":
+            thought = api.database.find(tokens[1])
+            return ActivateThoughtCommand(thought)

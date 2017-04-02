@@ -78,10 +78,10 @@ class DatabasePlugin(Plugin):
     def update(self):
         pass
 
-    def delete(self):
+    def delete(self, thought):
         pass
 
-    def find(self):
+    def find(self, query):
         pass
 
     def get(self):
@@ -89,5 +89,5 @@ class DatabasePlugin(Plugin):
 
 
 class CommandsPlugin:
-    def get_commands(self):
+    def parse(self, query, api):
         pass
