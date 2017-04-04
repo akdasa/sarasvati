@@ -1,0 +1,8 @@
+[Core]
+Name = Application.Console.Commands
+Module = application.console.commands
+
+[Documentation]
+Author = Advaita Krishna das
+Version = 0.1
+Description = Provides basic console interface

@@ -33,7 +33,9 @@ class Processor:
 
     def __parse_line(self, prompt):
         for plugin in self.__plugins:
-            return plugin.parse(prompt, self.__api)
+            command = plugin.parse(prompt, self.__api)
+            if command:
+                return command
 
     def __revert_command(self, command):
         command.revert(self.__api)

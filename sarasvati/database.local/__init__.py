@@ -16,6 +16,8 @@ class LocalDatabasePlugin(DatabasePlugin):
         self.__cache.remove(thought)
 
     def find(self, query):
+        if query is None:
+            return self.__cache.copy()
         for t in self.__cache:
             if t.title == query:
                 return t
