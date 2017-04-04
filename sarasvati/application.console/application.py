@@ -1,28 +1,26 @@
 from api.commands import CommandApi
+from .processor import Processor
 
 
 class SarasvatiConsoleApplication:
     __QUIT_COMMAND = "quit"
 
     def __init__(self, database_plugin, command_plugins):
-        self.__command_plugins = command_plugins
-        self.__command_api = CommandApi(database_plugin)
+        """
+        Initializes new instance of the SarasvatiConsoleApplication class.
+        :type command_plugins: [CommandsPlugin]
+        :type database_plugin: DatabasePlugin
+        :param database_plugin: Database 
+        :param command_plugins: Commands
+        """
+        command_api = CommandApi(database_plugin)
+        self.__processor = Processor(command_plugins, command_api)
 
     def run(self):
+        """
+        Starts application
+        """
         query = None
         while query != self.__QUIT_COMMAND:
-            query = input(self.__prompt())
-            self.__execute_commands(query, self.__command_plugins)
-
-    def __execute_commands(self, prompt, plugins):
-        for plugin in plugins:
-            command = plugin.parse(prompt, self.__command_api)
-            if command:
-                command.execute(self.__command_api)
-            else:
-                print("Unknown command")
-
-    def __prompt(self):
-        if self.__command_api.active_thought:
-            return str(self.__command_api.active_thought.title) + "> "
-        return "> "
+            query = input(self.__processor.prompt)
+            self.__processor.execute(query)

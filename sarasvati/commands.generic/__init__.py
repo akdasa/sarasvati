@@ -1,5 +1,5 @@
 from api.plugins import CommandsPlugin
-from .commands import CreateCommand, DeleteCommand, SetTitleCommand, ActivateThoughtCommand
+from .commands import CreateCommand, DeleteCommand, SetTitleCommand, ActivateThoughtCommand, SetDescriptionCommand
 
 
 class GenericCommandsPlugin(CommandsPlugin):
@@ -9,6 +9,8 @@ class GenericCommandsPlugin(CommandsPlugin):
 
         if command_name == "title":
             return SetTitleCommand(api.active_thought, tokens[1])
+        if command_name == "description":
+            return SetDescriptionCommand(api.active_thought, tokens[1])
         elif command_name == "create":
             return CreateCommand(tokens[1])
         elif command_name == "delete":

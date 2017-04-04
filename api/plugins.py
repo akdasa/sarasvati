@@ -88,6 +88,6 @@ class DatabasePlugin(Plugin):
         pass
 
 
-class CommandsPlugin:
+class CommandsPlugin(Plugin):
     def parse(self, query, api):
         pass

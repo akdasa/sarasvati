@@ -7,8 +7,8 @@ class SarasvatiConsoleApplicationPlugin(ApplicationPlugin):
 
     def __init__(self):
         super().__init__()
-        self.__database = None
         self.__application = None
+        self.__database = None
         self.__commands = None
 
     def activate(self):

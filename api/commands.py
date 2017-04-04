@@ -1,8 +1,24 @@
+from abc import abstractmethod
+
+
 class Command:
+    """Provides basic command interface"""
+    @abstractmethod
     def execute(self, api):
+        """
+        Executes command
+        :type api: CommandApi
+        :param api: api object
+        """
         pass
 
+    @abstractmethod
     def revert(self, api):
+        """
+        Reverts changes
+        :type api: CommandApi
+        :param api: api object
+        """
         pass
 
 

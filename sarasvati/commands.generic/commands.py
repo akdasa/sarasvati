@@ -52,3 +52,19 @@ class SetTitleCommand(Command):
 
     def revert(self, api):
         self.__thought.title = self.__old_title
+
+
+class SetDescriptionCommand(Command):
+    def __init__(self, thought, description):
+        if thought is None:
+            raise ValueError("Thought is none")
+        self.__thought = thought
+        self.__new_description = description
+        self.__old_description = thought.description
+
+    def execute(self, api):
+        self.__thought.description = self.__new_description
+
+    def revert(self, api):
+        self.__thought.description = self.__old_description
+
