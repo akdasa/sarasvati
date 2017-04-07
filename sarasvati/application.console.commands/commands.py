@@ -7,7 +7,7 @@ class ListCommand(Command):
 
     def execute(self):
         for thought in self._api.database.find(None) or []:
-            print(thought.title)
+            print("{}: {}".format(thought.title, thought.description))
 
     def revert(self):
         pass
