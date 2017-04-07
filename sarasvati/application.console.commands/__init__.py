@@ -3,9 +3,6 @@ from .commands import ListCommand
 
 
 class ApplicationConsoleCommandsPlugin(CommandsPlugin):
-    def parse(self, prompt, api):
-        tokens = prompt.split(" ")
-        command_name = tokens[0]
-
-        if command_name == "ls":
-            return ListCommand()
+    def __init__(self):
+        super().__init__()
+        self._register_console_command("ls", ListCommand)

@@ -14,7 +14,8 @@ class SarasvatiConsoleApplication:
         :param command_plugins: Commands
         """
         command_api = CommandApi(database_plugin)
-        self.__processor = Processor(command_plugins, command_api)
+        commands = self.__collect_commands(command_plugins)
+        self.__processor = Processor(commands, command_api)
 
     def run(self):
         """
@@ -24,3 +25,10 @@ class SarasvatiConsoleApplication:
         while query != self.__QUIT_COMMAND:
             query = input(self.__processor.prompt)
             self.__processor.execute(query)
+
+    @staticmethod
+    def __collect_commands(command_plugins):
+        result = {}
+        for plugin in command_plugins:
+            result.update(plugin.get_console_commands())
+        return result

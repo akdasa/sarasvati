@@ -3,21 +3,25 @@ from abc import abstractmethod
 
 class Command:
     """Provides basic command interface"""
+    def __init__(self, api):
+        """
+        Initializes new instance of the Command class.
+        :type api: CommandApi
+        :param api: Api
+        """
+        self._api = api
+
     @abstractmethod
-    def execute(self, api):
+    def execute(self):
         """
         Executes command
-        :type api: CommandApi
-        :param api: api object
         """
         pass
 
     @abstractmethod
-    def revert(self, api):
+    def revert(self):
         """
         Reverts changes
-        :type api: CommandApi
-        :param api: api object
         """
         pass
 
@@ -38,5 +42,3 @@ class CommandApi:
     @active_thought.setter
     def active_thought(self, value):
         self.__active_thought = value
-
-

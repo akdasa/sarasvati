@@ -1,3 +1,5 @@
+from inspect import signature
+
 from yapsy.IPlugin import IPlugin as YapsyPlugin
 from yapsy.PluginManager import PluginManager as YapsyPluginManager
 
@@ -84,10 +86,22 @@ class DatabasePlugin(Plugin):
     def find(self, query):
         pass
 
-    def get(self):
+    def get(self, query):
         pass
 
 
 class CommandsPlugin(Plugin):
-    def parse(self, query, api):
-        pass
+    def __init__(self):
+        super().__init__()
+        self.__console_commands = {}
+
+    def get_console_commands(self):
+        return self.__console_commands
+
+    def _register_console_command(self, name, command_class, arguments_map=None):
+        meta = {"class": command_class, "args_map": arguments_map}
+
+        if not arguments_map:
+            meta["args_cnt"] = len(signature(command_class.__init__).parameters) - 2  # (self, api)
+
+        self.__console_commands[name] = meta

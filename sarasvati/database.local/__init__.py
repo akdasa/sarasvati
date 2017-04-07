@@ -21,3 +21,9 @@ class LocalDatabasePlugin(DatabasePlugin):
         for t in self.__cache:
             if t.title == query:
                 return t
+
+    def get(self, query):
+        result = self.find(query)
+        if not result:
+            raise Exception("Nothing found")
+        return result
