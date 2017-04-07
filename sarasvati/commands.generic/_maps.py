@@ -42,3 +42,24 @@ def delete_map(api, args):
         return [api.active_thought]
     else:
         raise Exception("'delete' takes 0 or 1 argument but {} were given".format(len(args)))
+
+
+def link_map(api, args):
+    if len(args) == 3:
+        src_title = args[0]
+        dst_title = args[1]
+        kind = args[2]
+        new_title_or_desc = args[1]
+        try:
+            src_thought = api.database.get(src_title)
+            dst_thought = api.database.get(dst_title)
+            return [src_thought, dst_thought, kind]
+        except:
+            raise Exception("Unable to link these thoughts")
+    #elif len(args) == 1:
+    #    title_or_desc = args[0]
+    #    if not api.active_thought:
+    #        raise Exception("No active thought")
+    #    return [api.active_thought, title_or_desc]
+    else:
+        raise Exception("'title' takes 1 or 2 arguments but {} were given".format(len(args)))

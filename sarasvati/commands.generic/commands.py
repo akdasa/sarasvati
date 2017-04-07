@@ -72,3 +72,17 @@ class SetDescriptionCommand(Command):
 
     def revert(self):
         self.__thought.description = self.__old_description
+
+
+class LinkCommand(Command):
+    def __init__(self, api, source, destination, kind):
+        super().__init__(api)
+        self.__source = source
+        self.__destination = destination
+        self.__kind = kind
+
+    def execute(self):
+        self.__source.links.add(self.__destination, self.__kind)
+
+    def revert(self):
+        self.__source.links.remove(self.__destination)
