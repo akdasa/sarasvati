@@ -1,10 +1,10 @@
 from tinydb import TinyDB, Query
 
 from api.models import Thought, IdentityComponent, DefinitionComponent, LinksComponent
-from api.plugins import DatabasePlugin
+from api.plugins import StoragePlugin
 
 
-class LocalDatabasePlugin(DatabasePlugin):
+class LocalStoragePlugin(StoragePlugin):
     def __init__(self, path="db.json", storage=None):
         """Initializes new instance of the LocalStorage class."""
         super().__init__()

@@ -1,4 +1,4 @@
-from api.plugins import ApplicationPlugin, DatabasePlugin, PluginManager, CommandsPlugin
+from api.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin
 
 
 class SarasvatiApi:
@@ -7,6 +7,6 @@ class SarasvatiApi:
         self.plugins = PluginManager(
             categories={
                 "application": ApplicationPlugin,
-                "database": DatabasePlugin,
+                "database": StoragePlugin,
                 "commands": CommandsPlugin
             }, api=self)

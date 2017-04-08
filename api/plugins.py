@@ -73,7 +73,7 @@ class ApplicationPlugin(Plugin):
     pass
 
 
-class DatabasePlugin(Plugin):
+class StoragePlugin(Plugin):
     def add(self, thought):
         pass
 

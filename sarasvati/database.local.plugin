@@ -1,8 +1,0 @@
-[Core]
-Name = Database.Local
-Module = database.local
-
-[Documentation]
-Author = Advaita Krishna das
-Version = 0.1
-Description = Provides basic database interface
