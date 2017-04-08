@@ -81,3 +81,20 @@ class Component:
         :return: Name
         """
         return self.__component_name
+
+    def serialize(self, options=None):
+        """
+        Serializes component into dictionary.
+        :type options: dict
+        :rtype: dict
+        :param options: Options
+        """
+        pass
+
+    def deserialize(self, data, options=None):
+        """
+        Deserializes component from dictionary
+        :param data: Data to deserialize from.
+        :param options: Options
+        """
+        pass

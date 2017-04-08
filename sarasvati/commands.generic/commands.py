@@ -1,4 +1,5 @@
 from api.commands import Command
+from api.models import Thought
 
 
 class ActivateCommand(Command):
@@ -22,8 +23,8 @@ class CreateCommand(Command):
         self.__title = title
 
     def execute(self):
-        self.__created = self._api.database.create()
-        self.__created.title = self.__title
+        self.__created = Thought(self.__title)
+        self._api.database.add(self.__created)
         return self.__created
 
     def revert(self):
@@ -83,6 +84,7 @@ class LinkCommand(Command):
 
     def execute(self):
         self.__source.links.add(self.__destination, self.__kind)
+        self._api.database.update(self.__source)
 
     def revert(self):
         self.__source.links.remove(self.__destination)

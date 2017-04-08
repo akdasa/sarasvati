@@ -38,6 +38,7 @@ class Processor:
             self.__history.append(command)
         except Exception as e:
             print(e)
+            raise
 
     def __parse_line(self, prompt):
         tokens = shlex.split(prompt)

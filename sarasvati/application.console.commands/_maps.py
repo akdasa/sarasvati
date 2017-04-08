@@ -2,9 +2,13 @@ def show_command_map(api, args):
     if len(args) == 1:
         title = args[0]
         try:
-            thought = api.database.get(title)
+            thought = api.database.search({
+                "field": "definition.title",
+                "operator": "~~",
+                "value": title})[0]
             return [thought]
-        except:
+        except Exception as e:
+            print(e)
             raise Exception("Unable to show '{}' thought, because it does not exist".format(title))
     elif len(args) == 0:
         if not api.active_thought:

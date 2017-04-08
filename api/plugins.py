@@ -74,16 +74,16 @@ class ApplicationPlugin(Plugin):
 
 
 class DatabasePlugin(Plugin):
-    def create(self):
+    def add(self, thought):
         pass
 
-    def update(self):
+    def update(self, thought):
         pass
 
     def delete(self, thought):
         pass
 
-    def find(self, query):
+    def search(self, query):
         pass
 
     def get(self, query):

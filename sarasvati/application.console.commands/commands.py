@@ -4,12 +4,17 @@ from colored import stylize
 
 
 class ListCommand(Command):
-    def __init__(self, api):
+    def __init__(self, api, title):
         super().__init__(api)
+        self.__title = title
         self.__title_style = colored.fg("green")
 
     def execute(self):
-        for thought in self._api.database.find(None) or []:
+        for thought in self._api.database.search({
+            "field": "definition.title",
+            "operator": "~~",
+            "value": self.__title
+        }):
             print(
                 stylize(thought.title, self.__title_style),
                 thought.description)

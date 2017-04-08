@@ -1,7 +1,7 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABCMeta
 
 
-class Command:
+class Command(metaclass=ABCMeta):
     """Provides basic command interface"""
     def __init__(self, api):
         """

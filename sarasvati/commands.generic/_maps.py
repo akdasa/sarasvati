@@ -49,10 +49,15 @@ def link_map(api, args):
         src_title = args[0]
         dst_title = args[1]
         kind = args[2]
-        new_title_or_desc = args[1]
         try:
-            src_thought = api.database.get(src_title)
-            dst_thought = api.database.get(dst_title)
+            src_thought = api.database.search({
+                "field": "definition.title",
+                "operator": "=",
+                "value": src_title})[0]
+            dst_thought = api.database.search({
+                "field": "definition.title",
+                "operator": "=",
+                "value": dst_title})[0]
             return [src_thought, dst_thought, kind]
         except:
             raise Exception("Unable to link these thoughts")
