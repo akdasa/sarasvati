@@ -10,7 +10,7 @@ class ListCommand(Command):
         self.__title_style = colored.fg("green")
 
     def execute(self):
-        for thought in self._api.database.search({
+        for thought in self._api.storage.search({
             "field": "definition.title",
             "operator": "~~",
             "value": self.__title

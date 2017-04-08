@@ -27,13 +27,13 @@ class Command(metaclass=ABCMeta):
 
 
 class CommandApi:
-    def __init__(self, database):
-        self.__database = database
+    def __init__(self, storage):
+        self.__storage = storage
         self.__active_thought = None
 
     @property
-    def database(self):
-        return self.__database
+    def storage(self):
+        return self.__storage
 
     @property
     def active_thought(self):

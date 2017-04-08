@@ -24,11 +24,11 @@ class CreateCommand(Command):
 
     def execute(self):
         self.__created = Thought(self.__title)
-        self._api.database.add(self.__created)
+        self._api.storage.add(self.__created)
         return self.__created
 
     def revert(self):
-        self._api.database.delete(self.__created)
+        self._api.storage.delete(self.__created)
 
 
 class DeleteCommand(Command):
@@ -37,10 +37,10 @@ class DeleteCommand(Command):
         self.__thought = thought
 
     def execute(self):
-        self._api.database.delete(self.__thought)
+        self._api.storage.delete(self.__thought)
 
     def revert(self):
-        self._api.database.add(self.__thought)
+        self._api.storage.add(self.__thought)
 
 
 class SetTitleCommand(Command):
@@ -84,7 +84,7 @@ class LinkCommand(Command):
 
     def execute(self):
         self.__source.links.add(self.__destination, self.__kind)
-        self._api.database.update(self.__source)
+        self._api.storage.update(self.__source)
 
     def revert(self):
         self.__source.links.remove(self.__destination)

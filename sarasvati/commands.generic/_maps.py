@@ -4,7 +4,7 @@ def activate_map(api, args):
 
     title = args[0]
     try:
-        thought = api.database.get(title)
+        thought = api.storage.get(title)
         return [thought]
     except:
         raise Exception("Unable to activate '{}' thought, because it does not exist".format(title))
@@ -15,7 +15,7 @@ def set_title_or_description_map(api, args):
         title = args[0]
         new_title_or_desc = args[1]
         try:
-            thought = api.database.get(title)
+            thought = api.storage.get(title)
             return [thought, new_title_or_desc]
         except:
             raise Exception("Unable to set, because thought '{}' does not exist".format(title))
@@ -32,7 +32,7 @@ def delete_map(api, args):
     if len(args) == 1:
         title = args[0]
         try:
-            thought = api.database.get(title)
+            thought = api.storage.get(title)
             return [thought]
         except:
             raise Exception("Unable to delete, because thought '{}' does not exist".format(title))
@@ -50,11 +50,11 @@ def link_map(api, args):
         dst_title = args[1]
         kind = args[2]
         try:
-            src_thought = api.database.search({
+            src_thought = api.storage.search({
                 "field": "definition.title",
                 "operator": "=",
                 "value": src_title})[0]
-            dst_thought = api.database.search({
+            dst_thought = api.storage.search({
                 "field": "definition.title",
                 "operator": "=",
                 "value": dst_title})[0]

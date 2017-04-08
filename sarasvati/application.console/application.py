@@ -5,15 +5,16 @@ from .processor import Processor
 class SarasvatiConsoleApplication:
     __QUIT_COMMAND = "quit"
 
-    def __init__(self, database_plugin, command_plugins):
+    def __init__(self, storage_plugin, command_plugins):
         """
         Initializes new instance of the SarasvatiConsoleApplication class.
         :type command_plugins: [CommandsPlugin]
-        :type database_plugin: DatabasePlugin
-        :param database_plugin: Database 
+        :type storage_plugin: DatabasePlugin
+        :param storage_plugin: Database 
         :param command_plugins: Commands
         """
-        command_api = CommandApi(database_plugin)
+        storage = storage_plugin.get_storage()
+        command_api = CommandApi(storage)
         commands = self.__collect_commands(command_plugins)
         self.__processor = Processor(commands, command_api)
 

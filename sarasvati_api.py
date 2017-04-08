@@ -7,6 +7,6 @@ class SarasvatiApi:
         self.plugins = PluginManager(
             categories={
                 "application": ApplicationPlugin,
-                "database": StoragePlugin,
+                "storage": StoragePlugin,
                 "commands": CommandsPlugin
             }, api=self)

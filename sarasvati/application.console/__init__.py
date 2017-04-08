@@ -13,14 +13,14 @@ class SarasvatiConsoleApplicationPlugin(ApplicationPlugin):
 
     def activate(self):
         # Load required plugins
-        self.__database = self.api.plugins.get("database")
+        self.__database = self.api.plugins.get("storage")
         self.__commands = self.api.plugins.find("commands")
-        print(self.__INDENT, "database:", self.__database.name, self.__database.version)
+        print(self.__INDENT, "storage:", self.__database.name, self.__database.version)
         print(self.__INDENT, "commands:", len(self.__commands), "plugin(s) loaded")
 
         # Create and run application
         self.__application = SarasvatiConsoleApplication(
-            database_plugin=self.__database, command_plugins=self.__commands)
+            storage_plugin=self.__database, command_plugins=self.__commands)
         self.__application.run()
 
     def deactivate(self):

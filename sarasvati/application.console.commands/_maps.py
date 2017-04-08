@@ -2,7 +2,7 @@ def show_command_map(api, args):
     if len(args) == 1:
         title = args[0]
         try:
-            thought = api.database.search({
+            thought = api.storage.search({
                 "field": "definition.title",
                 "operator": "~~",
                 "value": title})[0]
