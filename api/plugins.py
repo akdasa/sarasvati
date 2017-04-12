@@ -99,9 +99,30 @@ class CommandsPlugin(Plugin):
         return self.__console_commands
 
     def _register_console_command(self, name, command_class, arguments_map=None):
-        meta = {"class": command_class, "args_map": arguments_map}
+        init_params_count = len(signature(command_class.__init__).parameters)
+        arguments_count = None if arguments_map else init_params_count - 2
+        self.__console_commands[name] = CommandMeta(name, command_class, arguments_map, arguments_count)
 
-        if not arguments_map:
-            meta["args_cnt"] = len(signature(command_class.__init__).parameters) - 2  # (self, api)
 
-        self.__console_commands[name] = meta
+class CommandMeta:
+    def __init__(self, name, command_class, arguments_map=None, arguments_count=None):
+        self.__name = name
+        self.__command_class = command_class
+        self.__arguments_map = arguments_map
+        self.__arguments_count = arguments_count
+
+    @property
+    def name(self):
+        return self.__name
+
+    @property
+    def command_class(self):
+        return self.__command_class
+
+    @property
+    def arguments_map(self):
+        return self.__arguments_map
+
+    @property
+    def arguments_count(self):
+        return self.__arguments_count

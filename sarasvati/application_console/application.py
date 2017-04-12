@@ -16,20 +16,25 @@ class SarasvatiConsoleApplication:
         storage = storage_plugin.get_storage()
         command_api = CommandApi(storage)
         commands = self.__collect_commands(command_plugins)
-        self.__processor = Processor(commands, command_api)
+        self.__processor = Processor(command_api, commands)
 
     def run(self):
         """
         Starts application
         """
         query = None
-        while query != self.__QUIT_COMMAND:
-            query = input(self.__processor.prompt)
+        while not self.__is_quit_command(query):
+            prompt = self.__processor.prompt
+            query = input(prompt)
             self.__processor.execute(query)
+
+    def __is_quit_command(self, query):
+        return query == self.__QUIT_COMMAND
 
     @staticmethod
     def __collect_commands(command_plugins):
         result = {}
         for plugin in command_plugins:
-            result.update(plugin.get_console_commands())
+            commands = plugin.get_console_commands()
+            result.update(commands)
         return result
