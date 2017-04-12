@@ -61,7 +61,8 @@ def test_load_linked_child(empty_storage, root_thought):
 
 
 def test_load_linked_child_and_parent():
-    empty_storage = LocalStorage("./tests/storage_local/fixtures/three_chain.json")
+    path = "./tests/storage_local/fixtures/two_chain.json"
+    empty_storage = LocalStorage(path)
 
     root = empty_storage.get("Root")
     child = root.links.children[0]
