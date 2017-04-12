@@ -1,0 +1,61 @@
+{
+  "_default": {
+    "1": {
+      "identity": {
+        "key": "Root"
+      },
+      "definition": {
+        "title": "Root",
+        "description": null
+      },
+      "links": [
+        {
+          "key": "Child",
+          "kind": "child"
+        },
+        {
+          "key": "Child_2",
+          "kind": "child"
+        }
+      ]
+    },
+    "2": {
+      "identity": {
+        "key": "Child"
+      },
+      "definition": {
+        "title": "Child",
+        "description": null
+      },
+      "links": [
+        {
+          "key": "Root",
+          "kind": "parent"
+        },
+                {
+          "key": "Child_2",
+          "kind": "reference"
+        }
+      ]
+    },
+    "3": {
+      "identity": {
+        "key": "Child_2"
+      },
+      "definition": {
+        "title": "Child_2",
+        "description": null
+      },
+      "links": [
+        {
+          "key": "Root",
+          "kind": "parent"
+        },
+        {
+          "key": "Child",
+          "kind": "reference"
+        }
+      ]
+    }
+  }
+}

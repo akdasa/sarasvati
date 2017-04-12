@@ -123,3 +123,20 @@ def test_cache_child(full_storage):
     assert full_storage.cache.is_lazy("root") is False
     assert full_storage.cache.is_lazy("child") is False
     assert full_storage.cache.is_lazy("child2") is False
+
+
+def test_circle():
+    path = "./tests/storage_local/fixtures/circle.json"
+    empty_storage = LocalStorage(path)
+
+    root = empty_storage.get("Root")
+
+    assert empty_storage.cache.is_lazy("Root") is False
+    assert empty_storage.cache.is_lazy("Child") is False
+    assert empty_storage.cache.is_lazy("Child_2") is False
+
+    assert root.links.children[0] is empty_storage.get("Child")
+    assert root.links.children[1] is empty_storage.get("Child_2")
+
+    assert empty_storage.get("Child").links.references[0] is empty_storage.get("Child_2")
+    assert empty_storage.get("Child_2").links.references[0] is empty_storage.get("Child")
