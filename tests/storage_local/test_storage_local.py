@@ -60,8 +60,8 @@ def test_load_linked_child(empty_storage, root_thought):
     assert empty_storage.get("Root").links.children[0].title == "Child"
 
 
-def test_load_linked_child_and_parent(root_thought):
-    empty_storage = LocalStorage("./tests/storage_local/fixtures/test_load_linked_child_and_parent.json")
+def test_load_linked_child_and_parent():
+    empty_storage = LocalStorage("./tests/storage_local/fixtures/three_chain.json")
 
     root = empty_storage.get("Root")
     child = root.links.children[0]
@@ -73,11 +73,10 @@ def test_load_linked_child_and_parent(root_thought):
 
 
 def test_load_linked_child_parent_and_lazy_child():
-    empty_storage = LocalStorage("./tests/storage_local/fixtures/three_linked_thoughts.json")
+    path = "./tests/storage_local/fixtures/three_linked_thoughts.json"
+    empty_storage = LocalStorage(path)
 
-    print("---- LOAD ROOT ----")
     root = empty_storage.get("Root")
-    print("---- LOAD CHILD 2 ----")
     child2 = empty_storage.get("Child_2")
     child = empty_storage.get("Child")
 
