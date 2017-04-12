@@ -1,5 +1,7 @@
 import shlex
 
+from api.plugins import CommandException
+
 
 class Processor:
     __REVERT_COMMAND = "revert"
@@ -36,29 +38,31 @@ class Processor:
     def __execute_line(self, line):
         try:
             command = self.__parse(line)
-            command.execute()
-            self.__history.append(command)
-        except Exception as e:
+            if command:
+                command.execute()
+                self.__history.append(command)
+        except CommandException as e:
             print(e)
-            raise
 
     def __parse(self, line):
         tokens = shlex.split(line)
+        if len(tokens) <= 0:
+            return None
+
         token_args = tokens[1:]
         token_cmd = tokens[0]
         meta = self.__commands.get(token_cmd)
 
-        if meta:
-            cmd_args_cnt = meta.arguments_count
-            cmd_args_map = meta.arguments_map
-            cmd_class = meta.command_class
+        if not meta:
+            raise CommandException("Unknown command '{}'".format(token_cmd))
 
-            if not cmd_args_map:
-                if len(token_args) != cmd_args_cnt:
-                    raise Exception(
-                        "'{}' takes {} arguments but {} were given".format(token_cmd, cmd_args_cnt, len(token_args)))
+        args_cnt = meta.arguments_count
+        args_map = meta.arguments_map
+        cmd_class = meta.command_class
+        if not args_map and len(token_args) != args_cnt:
+            raise CommandException("'{}' takes {} arguments but {} were given"
+                                   .format(token_cmd, args_cnt, len(token_args)))
 
-            cmd_args = cmd_args_map(self.__api, token_args) if cmd_args_map else token_args
-            return cmd_class(self.__api, *cmd_args)
-        else:
-            raise Exception("Unknown command '{}'".format(token_cmd))
+        cmd_args = args_map(self.__api, token_args) if args_map else token_args
+        return cmd_class(self.__api, *cmd_args)
+

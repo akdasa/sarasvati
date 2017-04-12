@@ -126,3 +126,7 @@ class CommandMeta:
     @property
     def arguments_count(self):
         return self.__arguments_count
+
+
+class CommandException(Exception):
+    pass

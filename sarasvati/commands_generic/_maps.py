@@ -1,31 +1,44 @@
+from api.plugins import CommandException
+
+
 def activate_map(api, args):
-    if len(args) != 1:
-        raise Exception("'activate' takes 1 argument but {} were given".format(len(args)))
+    args_count = len(args)
+    if args_count != 1:
+        raise CommandException("'activate' takes 1 argument but {} were given".format(args_count))
 
     title = args[0]
-    try:
-        thought = api.storage.get(title)
-        return [thought]
-    except:
-        raise Exception("Unable to activate '{}' thought, because it does not exist".format(title))
+    query = {"field": "definition.title", "operator": "~~", "value": title}
+    result = api.storage.search(query)
+    result_len = len(result)
+    if result_len == 0:
+        raise CommandException("No thoughts found")
+    elif result_len > 1:
+        raise CommandException("More than one thought found")
+    else:
+        return [result[0]]
 
 
 def set_title_or_description_map(api, args):
-    if len(args) == 2:
+    args_count = len(args)
+    if args_count == 2:
         title = args[0]
         new_title_or_desc = args[1]
-        try:
-            thought = api.storage.get(title)
-            return [thought, new_title_or_desc]
-        except:
-            raise Exception("Unable to set, because thought '{}' does not exist".format(title))
-    elif len(args) == 1:
+        query = {"field": "definition.title", "operator": "~~", "value": title}
+        result = api.storage.search(query)
+        result_len = len(result)
+        if result_len == 0:
+            raise CommandException("No thoughts found")
+        elif result_len > 1:
+            raise CommandException("More than one thought found")
+        else:
+            return [result[0], new_title_or_desc]
+    elif args_count == 1:
         title_or_desc = args[0]
         if not api.active_thought:
-            raise Exception("No active thought")
+            raise CommandException("No active thought")
         return [api.active_thought, title_or_desc]
     else:
-        raise Exception("'title' takes 1 or 2 arguments but {} were given".format(len(args)))
+        raise CommandException("'title' takes 1 or 2 arguments but {} were given".format(args_count))
 
 
 def delete_map(api, args):

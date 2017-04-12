@@ -4,6 +4,7 @@ from .application import SarasvatiConsoleApplication
 
 class SarasvatiConsoleApplicationPlugin(ApplicationPlugin):
     __INDENT = ".."
+    __BYE_MESSAGE = "Good bye, take care!"
 
     def __init__(self):
         super().__init__()
@@ -24,4 +25,4 @@ class SarasvatiConsoleApplicationPlugin(ApplicationPlugin):
         self.__application.run()
 
     def deactivate(self):
-        print("Good bye!")
+        print(self.__BYE_MESSAGE)

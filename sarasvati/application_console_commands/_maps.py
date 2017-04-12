@@ -1,18 +1,23 @@
+from api.plugins import CommandException
+
+
 def show_command_map(api, args):
-    if len(args) == 1:
+    args_count = len(args)
+
+    if args_count == 1:
         title = args[0]
-        try:
-            thought = api.storage.search({
-                "field": "definition.title",
-                "operator": "~~",
-                "value": title})[0]
-            return [thought]
-        except Exception as e:
-            print(e)
-            raise Exception("Unable to show '{}' thought, because it does not exist".format(title))
-    elif len(args) == 0:
+        query = {"field": "definition.title", "operator": "~~", "value": title}
+        result = api.storage.search(query)
+        result_len = len(result)
+        if result_len == 0:
+            raise CommandException("No thought found")
+        elif result_len > 1:
+            raise CommandException("More than one thought found")
+        else:
+            return [result[0]]
+    elif args_count == 0:
         if not api.active_thought:
-            raise Exception("No active thought")
+            raise CommandException("No active thought")
         return [api.active_thought]
     else:
-        raise Exception("'show' takes 0 or 1 argument but {} were given".format(len(args)))
+        raise CommandException("'show' takes 0-1 arguments but {} were given".format(args_count))
