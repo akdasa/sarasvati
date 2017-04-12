@@ -1,6 +1,6 @@
 [Core]
-Name = Storage.Local
-Module = storage.local
+Name = Local Storage
+Module = storage_local
 
 [Documentation]
 Author = Advaita Krishna das

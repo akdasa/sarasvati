@@ -350,6 +350,8 @@ class LinksComponent(Component):
         # deserialize each link
         for link in data:
             thought = storage.get(link["key"], depth_options)
+            if thought is None:
+                raise Exception("No link '{}' found".format(link["key"]))
             self.add(thought, link["kind"])
 
     def __get_links_of_kind(self, kind):
