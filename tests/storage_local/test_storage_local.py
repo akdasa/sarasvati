@@ -1,3 +1,5 @@
+import operator
+
 import pytest
 from api.models import Thought
 from sarasvati.storage_local import LocalStorage
@@ -135,8 +137,8 @@ def test_circle():
     assert empty_storage.cache.is_lazy("Child") is False
     assert empty_storage.cache.is_lazy("Child_2") is False
 
-    assert root.links.children[0] is empty_storage.get("Child")
-    assert root.links.children[1] is empty_storage.get("Child_2")
+    assert sorted(root.links.children, key=operator.attrgetter("title")) == \
+        [empty_storage.get("Child"), empty_storage.get("Child_2")]
 
     assert empty_storage.get("Child").links.references[0] is empty_storage.get("Child_2")
     assert empty_storage.get("Child_2").links.references[0] is empty_storage.get("Child")
