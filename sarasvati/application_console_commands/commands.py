@@ -10,8 +10,7 @@ class ListCommand(Command):
         self.__title_style = colored.fg("green")
 
     def execute(self):
-        query = {"field": "definition.title", "operator": "~~", "value": self.__title}
-        search_result = self._api.storage.search(query)
+        search_result = self._api.brain.search.by_title(self.__title)
         for thought in search_result:
             print(stylize(thought.title, self.__title_style), thought.description)
 

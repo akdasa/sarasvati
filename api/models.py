@@ -1,4 +1,6 @@
 import uuid
+
+from api.commands import CommandApi
 from api.interfaces import Composite, Component
 
 
@@ -160,7 +162,7 @@ class SerializationComponent(Component):
                 component = self.__model.get_component(key)
                 component.deserialize(component_data, options)
             elif component_class:
-                component = component_class() #.create(component_data)
+                component = component_class()
                 component.deserialize(component_data, options)
                 self.__model.add_component(component)
 
@@ -358,3 +360,169 @@ class LinksComponent(Component):
         links = filter(lambda x: x.kind == kind, self.__links.values())
         thoughts = map(lambda x: x.destination, links)
         return list(thoughts)
+
+
+class Brain(Composite):
+    def __init__(self, storage):
+        """
+        Initializes new instance of Brain class
+        :type storage: Storage
+        :param storage: Storage
+        """
+        super().__init__()
+        self.__storage = storage
+        self.add_components([
+            BrainCommandsComponent(),
+            BrainSearchComponent(self.__storage),
+            BrainStatsComponent(self.__storage)
+        ])
+
+    @property
+    def commands(self):
+        """
+        Returns commands component
+        :rtype: BrainCommandsComponent
+        :return: Commands component
+        """
+        return self.get_component(BrainCommandsComponent.COMPONENT_NAME)
+
+    @property
+    def search(self):
+        """
+        Returns search component
+        :rtype: BrainSearchComponent
+        :return: Search component
+        """
+        return self.get_component(BrainSearchComponent.COMPONENT_NAME)
+
+    @property
+    def stats(self):
+        """
+        Returns commands component
+        :rtype: BrainStatsComponent
+        :return: Stats component
+        """
+        return self.get_component(BrainStatsComponent.COMPONENT_NAME)
+
+
+class BrainStatsComponent(Component):
+    """Provides interface to see statistics of the brain"""
+    COMPONENT_NAME = "stats"
+
+    def __init__(self, storage):
+        """
+        Initializes new instance of the BrainStatsComponent class
+        :type storage: Storage
+        :param storage: Storage of the thoughts
+        """
+        super().__init__(self.COMPONENT_NAME)
+        self.__storage = storage
+
+    @property
+    def thoughts_count(self):
+        """
+        Returns count of thoughts in brain
+        :rtype: int
+        :return: Count of thoughts
+        """
+        return self.__storage.count()
+
+
+class BrainSearchComponent(Component):
+    """Provides interface to search thought in brain"""
+    COMPONENT_NAME = "search"
+
+    def __init__(self, storage):
+        """
+        Initializes new instance of the BrainSearchComponent class
+        :type storage: Storage
+        :param storage: Storage of thoughts
+        """
+        super().__init__(self.COMPONENT_NAME)
+        self.__storage = storage
+
+    def by_query(self, query):
+        """
+        Returns result of search using specified query
+        :param query: Query
+        :return: Result
+        """
+        return self.__storage.search(query)
+
+    def by_id(self, key):
+        """
+        Returns thought
+        :param key: Identity of thought
+        :return: Thought
+        """
+        result = self.by_query({
+            "field": "identity.key",
+            "operator": "=",
+            "value": key
+        })
+        return result[0] if len(result) != 0 else None
+
+    def by_title(self, title, operator="eq"):
+        """
+        Returns list of thoughts found by title
+        :param title: Title
+        :param operator: Operator (eq, contains) to test title with.
+        :return: List of thoughts
+        """
+        return self.by_query({
+            "field": "definition.title",
+            "operator": operator,
+            "value": title
+        })
+
+    def in_description(self, value, operator="~~"):
+        return self.by_query({
+            "field": "definition.description",
+            "operator": operator,
+            "value": value
+        })
+
+
+class BrainCommandsComponent(Component):
+    """Provides interface to manipulate brain with commands"""
+    COMPONENT_NAME = "commands"
+
+    def __init__(self):
+        """
+        Initializes new instance of the BrainCommandsComponent class.
+        :type api: BrainApi
+        :param api: Api to manipulate brain with.
+        """
+        super().__init__(self.COMPONENT_NAME)
+        self.__commands = []
+
+    def execute(self, command):
+        """
+        Executes specified command
+        :type command: Command
+        :param command: Command to execute
+        :return: Result of execution
+        :raises BrainCommandException: If command was already executed
+        :raises BrainCommandException: If some exception raised while executing command
+        """
+        if self.__is_executed(command):
+            raise Exception("Command already executed", command)
+        self.__commands.append(command)
+        try:
+            return command.execute()
+        except Exception as ex:
+            raise Exception("Error while executing command", command) from ex
+
+    def revert(self):
+        """
+        Reverts changes of last executed command back
+        :raises BrainCommandException: If nothing to undo
+        """
+        if len(self.__commands) <= 0:
+            raise Exception("Nothing to undo")
+        command = self.__commands.pop()
+        return command.revert()
+
+    def __is_executed(self, command):
+        """Is specified command was executed previously?"""
+        return command in self.__commands

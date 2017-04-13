@@ -1,4 +1,5 @@
 from api.commands import CommandApi
+from api.models import Brain
 from .processor import Processor
 
 
@@ -14,9 +15,9 @@ class SarasvatiConsoleApplication:
         :param command_plugins: Commands
         """
         storage = storage_plugin.get_storage()
-        command_api = CommandApi(storage)
         commands = self.__collect_commands(command_plugins)
-        self.__processor = Processor(command_api, commands)
+        self.__brain = Brain(storage)
+        self.__processor = Processor(self.__brain, commands)
 
     def run(self):
         """

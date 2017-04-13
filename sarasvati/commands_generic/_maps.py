@@ -1,14 +1,13 @@
 from api.plugins import CommandException
 
 
-def activate_map(api, args):
+def activate(api, args):
     args_count = len(args)
     if args_count != 1:
         raise CommandException("'activate' takes 1 argument but {} were given".format(args_count))
 
     title = args[0]
-    query = {"field": "definition.title", "operator": "~~", "value": title}
-    result = api.storage.search(query)
+    result = api.brain.search.by_title(title)
     result_len = len(result)
     if result_len == 0:
         raise CommandException("No thoughts found")
@@ -18,13 +17,12 @@ def activate_map(api, args):
         return [result[0]]
 
 
-def set_title_or_description_map(api, args):
+def set_title_or_description(api, args):
     args_count = len(args)
     if args_count == 2:
         title = args[0]
         new_title_or_desc = args[1]
-        query = {"field": "definition.title", "operator": "~~", "value": title}
-        result = api.storage.search(query)
+        result = api.brain.search.by_title(title)
         result_len = len(result)
         if result_len == 0:
             raise CommandException("No thoughts found")
@@ -41,7 +39,7 @@ def set_title_or_description_map(api, args):
         raise CommandException("'title' takes 1 or 2 arguments but {} were given".format(args_count))
 
 
-def delete_map(api, args):
+def delete(api, args):
     if len(args) == 1:
         title = args[0]
         try:
@@ -57,7 +55,7 @@ def delete_map(api, args):
         raise Exception("'delete' takes 0 or 1 argument but {} were given".format(len(args)))
 
 
-def link_map(api, args):
+def link(api, args):
     if len(args) == 3:
         src_title = args[0]
         dst_title = args[1]

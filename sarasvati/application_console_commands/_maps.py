@@ -6,8 +6,7 @@ def show_command_map(api, args):
 
     if args_count == 1:
         title = args[0]
-        query = {"field": "definition.title", "operator": "~~", "value": title}
-        result = api.storage.search(query)
+        result = api.brain.search.by_title(title)
         result_len = len(result)
         if result_len == 0:
             raise CommandException("No thought found")
