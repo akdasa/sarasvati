@@ -34,11 +34,3 @@ class CommandApi:
     @property
     def brain(self):
         return self.__brain
-
-    @property
-    def active_thought(self):
-        return self.__active_thought
-
-    @active_thought.setter
-    def active_thought(self, value):
-        self.__active_thought = value

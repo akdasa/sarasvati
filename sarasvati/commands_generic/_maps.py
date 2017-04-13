@@ -32,9 +32,9 @@ def set_title_or_description(api, args):
             return [result[0], new_title_or_desc]
     elif args_count == 1:
         title_or_desc = args[0]
-        if not api.active_thought:
+        if not api.brain.state.active_thought:
             raise CommandException("No active thought")
-        return [api.active_thought, title_or_desc]
+        return [api.brain.state.active_thought, title_or_desc]
     else:
         raise CommandException("'title' takes 1 or 2 arguments but {} were given".format(args_count))
 
@@ -48,9 +48,9 @@ def delete(api, args):
         except:
             raise Exception("Unable to delete, because thought '{}' does not exist".format(title))
     elif len(args) == 0:
-        if not api.active_thought:
+        if not api.brain.state.active_thought:
             raise Exception("No active thought")
-        return [api.active_thought]
+        return [api.brain.state.active_thought]
     else:
         raise Exception("'delete' takes 0 or 1 argument but {} were given".format(len(args)))
 

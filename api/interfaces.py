@@ -37,7 +37,8 @@ class Composite:
         :type components: List[Component]
         :param components: Array of components
         """
-        [self.add_component(component) for component in components]
+        for component in components:
+            self.add_component(component)
 
     def get_component(self, name):
         """

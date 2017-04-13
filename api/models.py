@@ -374,7 +374,8 @@ class Brain(Composite):
         self.add_components([
             BrainCommandsComponent(),
             BrainSearchComponent(self.__storage),
-            BrainStatsComponent(self.__storage)
+            BrainStatsComponent(self.__storage),
+            BrainStateComponent()
         ])
 
     @property
@@ -398,11 +399,19 @@ class Brain(Composite):
     @property
     def stats(self):
         """
-        Returns commands component
+        Returns statistics component
         :rtype: BrainStatsComponent
         :return: Stats component
         """
         return self.get_component(BrainStatsComponent.COMPONENT_NAME)
+
+    @property
+    def state(self):
+        """
+        Return state component
+        :return: BrainStateComponent
+        """
+        return self.get_component(BrainStateComponent.COMPONENT_NAME)
 
 
 class BrainStatsComponent(Component):
@@ -526,3 +535,29 @@ class BrainCommandsComponent(Component):
     def __is_executed(self, command):
         """Is specified command was executed previously?"""
         return command in self.__commands
+
+
+class BrainStateComponent(Component):
+    COMPONENT_NAME = "state"
+
+    def __init__(self):
+        """
+        Initializes new instance of the BrainStateComponent class.
+        """
+        super().__init__(self.COMPONENT_NAME)
+        self.__active_thought = None
+
+    def activate(self, thought):
+        """
+        Activates specified thought
+        :param thought: Thought to be activated
+        """
+        self.__active_thought = thought
+
+    @property
+    def active_thought(self):
+        """
+        Returns active thought
+        :return: Thought
+        """
+        return self.__active_thought

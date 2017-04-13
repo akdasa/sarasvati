@@ -15,8 +15,8 @@ def show_command_map(api, args):
         else:
             return [result[0]]
     elif args_count == 0:
-        if not api.active_thought:
+        if not api.brain.state.active_thought:
             raise CommandException("No active thought")
-        return [api.active_thought]
+        return [api.brain.state.active_thought]
     else:
         raise CommandException("'show' takes 0-1 arguments but {} were given".format(args_count))

@@ -9,11 +9,11 @@ class ActivateCommand(Command):
         self.__prev = None
 
     def execute(self):
-        self.__prev = self._api.active_thought
-        self._api.active_thought = self.__thought
+        self.__prev = self._api.brain.state.active_thought
+        self._api.brain.state.activate(self.__thought)
 
     def revert(self):
-        self._api.active_thought = self.__prev
+        self._api.brain.state.activate(self.__prev)
 
 
 class CreateCommand(Command):

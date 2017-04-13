@@ -29,7 +29,7 @@ class Processor:
 
     @property
     def prompt(self):
-        active_thought = self.__api.active_thought
+        active_thought = self.__api.brain.state.active_thought
         if active_thought:
             return str(active_thought.title) + "> "
         return "> "
