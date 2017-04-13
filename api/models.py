@@ -541,7 +541,9 @@ class BrainCommandsComponent(Component):
         if len(self.__commands) <= 0:
             raise Exception("Nothing to undo")
         command = self.__commands.pop()
-        return command.revert()
+        result = command.revert()
+        command.on_completed()
+        return result
 
     def __is_executed(self, command):
         """Is specified command was executed previously?"""
@@ -581,5 +583,11 @@ class BrainStorageComponent(Component):
         super().__init__(self.COMPONENT_NAME)
         self.__storage = storage
 
+    def add(self, thought):
+        self.__storage.add(thought)
+
     def update(self, thought):
-        return self.__storage.update(thought)
+        self.__storage.update(thought)
+
+    def remove(self, thought):
+        self.__storage.remove(thought)

@@ -93,7 +93,7 @@ class LocalStorage:
 
             if in_cache:
                 # get thought from cache
-                cached = self.__cache.thoughts[key]
+                cached = self.__cache.get(key)
 
                 # thought is in lazy state, so load it
                 if is_lazy:
@@ -119,17 +119,14 @@ class LocalStorage:
                 # create new thought
                 new_thought = Thought()
 
-                # pre-cache to avoid infinitive recursion
-                if query["field"] == "identity.key":
-                    new_thought.identity.key = query["value"]
-                    self.cache.add(new_thought, key=query["value"])
-
                 if not_deep:
                     # deserialize and add to result
-                    new_thought.serialization.deserialize(db_entity, options)
+                    new_thought.identity.key = db_entity["identity"]["key"]
                     self.__cache.add(new_thought)
+                    new_thought.serialization.deserialize(db_entity, options)
                     result.append(new_thought)
                 else:
+                    new_thought.title = "<LAZY>"
                     new_thought.identity.key = query["value"]
                     self.cache.add(new_thought, lazy=True)
                     result.append(new_thought)

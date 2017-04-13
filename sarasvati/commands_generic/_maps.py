@@ -61,21 +61,15 @@ def link(api, args):
         dst_title = args[1]
         kind = args[2]
         try:
-            src_thought = api.storage.search({
-                "field": "definition.title",
-                "operator": "=",
-                "value": src_title})[0]
-            dst_thought = api.storage.search({
-                "field": "definition.title",
-                "operator": "=",
-                "value": dst_title})[0]
+            src_thought = api.brain.search.by_title(src_title)[0]
+            dst_thought = api.brain.search.by_title(dst_title)[0]
             return [src_thought, dst_thought, kind]
         except:
-            raise Exception("Unable to link these thoughts")
+            raise CommandException("Unable to link these thoughts")
     #elif len(args) == 1:
     #    title_or_desc = args[0]
     #    if not api.active_thought:
     #        raise Exception("No active thought")
     #    return [api.active_thought, title_or_desc]
     else:
-        raise Exception("'title' takes 1 or 2 arguments but {} were given".format(len(args)))
+        raise CommandException("'link' takes 1-3 arguments but {} were given".format(len(args)))

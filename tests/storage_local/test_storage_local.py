@@ -142,3 +142,13 @@ def test_circle():
 
     assert empty_storage.get("Child").links.references[0] is empty_storage.get("Child_2")
     assert empty_storage.get("Child_2").links.references[0] is empty_storage.get("Child")
+
+
+def test_lazy_references():
+    path = "./tests/storage_local/fixtures/lazy_references.json"
+    empty_storage = LocalStorage(path)
+
+    root = empty_storage.search({"field": "definition.title", "operator": "~~", "value": "Root"})[0]
+    zzz = empty_storage.get("Child_Z")
+
+    assert zzz.links.references[0] == root
