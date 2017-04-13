@@ -77,9 +77,6 @@ class LocalStorage:
         self.__cache.remove(thought)
 
     def search(self, query, options=None):
-        x = random.randint(0, 100)
-        print(x, "---  ---  ---")
-        print("QUERY", query)
         if options is None:
             options = {}
         options.update(self._options)
@@ -94,16 +91,12 @@ class LocalStorage:
             in_cache = key in self.cache.thoughts
             is_lazy = self.__cache.is_lazy(key)
 
-            print("DB_RESULT", in_cache, is_lazy)
-
             if in_cache:
                 # get thought from cache
                 cached = self.__cache.thoughts[key]
 
                 # thought is in lazy state, so load it
                 if is_lazy:
-                    #self.cache.lazy[cached.key] = False
-                    print("DESERIALIZE", db_entity)
                     self.__cache.add(cached, lazy=False)
                     cached.serialization.deserialize(db_entity, options)
 
@@ -111,13 +104,10 @@ class LocalStorage:
                 for linked_thought in cached.links.all:
                     if not self.__cache.is_lazy(linked_thought.key):
                         continue  # skip not lazy thought
-                    #self.cache.lazy[linked_thought.key] = False
-                    #db_lazy_linked = self.__db.search(Query().identity.key == linked_thought.key)[0]
                     db_lazy_linked = self.__db.search({
                         "field": "identity.key",
                         "operator": "=",
                         "value": linked_thought.key})[0]
-                    print("DESERIALIZE LAZY CHILD", db_lazy_linked)
                     self.cache.add(linked_thought)
                     linked_thought.serialization.deserialize(db_lazy_linked, options)
                 result.append(self.__cache.thoughts[key])
@@ -136,16 +126,13 @@ class LocalStorage:
 
                 if not_deep:
                     # deserialize and add to result
-                    print("DESERIALIZE", db_entity)
                     new_thought.serialization.deserialize(db_entity, options)
                     self.__cache.add(new_thought)
                     result.append(new_thought)
                 else:
-                    print("TOO DEEP", query["value"])
                     new_thought.identity.key = query["value"]
                     self.cache.add(new_thought, lazy=True)
                     result.append(new_thought)
 
-        print(x, result)
         return result
 

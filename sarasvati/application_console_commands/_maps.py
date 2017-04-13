@@ -6,7 +6,7 @@ def show_command_map(api, args):
 
     if args_count == 1:
         title = args[0]
-        result = api.brain.search.by_title(title)
+        result = api.brain.search.by_title(title, operator="~~")
         result_len = len(result)
         if result_len == 0:
             raise CommandException("No thought found")
