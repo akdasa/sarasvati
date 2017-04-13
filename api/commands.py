@@ -25,6 +25,9 @@ class Command(metaclass=ABCMeta):
         """
         pass
 
+    def on_completed(self):
+        pass
+
 
 class CommandApi:
     def __init__(self, brain):

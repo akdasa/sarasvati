@@ -375,7 +375,8 @@ class Brain(Composite):
             BrainCommandsComponent(),
             BrainSearchComponent(self.__storage),
             BrainStatsComponent(self.__storage),
-            BrainStateComponent()
+            BrainStateComponent(),
+            BrainStorageComponent(self.__storage)
         ])
 
     @property
@@ -412,6 +413,14 @@ class Brain(Composite):
         :return: BrainStateComponent
         """
         return self.get_component(BrainStateComponent.COMPONENT_NAME)
+
+    @property
+    def storage(self):
+        """
+        Return storage component
+        :return: BrainStorageComponent
+        """
+        return self.get_component(BrainStorageComponent.COMPONENT_NAME)
 
 
 class BrainStatsComponent(Component):
@@ -518,7 +527,9 @@ class BrainCommandsComponent(Component):
             raise Exception("Command already executed", command)
         self.__commands.append(command)
         try:
-            return command.execute()
+            result = command.execute()
+            command.on_completed()
+            return result
         except Exception as ex:
             raise Exception("Error while executing command", command) from ex
 
@@ -561,3 +572,14 @@ class BrainStateComponent(Component):
         :return: Thought
         """
         return self.__active_thought
+
+
+class BrainStorageComponent(Component):
+    COMPONENT_NAME = "storage"
+
+    def __init__(self, storage):
+        super().__init__(self.COMPONENT_NAME)
+        self.__storage = storage
+
+    def update(self, thought):
+        return self.__storage.update(thought)

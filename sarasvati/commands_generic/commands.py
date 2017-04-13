@@ -58,6 +58,9 @@ class SetTitleCommand(Command):
     def revert(self):
         self.__thought.title = self.__old_title
 
+    def on_completed(self):
+        self._api.brain.storage.update(self.__thought)
+
 
 class SetDescriptionCommand(Command):
     def __init__(self, api, thought, description):
@@ -74,6 +77,9 @@ class SetDescriptionCommand(Command):
     def revert(self):
         self.__thought.description = self.__old_description
 
+    def on_completed(self):
+        self._api.brain.storage.update(self.__thought)
+
 
 class LinkCommand(Command):
     def __init__(self, api, source, destination, kind):
@@ -84,7 +90,9 @@ class LinkCommand(Command):
 
     def execute(self):
         self.__source.links.add(self.__destination, self.__kind)
-        self._api.storage.update(self.__source)
 
     def revert(self):
         self.__source.links.remove(self.__destination)
+
+    def on_completed(self):
+        self._api.brain.storage.update(self.__source)
