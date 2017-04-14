@@ -72,3 +72,14 @@ def test_link_to_itself_raises_error():
     t1 = Thought()
     with pytest.raises(ValueError):
         t1.links.add(t1, "child")
+
+
+def test_linked_entity_without_storage_specified():
+    t1 = Thought()
+    with pytest.raises(Exception):
+        t1.links.deserialize([{"key":"test2", "kind": "child"}])
+
+
+def test_empty_links_without_storage_specified():
+    t1 = Thought()
+    t1.links.deserialize([])  # should not raise exception

@@ -335,22 +335,24 @@ class LinksComponent(Component):
         return result
 
     def deserialize(self, data, options=None):
+        links_count = len(data)
+
         # increase depth level to avoid deserialization of
         # whole database
-        depth_options = options.copy()
-        if "depth" not in depth_options:
-            depth_options["depth"] = 0
+        my_options = (options or {}).copy()
+        if "depth" not in my_options:
+            my_options["depth"] = 0
         else:
-            depth_options["depth"] += 1
+            my_options["depth"] += 1
 
         # get storage to retrieve linked thoughts
-        storage = options.get("storage", None)
-        if not storage:
+        storage = my_options.get("storage", None)
+        if not storage and links_count > 0:
             raise Exception("No 'storage' specified to load linked thoughts")
 
         # deserialize each link
         for link in data:
-            thought = storage.get(link["key"], depth_options)
+            thought = storage.get(link["key"], my_options)
             if thought is None:
                 raise Exception("No link '{}' found".format(link["key"]))
             self.add(thought, link["kind"])
