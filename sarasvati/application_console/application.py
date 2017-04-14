@@ -1,4 +1,3 @@
-from api.commands import CommandApi
 from api.models import Brain
 from .processor import Processor
 

@@ -1,6 +1,5 @@
 import uuid
 
-from api.commands import CommandApi
 from api.interfaces import Composite, Component
 
 
@@ -338,7 +337,7 @@ class LinksComponent(Component):
     def deserialize(self, data, options=None):
         # increase depth level to avoid deserialization of
         # whole database
-        depth_options = options.copy() #(options or {"depth": 0}).copy()
+        depth_options = options.copy()
         if "depth" not in depth_options:
             depth_options["depth"] = 0
         else:
@@ -508,8 +507,6 @@ class BrainCommandsComponent(Component):
     def __init__(self):
         """
         Initializes new instance of the BrainCommandsComponent class.
-        :type api: BrainApi
-        :param api: Api to manipulate brain with.
         """
         super().__init__(self.COMPONENT_NAME)
         self.__commands = []

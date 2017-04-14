@@ -4,8 +4,6 @@ from api.models import Thought
 from sarasvati.storage_local import LocalStorage
 
 
-
-
 @pytest.fixture
 def empty_storage():
     return LocalStorage(None)

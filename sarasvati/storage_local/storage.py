@@ -1,6 +1,3 @@
-import random
-
-
 from api.models import Thought, IdentityComponent, DefinitionComponent, LinksComponent
 from .internal import InternalStorage
 from .cache import StorageCache
