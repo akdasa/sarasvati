@@ -1,3 +1,5 @@
+import pytest
+
 from api.models import IdentityComponent
 
 
@@ -21,3 +23,9 @@ def test_key_set():
     i = IdentityComponent()
     i.key = "my_key"
     assert i.key is "my_key"
+
+
+def test_deserialize_entity_without_key():
+    i = IdentityComponent()
+    with pytest.raises(Exception):
+        i.deserialize({"test": "123"})
