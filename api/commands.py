@@ -1,5 +1,7 @@
 from abc import abstractmethod, ABCMeta
 
+from api.plugins import CommandException
+
 
 class Command(metaclass=ABCMeta):
     """Provides basic command interface"""
@@ -37,3 +39,14 @@ class CommandApi:
     @property
     def brain(self):
         return self.__brain
+
+    @staticmethod
+    def get_one(lst):
+        """Returns one element from list, otherwise raises exception"""
+        lst_len = len(lst)
+        if lst_len == 0:
+            raise CommandException("Nothing found")
+        elif lst_len > 1:
+            raise CommandException("More than one entity found")
+        else:
+            return lst[0]
