@@ -130,3 +130,11 @@ class CommandMeta:
 
 class CommandException(Exception):
     pass
+
+
+class SectionPlugin(Plugin):
+    def get_widget(self):
+        pass
+
+    def get_section_name(self):
+        pass
