@@ -16,7 +16,7 @@ class SarasvatiConsoleApplicationPlugin(ApplicationPlugin):
         # Load required plugins
         self.__storage = self.api.plugins.get("storage")
         self.__commands = self.api.plugins.find("commands")
-        print(self.__INDENT, "storage:", self.__storage.name, self.__storage.version)
+        print(self.__INDENT, "storage:", self.__storage.info.name, self.__storage.info.version)
         print(self.__INDENT, "commands:", len(self.__commands), "plugin(s) loaded")
 
         # Create and run application

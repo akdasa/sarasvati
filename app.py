@@ -4,7 +4,7 @@ from sarasvati_api import SarasvatiApi
 
 def get_application_plugin(plugin_name):
     plugins = api.plugins.find("application")
-    filtered = filter(lambda x: x.name == plugin_name, plugins)
+    filtered = filter(lambda x: x.info.name == plugin_name, plugins)
     result = list(filtered)
     return result[0] if len(result) > 0 else None
 

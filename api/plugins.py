@@ -15,7 +15,7 @@ class PluginManager:
         :param categories: categories mappings
         """
         self.__path = [self.__CORE_PLUGINS_PATH, path]
-        self.__categories = categories or []
+        self.__categories = categories or {}
         self.__api = api
 
         # Configure plugin manager
@@ -55,9 +55,15 @@ class PluginManager:
 
     def __convert(self, obj):
         obj.plugin_object.api = self.__api
-        obj.plugin_object.name = obj.name
-        obj.plugin_object.version = obj.version
+        obj.plugin_object.info = PluginInfo(obj.name, obj.version)
         return obj.plugin_object
+
+
+class PluginInfo:
+    def __init__(self, name, version, description=None):
+        self.name = name
+        self.version = version
+        self.description = description
 
 
 class Plugin(YapsyPlugin):
