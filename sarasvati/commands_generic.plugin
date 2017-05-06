@@ -1,5 +1,5 @@
 [Core]
-Name = Generic Commands
+Name = Commands.Generic
 Module = commands_generic
 
 [Documentation]

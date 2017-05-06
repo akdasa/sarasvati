@@ -1,5 +1,5 @@
 [Core]
-Name = Console application
+Name = Application.Console
 Module = application_console
 
 [Documentation]

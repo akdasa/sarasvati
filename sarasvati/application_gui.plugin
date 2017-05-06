@@ -1,5 +1,5 @@
 [Core]
-Name = GUI application
+Name = Application.Gui
 Module = application_gui
 
 [Documentation]

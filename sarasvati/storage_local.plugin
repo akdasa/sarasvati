@@ -1,5 +1,5 @@
 [Core]
-Name = Local Storage
+Name = Storage.Local
 Module = storage_local
 
 [Documentation]
