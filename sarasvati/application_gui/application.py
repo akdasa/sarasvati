@@ -10,10 +10,8 @@ class SarasvatiGuiApplication:
     def __init__(self, storage_plugin, section_plugins):
         """
         Initializes new instance of the SarasvatiConsoleApplication class.
-        :type command_plugins: [CommandsPlugin]
         :type storage_plugin: DatabasePlugin
         :param storage_plugin: Database 
-        :param command_plugins: Commands
         """
         storage = storage_plugin.get_storage()
         self.__brain = Brain(storage)
