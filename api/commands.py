@@ -1,11 +1,9 @@
 from abc import abstractmethod, ABCMeta
 
-from api.plugins import CommandException
-
 
 class Command(metaclass=ABCMeta):
     """Provides basic command interface"""
-    def __init__(self, api):
+    def __init__(self, api=None):
         """
         Initializes new instance of the Command class.
         :type api: CommandApi
@@ -15,25 +13,30 @@ class Command(metaclass=ABCMeta):
 
     @abstractmethod
     def execute(self):
-        """
-        Executes command
-        """
+        """Executes command"""
         pass
 
     @abstractmethod
     def revert(self):
-        """
-        Reverts changes
-        """
+        """Reverts changes"""
         pass
 
+    # noinspection PyMethodMayBeStatic
+    def can_execute(self):
+        """
+        Checks if command can be executed
+        :rtype: bool
+        :return: True - if command can be executed, otherwise False
+        """
+        return True
+
     def on_completed(self):
+        """Calls when execution is completed"""
         pass
 
 
 class CommandApi:
     def __init__(self, brain):
-        self.__active_thought = None
         self.__brain = brain
 
     @property
@@ -50,3 +53,7 @@ class CommandApi:
             raise CommandException("More than one entity found")
         else:
             return lst[0]
+
+
+class CommandException(Exception):
+    pass

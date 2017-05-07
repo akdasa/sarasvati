@@ -1,5 +1,4 @@
-from api.commands import CommandApi
-from api.plugins import CommandException
+from api.commands import CommandApi, CommandException
 from sarasvati.application_console.parser import Parser
 
 

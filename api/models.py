@@ -1,5 +1,6 @@
 import uuid
 
+from api.commands import CommandException
 from api.interfaces import Composite, Component
 
 
@@ -526,6 +527,8 @@ class BrainCommandsComponent(Component):
             raise Exception("Command already executed", command)
         self.__commands.append(command)
         try:
+            if not command.can_execute():
+                raise CommandException("Command can not be executed")
             result = command.execute()
             command.on_completed()
             return result

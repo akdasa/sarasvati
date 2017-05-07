@@ -134,10 +134,6 @@ class CommandMeta:
         return self.__arguments_count
 
 
-class CommandException(Exception):
-    pass
-
-
 class SectionPlugin(Plugin):
     def get_widget(self):
         pass

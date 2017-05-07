@@ -1,6 +1,6 @@
 import shlex
 
-from api.plugins import CommandException
+from api.commands import CommandException
 
 
 class Parser:

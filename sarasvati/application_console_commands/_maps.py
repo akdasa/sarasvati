@@ -1,4 +1,4 @@
-from api.plugins import CommandException
+from api.commands import CommandException
 
 
 def show_command_map(api, args):

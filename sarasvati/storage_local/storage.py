@@ -11,6 +11,7 @@ class LocalStorage:
         self.__db = InternalStorage(path)
 
         # serialization options
+        # TODO: set serialization map
         self._options = {
             IdentityComponent.COMPONENT_NAME: IdentityComponent,
             DefinitionComponent.COMPONENT_NAME: DefinitionComponent,
