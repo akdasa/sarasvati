@@ -153,3 +153,11 @@ def test_lazy_references():
     zzz = empty_storage.get("Child_Z")
 
     assert zzz.links.references[0] == root
+
+
+def test_wrong_link_references():
+    path = "./tests/storage_local/fixtures/wrong_link.json"
+    storage = LocalStorage(path)
+    with pytest.raises(Exception) as ex:
+        storage.get("Root")
+    assert ex.value.args[0] == "No link 'Child' found"

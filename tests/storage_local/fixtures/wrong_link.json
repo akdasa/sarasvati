@@ -1,0 +1,19 @@
+{
+  "_default": {
+    "1": {
+      "identity": {
+        "key": "Root"
+      },
+      "definition": {
+        "title": "Root",
+        "description": null
+      },
+      "links": [
+        {
+          "key": "Child",
+          "kind": "child"
+        }
+      ]
+    }
+  }
+}
