@@ -1,5 +1,5 @@
-from .plex_state_diff_line import PlexStateDiffLine
-from .plex_state import PlexState
+from .state_diff_line import PlexStateDiffLine
+from .state import PlexState
 
 
 class PlexStateDiff:

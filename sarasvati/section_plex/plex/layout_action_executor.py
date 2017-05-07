@@ -2,7 +2,7 @@ from PyQt5.QtCore import QPointF
 
 from api.brain import Thought
 from .actions import MovePlexNodeAction, OpacityPlexNodeAction
-from .plex_node import PlexNode
+from .node import PlexNode
 
 
 class PlexLayoutActionExecutor:

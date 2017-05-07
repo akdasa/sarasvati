@@ -3,10 +3,10 @@ from PyQt5.QtWidgets import QGraphicsView
 
 from api.instance import get_api
 from .plex import Plex
-from .plex_layout import PlexLayout
-from .plex_layout_action_executor import PlexLayoutActionExecutor
-from .plex_scene import PlexScene
-from .plex_state_diff import PlexStateDiff
+from .layout import PlexLayout
+from .layout_action_executor import PlexLayoutActionExecutor
+from .scene import PlexScene
+from .state_diff import PlexStateDiff
 
 
 class PlexController:

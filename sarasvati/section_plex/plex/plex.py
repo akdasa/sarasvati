@@ -1,4 +1,4 @@
-from .plex_state import PlexState
+from .state import PlexState
 
 
 class Plex:

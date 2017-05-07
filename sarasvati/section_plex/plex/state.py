@@ -1,4 +1,4 @@
-from .plex_thought_state import PlexThoughtState
+from .thought_state import PlexThoughtState
 
 
 class PlexState:

@@ -1,7 +1,7 @@
 from .plex import PlexState
-from .plex_state_diff import PlexStateDiff
-from .plex_layout_action import PlexLayoutAction
-from .plex_layout_placement import PlexLayoutPlacement
+from .state_diff import PlexStateDiff
+from .layout_action import PlexLayoutAction
+from .layout_placement import PlexLayoutPlacement
 
 
 class PlexLayout:

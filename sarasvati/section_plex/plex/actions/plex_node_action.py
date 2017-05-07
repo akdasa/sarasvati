@@ -1,5 +1,5 @@
 from api.event import Event
-from ..plex_node import PlexNode
+from ..node import PlexNode
 
 
 class PlexNodeAction:

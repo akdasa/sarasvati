@@ -2,7 +2,7 @@ from PyQt5.QtCore import QPointF, QMarginsF
 from PyQt5.QtGui import QPainter, QPainterPath, QPen, QColor
 from PyQt5.QtWidgets import QGraphicsScene
 
-from .plex_node import PlexNode
+from .node import PlexNode
 
 
 class PlexScene(QGraphicsScene):
