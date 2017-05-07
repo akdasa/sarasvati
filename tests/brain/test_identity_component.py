@@ -29,3 +29,14 @@ def test_deserialize_entity_without_key():
     i = IdentityComponent()
     with pytest.raises(Exception):
         i.deserialize({"test": "123"})
+
+
+def test_serialization():
+    i = IdentityComponent()
+    assert i.serialize() == {"key": i.key}
+
+
+def test_deserialization():
+    i = IdentityComponent()
+    i.deserialize({"key": "123"})
+    assert i.key == "123"
