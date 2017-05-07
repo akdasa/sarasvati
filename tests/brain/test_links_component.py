@@ -76,8 +76,9 @@ def test_link_to_itself_raises_error():
 
 def test_linked_entity_without_storage_specified():
     t1 = Thought()
-    with pytest.raises(Exception):
+    with pytest.raises(Exception) as ex:
         t1.links.deserialize([{"key": "test2", "kind": "child"}])
+    assert ex.value.args[0] == "No 'storage' specified to load linked thoughts"
 
 
 def test_empty_links_without_storage_specified():
