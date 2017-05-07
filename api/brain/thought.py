@@ -1,6 +1,5 @@
 from api.brain.link import Link
-from api.brain.model import Model, SerializationComponent
-from api.interfaces import Component
+from api.brain.model import Model, Component
 
 
 class Thought(Model):
@@ -45,15 +44,6 @@ class Thought(Model):
         :return: Definition component
         """
         return self.get_component(DefinitionComponent.COMPONENT_NAME)
-
-    @property
-    def serialization(self):
-        """
-        Returns serialization component
-        :rtype: SerializationComponent
-        :return: Serialization component
-        """
-        return self.get_component(SerializationComponent.COMPONENT_NAME)
 
     @property
     def links(self):

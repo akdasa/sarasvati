@@ -1,5 +1,5 @@
+from api.brain.model import Composite, Component
 from api.commands import CommandException
-from api.interfaces import Composite, Component
 
 
 class Brain(Composite):

@@ -1,4 +1,4 @@
-from api.interfaces import Component
+from api.brain.model import Component
 
 
 def test_init_component():
