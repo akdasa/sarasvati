@@ -28,6 +28,16 @@ def test_add_component_to_composite():
     assert len(ct.components) == 1
 
 
+def test_add_components_to_composite():
+    c1 = Component(name="test1")
+    c2 = Component(name="test2")
+    ct = Composite()
+    ct.add_components([c1, c2])
+    assert len(ct.components) == 2
+    assert ct.has_component("test1")
+    assert ct.has_component("test2")
+
+
 def test_add_component_twice_raises_exception():
     c = Component(name="test")
     ct = Composite()
@@ -72,4 +82,12 @@ def test_access_to_non_existent_component_by_property_raises_exception():
     ct = Composite()
     with pytest.raises(Exception) as ex:
         ct.non_existent_component.do()
-    assert ex.value.args[0] == "Component 'non_existent_component' not found for " + str(ct)
+    assert ex.value.args[0] == "Component 'non_existent_component' not found for '" + str(ct) + "'"
+
+
+def test_components_returns_list_of_components():
+    c1 = Component(name="test1")
+    c2 = Component(name="test2")
+    ct = Composite()
+    ct.add_components([c1, c2])
+    assert sorted(list(ct.components), key=lambda x: x.name) == [c1, c2]

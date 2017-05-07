@@ -13,9 +13,10 @@ class Composite:
         if components is not None:
             self.add_components(components)
 
-    def has_component(self, component_name) -> bool:
+    def has_component(self, component_name):
         """
         Returns true if component already added, otherwise false
+        :rtype: bool
         :type component_name: str
         :param component_name: Name of the component
         :return: True if component already added, otherwise false
@@ -51,7 +52,8 @@ class Composite:
         :return: Component
         """
         if name not in self.__components.keys():
-            raise Exception("Component '" + name + "' not found for " + str(self))
+            raise Exception("Component '{}' not found for '{}'".format(name, str(self)))
+
         return self.__components[name]
 
     @property
