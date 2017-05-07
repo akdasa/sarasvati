@@ -1,4 +1,4 @@
-from api.models import Thought
+from api.brain import Thought
 
 TITLE = "My Thought"
 DESCRIPTION = "Some Description"

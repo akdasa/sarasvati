@@ -1,6 +1,6 @@
 import pytest
 
-from api.models import Thought
+from api.brain import Thought
 from sarasvati.storage_local import LocalStorage
 
 

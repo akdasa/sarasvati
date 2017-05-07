@@ -1,6 +1,6 @@
-from api.models import Thought, IdentityComponent, DefinitionComponent, LinksComponent
-from .internal import InternalStorage
+from api.brain.models import Thought, IdentityComponent, DefinitionComponent, LinksComponent
 from .cache import StorageCache
+from .internal import InternalStorage
 
 
 class LocalStorage:

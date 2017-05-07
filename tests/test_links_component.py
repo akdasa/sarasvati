@@ -1,6 +1,6 @@
 import pytest
 
-from api.models import Thought
+from api.brain import Thought
 
 
 def test_add():

@@ -1,9 +1,10 @@
 import os
 import sys
+
 from PyQt5.QtWidgets import QApplication
 from PyQt5.uic import loadUi
 
-from api.models import Brain
+from api.brain import Brain
 
 
 class SarasvatiGuiApplication:

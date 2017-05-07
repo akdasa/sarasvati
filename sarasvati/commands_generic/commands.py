@@ -1,5 +1,5 @@
+from api.brain import Thought
 from api.commands import Command
-from api.models import Thought
 
 
 class ActivateCommand(Command):

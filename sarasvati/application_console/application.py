@@ -1,4 +1,4 @@
-from api.models import Brain
+from api.brain import Brain
 from .processor import Processor
 
 

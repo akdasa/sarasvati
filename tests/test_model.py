@@ -1,5 +1,5 @@
+from api.brain.models import Model
 from api.interfaces import Component
-from api.models import Model
 
 
 def test_init_with_specified_components():
