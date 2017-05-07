@@ -1,3 +1,4 @@
+from api.instance import get_api
 from api.plugins import ApplicationPlugin
 from .application import SarasvatiConsoleApplication
 
@@ -11,11 +12,12 @@ class SarasvatiConsoleApplicationPlugin(ApplicationPlugin):
         self.__application = None
         self.__storage = None
         self.__commands = None
+        self.__api = get_api()
 
     def activate(self):
         # Load required plugins
-        self.__storage = self.api.plugins.get("storage")
-        self.__commands = self.api.plugins.find("commands")
+        self.__storage = self.__api.plugins.get("storage")
+        self.__commands = self.__api.plugins.find("commands")
         print(self.__INDENT, "storage:", self.__storage.info.name, self.__storage.info.version)
         print(self.__INDENT, "commands:", len(self.__commands), "plugin(s) loaded")
 

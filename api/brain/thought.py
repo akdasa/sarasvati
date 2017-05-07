@@ -173,6 +173,10 @@ class LinksComponent(Component):
         """Returns references"""
         return self.__get_links_of_kind("reference")
 
+    def by_kind(self, kind):
+        """Returns links by specified kind"""
+        return self.__get_links_of_kind(kind)
+
     def on_added(self, composite):
         self.__source = composite
 

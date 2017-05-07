@@ -8,7 +8,7 @@ class PluginManager:
     __EXTENSION = "plugin"
     __CORE_PLUGINS_PATH = "sarasvati"
 
-    def __init__(self, path="plugins", categories=None, api=None):
+    def __init__(self, path="plugins", categories=None):
         """
         Initializes new instance of the PluginManager class
         :param path: path to the plugins, default: "plugins"
@@ -16,7 +16,6 @@ class PluginManager:
         """
         self.__path = [self.__CORE_PLUGINS_PATH, path]
         self.__categories = categories or {}
-        self.__api = api
 
         # Configure plugin manager
         self.__manager = YapsyPluginManager()
@@ -54,7 +53,6 @@ class PluginManager:
             raise Exception("More than one plugin found")
 
     def __convert(self, obj):
-        obj.plugin_object.api = self.__api
         obj.plugin_object.info = PluginInfo(obj.name, obj.version)
         return obj.plugin_object
 
@@ -72,7 +70,6 @@ class Plugin(YapsyPlugin):
     """
     def __init__(self):
         super().__init__()
-        self.api = None
 
 
 class ApplicationPlugin(Plugin):

@@ -4,6 +4,7 @@ import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.uic import loadUi
 
+from api.instance import get_api
 from api.brain import Brain
 
 
@@ -18,6 +19,7 @@ class SarasvatiGuiApplication:
         self.__brain = Brain(storage)
         self.__path = os.path.dirname(os.path.abspath(__file__))
         self.__section_plugins = section_plugins
+        get_api().brain = self.__brain
 
     def run(self):
         app = QApplication(sys.argv)
@@ -30,5 +32,5 @@ class SarasvatiGuiApplication:
     @staticmethod
     def __init_sections(widget, plugins):
         for plugin in plugins:
-            #po.activate()
+            plugin.activate()
             widget.tabWidget.addTab(plugin.get_widget(), plugin.get_section_name())
