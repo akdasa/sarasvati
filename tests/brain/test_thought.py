@@ -46,3 +46,10 @@ def test_thought_has_generated_key():
 def test_thought_string_representation():
     t = Thought(title=TITLE)
     assert str(t) == "<Thought:" + t.key + "/" + t.title + ">"
+
+
+def test_thought_basic_serialization():
+    model = Thought(TITLE, DESCRIPTION)
+    assert model.serialization.serialize() == {
+        "identity": {"key": model.key},
+        "definition": {"title": TITLE, "description": DESCRIPTION}}
