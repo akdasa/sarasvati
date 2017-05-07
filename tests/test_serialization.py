@@ -1,4 +1,6 @@
-from api.brain.models import Thought, DefinitionComponent, IdentityComponent, Model, LinksComponent
+from api.brain import Thought
+from api.brain.model import Model, IdentityComponent
+from api.brain.thought import DefinitionComponent, LinksComponent
 
 _deserialization_options = {
     IdentityComponent.COMPONENT_NAME: IdentityComponent,

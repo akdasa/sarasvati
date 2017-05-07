@@ -1,4 +1,6 @@
-from api.brain.models import Thought, IdentityComponent, DefinitionComponent, LinksComponent
+from api.brain import Thought
+from api.brain.model import IdentityComponent
+from api.brain.thought import DefinitionComponent, LinksComponent
 from .cache import StorageCache
 from .internal import InternalStorage
 

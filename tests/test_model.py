@@ -1,4 +1,4 @@
-from api.brain.models import Model
+from api.brain.model import Model
 from api.interfaces import Component
 
 
