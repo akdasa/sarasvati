@@ -9,9 +9,9 @@ from api.models import Brain
 class SarasvatiGuiApplication:
     def __init__(self, storage_plugin, section_plugins):
         """
-        Initializes new instance of the SarasvatiConsoleApplication class.
-        :type storage_plugin: DatabasePlugin
-        :param storage_plugin: Database 
+        Initializes new instance of the SarasvatiGuiApplication class.
+        :type storage_plugin: StoragePlugin
+        :param storage_plugin: Storage 
         """
         storage = storage_plugin.get_storage()
         self.__brain = Brain(storage)
@@ -20,7 +20,7 @@ class SarasvatiGuiApplication:
 
     def run(self):
         app = QApplication(sys.argv)
-        widget = loadUi(os.path.join(self.__path, 'main.ui'))
+        widget = loadUi(os.path.join(self.__path, "main.ui"))
         self.__init_sections(widget, self.__section_plugins)
 
         widget.show()
