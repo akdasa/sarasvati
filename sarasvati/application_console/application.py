@@ -9,8 +9,8 @@ class SarasvatiConsoleApplication:
         """
         Initializes new instance of the SarasvatiConsoleApplication class.
         :type command_plugins: [CommandsPlugin]
-        :type storage_plugin: DatabasePlugin
-        :param storage_plugin: Database 
+        :type storage_plugin: StoragePlugin
+        :param storage_plugin: Storage 
         :param command_plugins: Commands
         """
         storage = storage_plugin.get_storage()
