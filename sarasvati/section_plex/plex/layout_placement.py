@@ -10,7 +10,7 @@ class PlexLayoutPlacement:
     def place(self, plex_state: PlexState):
         self.offset = {"child_x": 0, "parent_x":0,"jump_y":0}
         self.result = {}
-        for state in ["root", "parent", "child", "jump"]:
+        for state in ["root", "parent", "child", "reference"]:
             thoughts = plex_state.get_thoughts_by_state(state)
             for thought in thoughts:
                 pos = self.__get_pos(state)
@@ -35,7 +35,7 @@ class PlexLayoutPlacement:
             self.offset["child_x"] += 100
             return [x, 100]
 
-        if state == "jump":
+        if state == "reference":
             y = self.offset["jump_y"]
             self.offset["jump_y"] -= 40
             return [-200, y]

@@ -30,7 +30,7 @@ class PlexScene(QGraphicsScene):
                 if node is not None and node not in drawn_from:
                     if link_kind == "parent":
                         self.__draw_link(painter, node, item)
-                    if link_kind == "jump":
+                    if link_kind == "reference":
                         self.__draw_jump_link(painter, item, node)
             drawn_from.append(item)
 
