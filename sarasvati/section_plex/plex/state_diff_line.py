@@ -19,3 +19,6 @@ class PlexStateDiffLine:
         return self.thought == other.thought and \
             self.old_state == other.old_state and \
             self.new_state == other.new_state
+
+    def __repr__(self):
+        return "<{}/{}->{}>".format(self.thought.title, self.old_state, self.new_state)

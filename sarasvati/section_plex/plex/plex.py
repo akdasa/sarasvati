@@ -13,7 +13,6 @@ class Plex:
         """
         self.brain = brain
 
-
     def activate(self, thought):
         """
         Activate thought
