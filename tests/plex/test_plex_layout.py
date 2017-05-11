@@ -1,16 +1,4 @@
-# def setUp(self):
-#     self.storage = MemoryStorage()
-#     self.brain = Brain(self.storage)
-#     self.plex = Plex(self.brain)
-#     self.layout = PlexLayout()
-#
-#     # root -> 1child -> child_of_child
-#     # root -> 2child
-#     self.root = self.brain.create_thought("root")
-#     self.child1 = self.brain.create_linked_thought(self.root, "parent->child", "1child")
-#     self.child2 = self.brain.create_linked_thought(self.root, "parent->child", "2child")
-#     self.child3 = self.brain.create_linked_thought(self.child1, "parent->child", "3child")
-from sarasvati.section_plex.plex import PlexLayout, PlexLayoutAction
+from sarasvati.section_plex.plex import PlexLayoutAction
 
 
 def test_root(plex, layout, thoughts):
