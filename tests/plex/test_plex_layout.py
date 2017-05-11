@@ -6,10 +6,10 @@ def test_root(plex, layout, thoughts):
     assert _s(layout.change_to(state)) == _s([
         PlexLayoutAction(thoughts["Brain"], "add", None),
         PlexLayoutAction(thoughts["Brain"], "move_to", [0, 0]),
-        PlexLayoutAction(thoughts["Tasks"], "add", None),
-        PlexLayoutAction(thoughts["Tasks"], "move_to",  [100, 100]),
         PlexLayoutAction(thoughts["Recipes"], "add", None),
-        PlexLayoutAction(thoughts["Recipes"], "move_to", [200, 100])
+        PlexLayoutAction(thoughts["Recipes"], "move_to", [100, 100]),
+        PlexLayoutAction(thoughts["Tasks"], "add", None),
+        PlexLayoutAction(thoughts["Tasks"], "move_to",  [200, 100])
     ])
 
 
@@ -20,10 +20,10 @@ def test_tasks(plex, layout, thoughts):
         PlexLayoutAction(thoughts["Tasks"], "move_to", [0, 0]),
         PlexLayoutAction(thoughts["Brain"], "add", None),
         PlexLayoutAction(thoughts["Brain"], "move_to", [0, -100]),
-        PlexLayoutAction(thoughts["Task1"], "add", None),
-        PlexLayoutAction(thoughts["Task1"], "move_to", [100, 100]),
         PlexLayoutAction(thoughts["Task2"], "add", None),
-        PlexLayoutAction(thoughts["Task2"], "move_to", [200, 100])
+        PlexLayoutAction(thoughts["Task2"], "move_to", [100, 100]),
+        PlexLayoutAction(thoughts["Task1"], "add", None),
+        PlexLayoutAction(thoughts["Task1"], "move_to", [200, 100])
     ])
 
 
@@ -47,12 +47,12 @@ def test_brain_and_tasks(plex, layout, thoughts):
         PlexLayoutAction(thoughts["Tasks"], "move_to", [0, 0]),
         PlexLayoutAction(thoughts["Recipes"], "move_to", thoughts["Brain"]),
         PlexLayoutAction(thoughts["Recipes"], "remove", None),
-        PlexLayoutAction(thoughts["Task1"], "add", None),
-        PlexLayoutAction(thoughts["Task1"], "set_pos_to", thoughts["Tasks"]),
-        PlexLayoutAction(thoughts["Task1"], "move_to", [100, 100]),
         PlexLayoutAction(thoughts["Task2"], "add", None),
         PlexLayoutAction(thoughts["Task2"], "set_pos_to", thoughts["Tasks"]),
-        PlexLayoutAction(thoughts["Task2"], "move_to", [200, 100])
+        PlexLayoutAction(thoughts["Task2"], "move_to", [100, 100]),
+        PlexLayoutAction(thoughts["Task1"], "add", None),
+        PlexLayoutAction(thoughts["Task1"], "set_pos_to", thoughts["Tasks"]),
+        PlexLayoutAction(thoughts["Task1"], "move_to", [200, 100]),
     ])
 
 
