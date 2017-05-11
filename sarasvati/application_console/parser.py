@@ -28,4 +28,4 @@ class Parser:
                                    .format(token_cmd, args_cnt, len(token_args)))
 
         cmd_args = args_map(self.__api, token_args) if args_map else token_args
-        return cmd_class(self.__api, *cmd_args)
+        return cmd_class(*cmd_args)

@@ -1,3 +1,4 @@
+from api.commands import CommandException
 from api.instance import set_api
 from api.event import Event
 from api.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin, SectionPlugin
@@ -22,6 +23,17 @@ class SarasvatiApi:
     @property
     def events(self):
         return self.__events
+
+    @staticmethod
+    def get_one(lst):
+        """Returns one element from list, otherwise raises exception"""
+        lst_len = len(lst)
+        if lst_len == 0:
+            raise CommandException("Nothing found")
+        elif lst_len > 1:
+            raise CommandException("More than one entity found")
+        else:
+            return lst[0]
 
 
 class SarasvatiApiEvents:

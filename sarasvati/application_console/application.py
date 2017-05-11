@@ -1,5 +1,6 @@
 from api.brain import Brain
 from .processor import Processor
+from api.instance import get_api
 
 
 class SarasvatiConsoleApplication:
@@ -17,6 +18,7 @@ class SarasvatiConsoleApplication:
         commands = self.__collect_commands(command_plugins)
         self.__brain = Brain(storage)
         self.__processor = Processor(self.__brain, commands)
+        get_api().brain = self.__brain
 
     def run(self):
         """

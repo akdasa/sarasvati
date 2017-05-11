@@ -3,8 +3,8 @@ from api.commands import Command
 
 
 class ActivateCommand(Command):
-    def __init__(self, api, thought):
-        super().__init__(api)
+    def __init__(self, thought):
+        super().__init__()
         self.__thought = thought
         self.__prev = None
 
@@ -17,8 +17,8 @@ class ActivateCommand(Command):
 
 
 class CreateCommand(Command):
-    def __init__(self, api, title):
-        super().__init__(api)
+    def __init__(self, title):
+        super().__init__()
         self.__created = None
         self.__title = title
 
@@ -32,8 +32,8 @@ class CreateCommand(Command):
 
 
 class DeleteCommand(Command):
-    def __init__(self, api, thought):
-        super().__init__(api)
+    def __init__(self, thought):
+        super().__init__()
         self.__thought = thought
 
     def execute(self):
@@ -44,8 +44,8 @@ class DeleteCommand(Command):
 
 
 class SetTitleCommand(Command):
-    def __init__(self, api, thought, title):
-        super().__init__(api)
+    def __init__(self, thought, title):
+        super().__init__()
         if thought is None:
             raise ValueError("Thought is none")
         self.__thought = thought
@@ -63,8 +63,8 @@ class SetTitleCommand(Command):
 
 
 class SetDescriptionCommand(Command):
-    def __init__(self, api, thought, description):
-        super().__init__(api)
+    def __init__(self, thought, description):
+        super().__init__()
         if thought is None:
             raise ValueError("Thought is none")
         self.__thought = thought
@@ -82,8 +82,8 @@ class SetDescriptionCommand(Command):
 
 
 class LinkCommand(Command):
-    def __init__(self, api, source, destination, kind):
-        super().__init__(api)
+    def __init__(self, source, destination, kind):
+        super().__init__()
         self.__source = source
         self.__destination = destination
         self.__kind = kind

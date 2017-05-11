@@ -1,6 +1,6 @@
-from api.commands import CommandApi, CommandException
+from api.commands import CommandException
 from sarasvati.application_console.parser import Parser
-
+from api.instance import get_api
 
 class Processor:
     __REVERT_COMMAND = "revert"
@@ -13,7 +13,7 @@ class Processor:
         :param brain: Brain to manipulate with
         """
         self.__brain = brain
-        self.__api = CommandApi(self.__brain)
+        self.__api = get_api()
         self.__parser = Parser(self.__api, commands)
 
     def execute(self, line):

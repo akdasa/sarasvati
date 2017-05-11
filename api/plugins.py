@@ -103,7 +103,7 @@ class CommandsPlugin(Plugin):
 
     def _register_console_command(self, name, command_class, arguments_map=None):
         init_params_count = len(signature(command_class.__init__).parameters)
-        arguments_count = None if arguments_map else init_params_count - 2
+        arguments_count = None if arguments_map else init_params_count - 1
         self.__console_commands[name] = CommandMeta(name, command_class, arguments_map, arguments_count)
 
 

@@ -4,8 +4,8 @@ from colored import stylize
 
 
 class ListCommand(Command):
-    def __init__(self, api, title):
-        super().__init__(api)
+    def __init__(self, title):
+        super().__init__()
         self.__title = title
         self.__title_style = colored.fg("green")
 
@@ -19,8 +19,8 @@ class ListCommand(Command):
 
 
 class ShowCommand(Command):
-    def __init__(self, api, thought):
-        super().__init__(api)
+    def __init__(self, thought):
+        super().__init__()
         self.__title_style = colored.fg("green") + colored.attr("bold")
         self.__link_style = colored.fg("blue") + colored.attr("underlined")
         self.__thought = thought
