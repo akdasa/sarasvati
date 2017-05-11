@@ -57,7 +57,6 @@ class PlexScene(QGraphicsScene):
         painter.setPen(QPen(QColor(0, 0, 0, opacity)))
         painter.drawPath(cubic_path)
 
-
     @staticmethod
     def __draw_jump_link(painter, src, dst):
         margins = QMarginsF(10, 10, 10, 10)

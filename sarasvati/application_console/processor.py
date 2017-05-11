@@ -2,6 +2,7 @@ from api.commands import CommandException
 from sarasvati.application_console.parser import Parser
 from api.instance import get_api
 
+
 class Processor:
     __REVERT_COMMAND = "revert"
     __QUIT_COMMAND = "quit"

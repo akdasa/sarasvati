@@ -1,4 +1,3 @@
-from api.instance import get_api
 from api.plugins import ApplicationPlugin
 from .application import SarasvatiGuiApplication
 

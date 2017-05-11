@@ -2,7 +2,6 @@ import os
 
 from PyQt5.uic import loadUi
 
-from api.instance import get_api
 from api.plugins import SectionPlugin
 from .plex import PlexController
 

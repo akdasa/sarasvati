@@ -33,7 +33,7 @@ class PlexController:
         self.__api.events.thoughtSelected.notify(root_thought)
 
     def activate(self, thought):
-        self.brain.search.by_id(thought.key) # TODO load lazy thought
+        self.brain.search.by_id(thought.key)  # TODO load lazy thought
 
         self.active_thought = thought
         new_state = self.plex.activate(thought)
