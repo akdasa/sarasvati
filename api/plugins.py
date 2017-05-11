@@ -3,6 +3,8 @@ from inspect import signature
 from yapsy.IPlugin import IPlugin as YapsyPlugin
 from yapsy.PluginManager import PluginManager as YapsyPluginManager
 
+from api.instance import get_api
+
 
 class PluginManager:
     __EXTENSION = "plugin"
@@ -70,6 +72,7 @@ class Plugin(YapsyPlugin):
     """
     def __init__(self):
         super().__init__()
+        self._api = get_api()
 
 
 class ApplicationPlugin(Plugin):
@@ -132,6 +135,9 @@ class CommandMeta:
 
 
 class SectionPlugin(Plugin):
+    def __init__(self):
+        super().__init__()
+
     def get_widget(self):
         pass
 

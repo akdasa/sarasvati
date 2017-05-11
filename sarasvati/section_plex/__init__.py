@@ -13,10 +13,9 @@ class PlexSectionPlugin(SectionPlugin):
         self.__widget = None
         self.__path = os.path.dirname(os.path.abspath(__file__))
         self.__plex_controller = None
-        self.__api = get_api()
 
     def activate(self):
-        path = os.path.join(self.__path, 'section.ui')
+        path = os.path.join(self.__path, "section.ui")
         self.__widget = loadUi(path)
         # self.__widget.toolBox.removeItem(0)  # remove dummy page
 
@@ -27,7 +26,7 @@ class PlexSectionPlugin(SectionPlugin):
         #    po.activate()
         #    self.widget.toolBox.addItem(po.get_widget(), po.get_section_name())
 
-        self.__plex_controller = PlexController(self.__api.brain, self.__widget.graphicsView)
+        self.__plex_controller = PlexController(self._api.brain, self.__widget.graphicsView)
 
     def get_widget(self):
         return self.__widget
