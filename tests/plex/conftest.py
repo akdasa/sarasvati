@@ -45,3 +45,10 @@ def layout():
 @pytest.fixture
 def differ():
     return PlexStateDiff()
+
+
+@pytest.fixture
+def compare():
+    def a(array1, array2):
+        return sorted(array1, key=lambda t: t.key) == sorted(array2, key=lambda t: t.key)
+    return a
