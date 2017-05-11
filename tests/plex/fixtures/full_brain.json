@@ -73,6 +73,10 @@
         {
           "key": "Recipe 'Anthill cake'",
           "kind": "reference"
+        },
+        {
+          "key": "Party",
+          "kind": "parent"
         }
       ]
     },
@@ -129,6 +133,40 @@
       "links": [
         {
           "key": "Recipes",
+          "kind": "parent"
+        }
+      ]
+    },
+    "8": {
+      "identity": {
+        "key": "Party"
+      },
+      "definition": {
+        "title": "Party",
+        "description": null
+      },
+      "links": [
+        {
+          "key": "Cook cake",
+          "kind": "child"
+        },
+        {
+          "key": "Guests",
+          "kind": "child"
+        }
+      ]
+    },
+    "9": {
+      "identity": {
+        "key": "Guests"
+      },
+      "definition": {
+        "title": "Guests",
+        "description": null
+      },
+      "links": [
+        {
+          "key": "Party",
           "kind": "parent"
         }
       ]

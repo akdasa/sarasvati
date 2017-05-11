@@ -27,7 +27,7 @@ class PlexController:
         self.__set_up_view_widget()
         self.actions_executor = PlexLayoutActionExecutor(self.scene)
 
-        root_thought = self.brain.search.by_title("Root")[0]  # todo get_root_thought()
+        root_thought = self.brain.search.by_title("Brain")[0]  # todo get_root_thought()
         self.activate(root_thought)
 
         self.__api.events.thoughtSelected.notify(root_thought)

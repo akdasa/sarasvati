@@ -34,6 +34,8 @@ def thoughts(brain):
         "Task2": brain.search.by_id("Cook cake"),
         "Recipe1": brain.search.by_id("Recipe 'Anthill cake'"),
         "Recipe2": brain.search.by_id("Simple wounderful"),
+        "Party": brain.search.by_id("Party"),
+        "Guests": brain.search.by_id("Guests"),
     }
 
 
