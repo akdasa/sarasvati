@@ -80,4 +80,4 @@ def test_twice_empty(plex, layout, thoughts):
 
 
 def compare(array1, array2):
-    return sorted(array1, key=lambda a: a.thought.key) == sorted(array2, key=lambda a: a.thought.key)
+    return sorted(array1, key=lambda a: a.thought.key+a.name) == sorted(array2, key=lambda a: a.thought.key+a.name)
