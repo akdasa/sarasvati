@@ -3,7 +3,7 @@ from sarasvati.section_plex.plex import PlexLayoutAction
 
 def test_root(plex, layout, thoughts):
     state = plex.activate(thoughts["Brain"])
-    assert compare(layout.change_to(state), [
+    assert _s(layout.change_to(state)) == _s([
         PlexLayoutAction(thoughts["Brain"], "add", None),
         PlexLayoutAction(thoughts["Brain"], "move_to", [0, 0]),
         PlexLayoutAction(thoughts["Tasks"], "add", None),
@@ -29,7 +29,7 @@ def test_tasks(plex, layout, thoughts):
 
 def test_task1(plex, layout, thoughts):
     state = plex.activate(thoughts["Task1"])
-    assert compare(layout.change_to(state), [
+    assert _s(layout.change_to(state)) == _s([
         PlexLayoutAction(thoughts["Task1"], "add", None),
         PlexLayoutAction(thoughts["Task1"], "move_to", [0, 0]),
         PlexLayoutAction(thoughts["Tasks"], "add", None),
@@ -61,7 +61,7 @@ def test_brain_and_tasks1(plex, layout, thoughts):
     layout.change_to(state)
     state = plex.activate(thoughts["Task1"])
 
-    assert compare(layout.change_to(state), [
+    assert _s(layout.change_to(state)) == _s([
         PlexLayoutAction(thoughts["Brain"], "remove"),
         PlexLayoutAction(thoughts["Tasks"], "move_to", [0, -100]),
         PlexLayoutAction(thoughts["Recipes"], "move_to", thoughts["Brain"]),
@@ -81,6 +81,3 @@ def test_twice_empty(plex, layout, thoughts):
 
 def _s(array):
     return sorted(array, key=lambda a: a.thought.key+a.name)
-
-def compare(array1, array2):
-    return sorted(array1, key=lambda a: a.thought.key+a.name) == sorted(array2, key=lambda a: a.thought.key+a.name)
