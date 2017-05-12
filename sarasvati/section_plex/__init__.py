@@ -16,14 +16,13 @@ class PlexSectionPlugin(SectionPlugin):
     def activate(self):
         path = os.path.join(self.__path, "section.ui")
         self.__widget = loadUi(path)
-        # self.__widget.toolBox.removeItem(0)  # remove dummy page
+        self.__widget.toolBox.removeItem(0)  # remove dummy page
 
-        #plugins = api.pluginManager.getPluginsOfCategory("toolbox")
-        #plugins.sort(key=lambda x: x.plugin_object.get_order())
-        #for plugin in plugins:
-        #    po = plugin.plugin_object
-        #    po.activate()
-        #    self.widget.toolBox.addItem(po.get_widget(), po.get_section_name())
+        plugins = self._api.plugins.find("toolbox")
+        plugins.sort(key=lambda x: x.get_order())
+        for plugin in plugins:
+            plugin.activate()
+            self.__widget.toolBox.addItem(plugin.get_widget(), plugin.get_section_name())
 
         self.__plex_controller = PlexController(self._api.brain, self.__widget.graphicsView)
 
@@ -31,4 +30,4 @@ class PlexSectionPlugin(SectionPlugin):
         return self.__widget
 
     def get_section_name(self):
-        return 'Brain'
+        return "Brain"

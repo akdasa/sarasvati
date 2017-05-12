@@ -143,3 +143,14 @@ class SectionPlugin(Plugin):
 
     def get_section_name(self):
         pass
+
+
+class ToolboxPlugin(Plugin):
+    def get_widget(self):
+        pass
+
+    def get_section_name(self):
+        pass
+
+    def get_order(self):
+        return 0
