@@ -2,6 +2,7 @@ from api.commands import CommandException
 from api.instance import set_api
 from api.event import Event
 from api.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin, SectionPlugin, ToolboxPlugin
+from sarasvati.commands_generic import CreateCommand, LinkCommand
 
 
 class SarasvatiApi:
@@ -55,12 +56,17 @@ class SarasvatiApiActions:
         self.__api = api
 
     def create_thought(self, title):
-        thought = self.__api.brain.create_thought(title)
+        command = CreateCommand(title)
+        thought = self.__api.brain.commands.execute(command)
         self.__api.events.thoughtCreated.notify(thought)
         return thought
 
     def create_linked_thought(self, root, kind, title):
-        thought = self.__api.brain.create_linked_thought(root, kind, title)
+        ex = self.__api.brain.commands.execute
+        thought = ex(CreateCommand(title))
+        ex(LinkCommand(root, thought, "child"))
+        ex(LinkCommand(thought, root, "parent"))
+
         self.__api.events.thoughtCreated.notify(thought)
         return thought
 

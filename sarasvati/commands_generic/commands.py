@@ -89,7 +89,7 @@ class LinkCommand(Command):
         self.__kind = kind
 
     def execute(self):
-        self.__source.links.add(self.__destination, self.__kind)
+        return self.__source.links.add(self.__destination, self.__kind)
 
     def revert(self):
         self.__source.links.remove(self.__destination)

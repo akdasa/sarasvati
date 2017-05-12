@@ -29,7 +29,7 @@ class Controller:
         if self.active_thought is None:
             self.active_thought = self.__api.actions.create_thought("New Node")
         else:
-            #self.__api.actions.create_linked_thought(self.active_thought, "parent->child", "Child Node")
+            self.__api.actions.create_linked_thought(self.active_thought, "parent->child", "Child Node")
             pass
 
     def __on_create_parent_button_clicked(self):
