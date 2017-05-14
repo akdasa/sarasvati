@@ -27,20 +27,11 @@ class Controller:
         self.__widget.createReferenceButton.setEnabled(thought is not None)
 
     def __on_thought_selected(self, thought):
-        if self.__thought and self.__is_modified:
+        if self.__thought and self.__is_modified:  # update previously selected thought
             self.__api.actions.update_thought(self.__thought)
             self.__is_modified = False
         self.__thought = thought
         self.__update_controls(thought)
-
-    def __on_create_child_button_clicked(self):
-        self.__api.actions.create_linked_thought(self.__thought, "child", "Child Node")
-
-    def __on_create_parent_button_clicked(self):
-        self.__api.actions.create_linked_thought(self.__thought, "parent", "Parent Node")
-
-    def __on_create_reference_button_clicked(self):
-        self.__api.actions.create_linked_thought(self.__thought, "reference", "Reference Node")
 
     def __on_title_text_changed(self):
         title = self.__widget.title.toPlainText()
@@ -55,3 +46,12 @@ class Controller:
             self.__thought.description = description
             self.__api.actions.updating_thought(self.__thought)
             self.__is_modified = True
+
+    def __on_create_child_button_clicked(self):
+        self.__api.actions.create_linked_thought(self.__thought, "child", "Child Node")
+
+    def __on_create_parent_button_clicked(self):
+        self.__api.actions.create_linked_thought(self.__thought, "parent", "Parent Node")
+
+    def __on_create_reference_button_clicked(self):
+        self.__api.actions.create_linked_thought(self.__thought, "reference", "Reference Node")
