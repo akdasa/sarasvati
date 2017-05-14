@@ -63,12 +63,12 @@ def test_load_linked_child(empty_storage, root_thought):
 
 def test_load_linked_child_and_parent(storage):
     brain = storage.get("Brain")
-    tasks = brain.links.children[0]
+    tasks = list(filter(lambda x: x.title == "Tasks", brain.links.children))[0]
     tasks_db = storage.get("Tasks")
 
     assert tasks is tasks_db
-    assert brain.links.children[0] is tasks
-    assert tasks.links.parents[0] is brain
+    assert tasks in brain.links.children
+    assert brain in tasks.links.parents
 
 
 def test_load_linked_child_parent_and_lazy_child(storage):
@@ -76,10 +76,10 @@ def test_load_linked_child_parent_and_lazy_child(storage):
     cook = storage.get("Cook cake")
     tasks = storage.get("Tasks")
 
-    assert brain.links.children[0] is tasks
+    assert tasks in brain.links.children
     assert cook in tasks.links.children
-    assert tasks.links.parents[0] is brain
-    assert cook.links.parents[0] is tasks
+    assert brain in tasks.links.parents
+    assert tasks in cook.links.parents
 
 
 def test_cache_linked(storage):
