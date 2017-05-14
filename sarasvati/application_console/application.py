@@ -1,9 +1,9 @@
+from api.application import SarasvatiApplication
 from api.brain import Brain
 from .processor import Processor
-from api.instance import get_api
 
 
-class SarasvatiConsoleApplication:
+class SarasvatiConsoleApplication(SarasvatiApplication):
     __QUIT_COMMAND = "quit"
 
     def __init__(self, storage_plugin, command_plugins):
@@ -14,11 +14,12 @@ class SarasvatiConsoleApplication:
         :param storage_plugin: Storage 
         :param command_plugins: Commands
         """
+        super().__init__()
         storage = storage_plugin.get_storage()
         commands = self.__collect_commands(command_plugins)
         self.__brain = Brain(storage)
         self.__processor = Processor(self.__brain, commands)
-        get_api().brain = self.__brain
+        self._api.brain = self.__brain
 
     def run(self):
         """

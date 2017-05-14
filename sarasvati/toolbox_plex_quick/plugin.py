@@ -9,18 +9,17 @@ from .controller import Controller
 class BrainQuickToolboxPlugin(ToolboxPlugin):
     def __init__(self):
         super().__init__()
-        self.controller = None
-        self.widget = None
-        self.path = os.path.dirname(os.path.abspath(__file__))
+        self.__controller = None
+        self.__widget = None
+        self.__path = os.path.dirname(os.path.abspath(__file__))
 
     def activate(self):
-        path = os.path.join(self.path, "widget.ui")
-        self.widget = loadUi(path)
-
-        self.controller = Controller(self.widget)
+        path = os.path.join(self.__path, "widget.ui")
+        self.__widget = loadUi(path)
+        self.__controller = Controller(self.__widget)
 
     def get_widget(self):
-        return self.widget
+        return self.__widget
 
     def get_section_name(self):
         return 'Actions'

@@ -50,6 +50,9 @@
     <layout class="QHBoxLayout" name="buttonsLayout">
      <item>
       <widget class="QPushButton" name="createChildButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Child</string>
        </property>
@@ -57,6 +60,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="createParentButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Parent</string>
        </property>
@@ -66,9 +72,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="createJumpButton">
+      <widget class="QPushButton" name="createReferenceButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
-        <string>Jump</string>
+        <string>Reference</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

@@ -23,6 +23,7 @@ class PlexController:
         self.__api.events.thoughtSelected.subscribe(self.__on_thought_selected)
         self.__api.events.thoughtCreated.subscribe(self.__on_thought_created)
         self.__api.events.thoughtChanged.subscribe(self.__on_thought_changed)
+        self.__api.events.thoughtChanging.subscribe(self.__on_thought_changed)
 
         self.__set_up_view_widget()
         self.actions_executor = PlexLayoutActionExecutor(self.scene)

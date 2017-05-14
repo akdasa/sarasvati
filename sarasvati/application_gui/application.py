@@ -4,22 +4,23 @@ import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.uic import loadUi
 
-from api.instance import get_api
+from api.application import SarasvatiApplication
 from api.brain import Brain
 
 
-class SarasvatiGuiApplication:
+class SarasvatiGuiApplication(SarasvatiApplication):
     def __init__(self, storage_plugin, section_plugins):
         """
         Initializes new instance of the SarasvatiGuiApplication class.
         :type storage_plugin: StoragePlugin
         :param storage_plugin: Storage 
         """
+        super().__init__()
         storage = storage_plugin.get_storage()
         self.__brain = Brain(storage)
         self.__path = os.path.dirname(os.path.abspath(__file__))
         self.__section_plugins = section_plugins
-        get_api().brain = self.__brain
+        self._api.brain = self.__brain
 
     def run(self):
         app = QApplication(sys.argv)

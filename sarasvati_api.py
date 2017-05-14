@@ -14,6 +14,7 @@ class SarasvatiApi:
         set_api(self)
         self.__events = SarasvatiApiEvents()
         self.__actions = SarasvatiApiActions(self)
+        self.__serialization = SarasvatiApiSerialization()
         self.__plugins = PluginManager(
             categories={
                 "application": ApplicationPlugin,
@@ -22,7 +23,6 @@ class SarasvatiApi:
                 "section": SectionPlugin,
                 "toolbox": ToolboxPlugin
             })
-        self.__serialization = SarasvatiApiSerialization()
 
     @property
     def plugins(self):
@@ -85,6 +85,9 @@ class SarasvatiApiActions:
 
         self.__api.events.thoughtCreated.notify(thought)
         return thought
+
+    def updating_thought(self, thought):
+        self.__api.events.thoughtChanging.notify(thought)
 
     def update_thought(self, thought):
         self.__api.brain.storage.update(thought)
