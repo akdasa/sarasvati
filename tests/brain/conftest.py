@@ -4,7 +4,7 @@ from api.brain import Brain
 from api.brain.model import IdentityComponent
 from api.brain.thought import DefinitionComponent, LinksComponent
 from api.commands import Command
-from api.plugins import PluginManager, StoragePlugin
+from sarasvati.storage_local import LocalStorage
 
 
 class DummyCommand(Command):
@@ -22,9 +22,7 @@ class DummyCommand(Command):
 
 @pytest.fixture
 def brain():
-    pm = PluginManager(categories={"storage": StoragePlugin})
-    plugins = pm.get("storage")
-    storage = plugins.get_storage()
+    storage = LocalStorage(None)
     return Brain(storage)
 
 

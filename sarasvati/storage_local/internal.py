@@ -11,7 +11,7 @@ class InternalStorage:
         else:
             self.__db = TinyDB(storage=MemoryStorage)
 
-    def count(self):
+    def count(self, query=None):
         return len(self.__db)
 
     def contains(self, key):

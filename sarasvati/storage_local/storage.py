@@ -1,11 +1,11 @@
 from api.brain import Thought
-from api.brain.model import IdentityComponent
-from api.brain.thought import DefinitionComponent, LinksComponent
+from api.instance import get_api
+from api.storage import Storage
 from .cache import StorageCache
 from .internal import InternalStorage
 
 
-class LocalStorage:
+class LocalStorage(Storage):
     def __init__(self, path="db.json"):
         """
         Initializes new instance of the LocalStorage class
@@ -15,33 +15,7 @@ class LocalStorage:
         super().__init__()
         self.__cache = StorageCache()
         self.__db = InternalStorage(path)
-        self._options = {
-            "get_component": self.__get_component,
-            "get_linked": self.get_from_cache_or_create}
-
-    @property
-    def cache(self):
-        return self.__cache
-
-    def count(self):
-        return self.__db.count()
-
-    def contains(self, key):
-        return self.__db.contains(key)
-
-    def get(self, key):
-        """
-        Returns thought by "identity.key"
-        :param key: Key
-        :return: Thought or None if nothing found
-        """
-        result = self.search({
-            "field": "identity.key",
-            "operator": "=",
-            "value": key})
-        if len(result) > 1:
-            raise Exception("Entity is not unique {}".format(key))
-        return result[0] if len(result) > 0 else None
+        self.__options = get_api().serialization.get_options(self)
 
     def add(self, thought):
         """
@@ -99,13 +73,13 @@ class LocalStorage:
 
             if not in_cache:
                 thought = Thought()
-                thought.serialization.deserialize(db_entity, self._options)
+                thought.serialization.deserialize(db_entity, self.__options)
                 self.__cache.add(thought)
                 self.__load_linked(thought)
             else:
                 thought = self.__cache.get(key)
                 if is_lazy:
-                    thought.serialization.deserialize(db_entity, self._options)
+                    thought.serialization.deserialize(db_entity, self.__options)
                     self.__cache.add(thought)  # remove lazy flag
                 self.__load_linked(thought)
 
@@ -113,32 +87,53 @@ class LocalStorage:
 
         return result
 
+    def get(self, key):
+        """
+        Returns thought by "identity.key"
+        :param key: Key
+        :return: Thought or None if nothing found
+        """
+        result = self.search({
+            "field": "identity.key",
+            "operator": "=",
+            "value": key})
+        if len(result) > 1:
+            raise Exception("Entity is not unique {}".format(key))
+        return result[0] if len(result) > 0 else None
+
+    def contains(self, key):
+        """
+        Returns True if storage contains thought with specified key
+        :rtype: bool
+        :type key: str
+        :param key: Key
+        :return: True if thought found in storage
+        """
+        return self.__db.contains(key)
+
+    def count(self, query=None):
+        """
+        Returns count of Thoughts
+        :type query: dict
+        :rtype: int
+        :param query: Query
+        :return: Count
+        """
+        return self.__db.count(query)
+
+    @property
+    def cache(self):
+        """
+        Returns cache
+        """
+        return self.__cache
+
     def __load_linked(self, thought):
         for linked in thought.links.all:
             if self.__cache.is_lazy(linked.key):
                 db_data = self.__db.search({"field": "identity.key", "operator": "=", "value": linked.key})
                 if len(db_data) == 0:
                     raise Exception("No link '{}' found".format(linked.key))
-                linked.serialization.deserialize(db_data[0], self._options)
+                linked.serialization.deserialize(db_data[0], self.__options)
                 self.__cache.add(linked, lazy=False)
 
-    @staticmethod
-    # TODO: set serialization map
-    def __get_component(key):
-        options = {
-            IdentityComponent.COMPONENT_NAME: IdentityComponent,
-            DefinitionComponent.COMPONENT_NAME: DefinitionComponent,
-            LinksComponent.COMPONENT_NAME: LinksComponent}
-        res = options.get(key, None)
-        if res:
-            return res()
-        return None
-
-    def get_from_cache_or_create(self, key):
-        cached = self.__cache.thoughts.get(key, None)
-        if not cached:
-            thought = Thought("<LAZY>", key=key)
-            self.__cache.add(thought, lazy=True)
-            return thought
-        else:
-            return cached

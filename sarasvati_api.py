@@ -1,4 +1,7 @@
 import sys
+
+from api.brain.model import IdentityComponent
+from api.brain.thought import DefinitionComponent, LinksComponent, Thought
 from api.commands import CommandException
 from api.instance import set_api
 from api.event import Event
@@ -19,6 +22,7 @@ class SarasvatiApi:
                 "section": SectionPlugin,
                 "toolbox": ToolboxPlugin
             })
+        self.__serialization = SarasvatiApiSerialization()
 
     @property
     def plugins(self):
@@ -31,6 +35,10 @@ class SarasvatiApi:
     @property
     def actions(self):
         return self.__actions
+
+    @property
+    def serialization(self):
+        return self.__serialization
 
     @staticmethod
     def get_one(lst):
@@ -81,3 +89,37 @@ class SarasvatiApiActions:
     def update_thought(self, thought):
         self.__api.brain.storage.update(thought)
         self.__api.events.thoughtChanged.notify(thought)
+
+
+class SarasvatiApiSerialization:
+    def __init__(self):
+        pass
+
+    def get_options(self, storage):
+        return {
+            "get_component": self.__get_component,
+            "get_linked": self.__get_linked(storage)}
+
+    @staticmethod
+    # TODO: set serialization map
+    def __get_component(key):
+        options = {
+            IdentityComponent.COMPONENT_NAME: IdentityComponent,
+            DefinitionComponent.COMPONENT_NAME: DefinitionComponent,
+            LinksComponent.COMPONENT_NAME: LinksComponent}
+        res = options.get(key, None)
+        if res:
+            return res()
+        return None
+
+    @staticmethod
+    def __get_linked(storage):
+        def result(key):
+            cached = storage.cache.get(key)
+            if not cached:
+                thought = Thought("<LAZY>", key=key)
+                storage.cache.add(thought, lazy=True)
+                return thought
+            else:
+                return cached
+        return result
