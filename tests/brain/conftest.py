@@ -1,6 +1,8 @@
 import pytest
 
 from api.brain import Brain
+from api.brain.model import IdentityComponent
+from api.brain.thought import DefinitionComponent, LinksComponent
 from api.commands import Command
 from api.plugins import PluginManager, StoragePlugin
 
@@ -29,3 +31,21 @@ def brain():
 @pytest.fixture
 def command():
     return DummyCommand()
+
+
+def _get_component(key):
+    options = {
+        IdentityComponent.COMPONENT_NAME: IdentityComponent,
+        DefinitionComponent.COMPONENT_NAME: DefinitionComponent,
+        LinksComponent.COMPONENT_NAME: LinksComponent}
+    res = options.get(key, None)
+    if res:
+        return res()
+    return None
+
+
+@pytest.fixture
+def serialization_options():
+    return {
+        "get_component": _get_component
+    }

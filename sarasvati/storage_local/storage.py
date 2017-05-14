@@ -7,17 +7,17 @@ from .internal import InternalStorage
 
 class LocalStorage:
     def __init__(self, path="db.json"):
-        """Initializes new instance of the LocalStorage class."""
+        """
+        Initializes new instance of the LocalStorage class
+        :type path: str
+        :param path: path
+        """
         super().__init__()
         self.__cache = StorageCache()
         self.__db = InternalStorage(path)
-
-        # serialization options
-        # TODO: set serialization map
         self._options = {
-            IdentityComponent.COMPONENT_NAME: IdentityComponent,
-            DefinitionComponent.COMPONENT_NAME: DefinitionComponent,
-            LinksComponent.COMPONENT_NAME: LinksComponent}
+            "get_component": self.__get_component,
+            "get_linked": self.get_from_cache_or_create}
 
     @property
     def cache(self):
@@ -29,19 +29,16 @@ class LocalStorage:
     def contains(self, key):
         return self.__db.contains(key)
 
-    def get(self, key, options=None):
+    def get(self, key):
         """
         Returns thought by "identity.key"
         :param key: Key
-        :param options: Options
         :return: Thought or None if nothing found
         """
-        if self.__cache.is_cached_with_links(key):
-            return self.__cache.get(key)
         result = self.search({
             "field": "identity.key",
             "operator": "=",
-            "value": key}, options)
+            "value": key})
         if len(result) > 1:
             raise Exception("Entity is not unique {}".format(key))
         return result[0] if len(result) > 0 else None
@@ -53,7 +50,7 @@ class LocalStorage:
         :param thought: Thought
         """
         if self.contains(thought.key):
-            raise Exception("Thought this same key '{}/{}' already exist".format(thought.key, thought.title))
+            raise Exception("Thought with same key '{}/{}' already exist".format(thought.key, thought.title))
         data = thought.serialization.serialize()
         self.__db.insert(data)
         self.__cache.add(thought)
@@ -76,60 +73,72 @@ class LocalStorage:
         self.__db.remove(thought.key)
         self.__cache.remove(thought)
 
-    def search(self, query, options=None):
-        if options is None:
-            options = {}
-        options.update(self._options)
-        options["storage"] = self
-        if "depth" not in options:
-            options["depth"] = 0
-
+    def search(self, query):
+        """
+        Search
+        :param query: Query 
+        :return: Array of thoughts if found 
+        """
         result = []
+
+        # if search for one thought
+        if query["field"] == "identity.key" and query["operator"] == "=":
+            if self.__cache.is_cached_with_links(query["value"]):
+                return [self.__cache.get(query["value"])]
+            elif self.__cache.is_cached(query["value"]) and not self.__cache.is_lazy(query["value"]):
+                thought = self.__cache.get(query["value"])
+                self.__load_linked(thought)
+                return [thought]
+
+        # get it from db
         db_search_result = self.__db.search(query)
         for db_entity in db_search_result:
             key = db_entity["identity"]["key"]
-            in_cache = key in self.cache.thoughts
+            in_cache = self.__cache.is_cached(key)
             is_lazy = self.__cache.is_lazy(key)
 
-            if in_cache:
-                # get thought from cache
-                cached = self.__cache.get(key)
-
-                # thought is in lazy state, so load it
-                if is_lazy:
-                    self.__cache.add(cached, lazy=False)
-                    cached.serialization.deserialize(db_entity, options)
-
-                # thought have lazy links
-                for linked_thought in cached.links.all:
-                    if not self.__cache.is_lazy(linked_thought.key):
-                        continue  # skip not lazy thought
-                    db_lazy_linked = self.__db.search({
-                        "field": "identity.key",
-                        "operator": "=",
-                        "value": linked_thought.key})[0]
-                    self.cache.add(linked_thought)
-                    linked_thought.serialization.deserialize(db_lazy_linked, options)
-                result.append(self.__cache.thoughts[key])
+            if not in_cache:
+                thought = Thought()
+                thought.serialization.deserialize(db_entity, self._options)
+                self.__cache.add(thought)
+                self.__load_linked(thought)
             else:
-                # use "depth" options to avoid all DB deserialization
-                # by going links deeper and deeper
-                not_deep = options["depth"] < 2
+                thought = self.__cache.get(key)
+                if is_lazy:
+                    thought.serialization.deserialize(db_entity, self._options)
+                    self.__cache.add(thought)  # remove lazy flag
+                self.__load_linked(thought)
 
-                # create new thought
-                new_thought = Thought()
-
-                if not_deep:
-                    # deserialize and add to result
-                    new_thought.identity.key = db_entity["identity"]["key"]
-                    self.__cache.add(new_thought)
-                    new_thought.serialization.deserialize(db_entity, options)
-                    result.append(new_thought)
-                else:
-                    new_thought.title = "<LAZY>"
-                    new_thought.identity.key = query["value"]
-                    self.cache.add(new_thought, lazy=True)
-                    result.append(new_thought)
+            result.append(thought)
 
         return result
 
+    def __load_linked(self, thought):
+        for linked in thought.links.all:
+            if self.__cache.is_lazy(linked.key):
+                db_data = self.__db.search({"field": "identity.key", "operator": "=", "value": linked.key})
+                if len(db_data) == 0:
+                    raise Exception("No link '{}' found".format(linked.key))
+                linked.serialization.deserialize(db_data[0], self._options)
+                self.__cache.add(linked, lazy=False)
+
+    @staticmethod
+    # TODO: set serialization map
+    def __get_component(key):
+        options = {
+            IdentityComponent.COMPONENT_NAME: IdentityComponent,
+            DefinitionComponent.COMPONENT_NAME: DefinitionComponent,
+            LinksComponent.COMPONENT_NAME: LinksComponent}
+        res = options.get(key, None)
+        if res:
+            return res()
+        return None
+
+    def get_from_cache_or_create(self, key):
+        cached = self.__cache.thoughts.get(key, None)
+        if not cached:
+            thought = Thought("<LAZY>", key=key)
+            self.__cache.add(thought, lazy=True)
+            return thought
+        else:
+            return cached

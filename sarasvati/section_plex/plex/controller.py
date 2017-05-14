@@ -30,11 +30,10 @@ class PlexController:
         root_thought = self.brain.search.by_title("Brain")[0]  # todo get_root_thought()
         self.activate(root_thought)
 
-        self.__api.events.thoughtSelected.notify(root_thought)
+        #self.__api.events.thoughtSelected.notify(root_thought)
 
     def activate(self, thought):
-        self.brain.search.by_id(thought.key)  # TODO load lazy thought
-
+        thought = self.brain.search.by_id(thought.key)  # TODO load lazy thought
         self.active_thought = thought
         new_state = self.plex.activate(thought)
         actions = self.layout.change_to(new_state)
@@ -61,5 +60,5 @@ class PlexController:
         node = self.scene.get_node(thought)
         if node:
             node.update()
-        if self.active_thought == thought:
-            self.activate(self.active_thought)
+        #if self.active_thought == thought:
+        #    self.activate(self.active_thought)

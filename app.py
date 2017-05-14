@@ -1,30 +1,20 @@
-import sys
 from sarasvati_api import SarasvatiApi
+import logging
 
-
-def get_application_plugin(plugin_name):
-    plugins = api.plugins.find("application")
-    filtered = filter(lambda x: x.info.name == plugin_name, plugins)
-    result = list(filtered)
-    return result[0] if len(result) > 0 else None
-
-
-def get_application_plugin_name():
-    return sys.argv[1] if len(sys.argv) > 1 else "Application.Gui"
-
+# Logging configuration
+logging.basicConfig(level=logging.DEBUG)
 
 # Sarasvati Application info
 version = "0.0.1 Born"
-print("Sarasvati " + version)
+logging.info("Sarasvati " + version)
 
 # Get one application plugin and activate it
 api = SarasvatiApi()
-apn = get_application_plugin_name()
-application = get_application_plugin(apn)
+application = api.get_application_plugin()
 
-
+# Run application
 if application is not None:
     application.activate()
     application.deactivate()
 else:
-    print("No specified application plugin found")
+    logging.critical("No specified application plugin found")

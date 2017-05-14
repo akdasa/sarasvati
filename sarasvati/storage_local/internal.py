@@ -1,9 +1,11 @@
 from tinydb import TinyDB, Query
 from tinydb.storages import MemoryStorage
+import logging
 
 
 class InternalStorage:
     def __init__(self, path):
+        self.__logger = logging.getLogger("storage")
         if path is not None:
             self.__db = TinyDB(path)
         else:
@@ -19,14 +21,17 @@ class InternalStorage:
         self.__db.insert(data)
 
     def update(self, key, data):
+        self.__logger.debug("Update '{}' with '{}'".format(key, data))
         self.__db.update(
             _update_operation(data),
             Query().identity.key == key)
 
     def remove(self, key):
+        self.__logger.debug("Remove {}".format(key))
         return self.__db.remove(Query().identity.key == key)
 
     def search(self, query):
+        self.__logger.debug("Search {}".format(query))
         db_query = self.__tiny_db_query(query)
         return self.__db.search(db_query)
 

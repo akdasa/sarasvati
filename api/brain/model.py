@@ -2,10 +2,10 @@ import uuid
 
 
 class Composite:
-    def __init__(self, components: list=None):
+    def __init__(self, components=None):
         """
         Initializes new instance of the Composite class.
-        :type components: List[Component]
+        :type components: list
         :param components: Components to create composite from.
         """
         self.__components = {}
@@ -99,7 +99,7 @@ class Component:
 
     def deserialize(self, data, options=None):
         """
-        Deserializes component from dictionary
+        Deserialize component from dictionary
         :param data: Data to deserialize from.
         :param options: Options
         """
@@ -111,10 +111,14 @@ class Model(Composite):
     Model is a basic entity to create other entities from.
     Contains IdentityComponent and SerializationComponent.
     """
-    def __init__(self, components=None):
-        """Initializes new instance of the Model class."""
+    def __init__(self, key=None, components=None):
+        """
+        Initializes new instance of the Model class.
+        :param key: Identity key
+        :param components: Array of components to construct Model from
+        """
         super().__init__(components=[
-            IdentityComponent(),
+            IdentityComponent(key),
             SerializationComponent()
         ])
         if components is not None:
@@ -192,16 +196,27 @@ class IdentityComponent(Component):
 
 class SerializationComponent(Component):
     COMPONENT_NAME = "serialization"
+    __GET_COMPONENT = "get_component"
 
     def __init__(self):
+        """
+        Initializes new instance of the SerializationComponent class
+        """
         super().__init__(self.COMPONENT_NAME)
         self.__model = None
 
     def serialize(self, options=None):
+        """
+        Serializes object
+        :type options: dict
+        :rtype: dict
+        :param options: User specified options
+        :return: Dictionary
+        """
         result = {}
         for component in self.__model.components:
             if component.name == self.COMPONENT_NAME:
-                continue
+                continue  # do not serialize myself
 
             data = component.serialize(options)
             if data:
@@ -209,16 +224,25 @@ class SerializationComponent(Component):
         return result
 
     def deserialize(self, data, options=None):
-        for key in data.keys():
-            component_class = options.get(key, None)
-            component_data = data[key]
-            model_has_component = self.__model.has_component(key)
+        """
+        Deserialize specified data into model
+        :param data: Data to deserialize from
+        :param options: User specified options
+        """
+        get_component = options.get(self.__GET_COMPONENT, None)
+        if not get_component:
+            raise Exception("No '{}' specified".format(self.__GET_COMPONENT))
 
-            if component_class and model_has_component:
+        for key in data.keys():
+            component_data = data[key]
+
+            if self.__model.has_component(key):
                 component = self.__model.get_component(key)
                 component.deserialize(component_data, options)
-            elif component_class:
-                component = component_class()
+            else:
+                component = get_component(key)
+                if not component:
+                    raise Exception("No component provided for {} by '{}'".format(key, self.__GET_COMPONENT))
                 component.deserialize(component_data, options)
                 self.__model.add_component(component)
 

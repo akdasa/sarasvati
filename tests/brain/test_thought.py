@@ -10,6 +10,11 @@ def test_init_with_default_values():
     assert t.description is None
 
 
+def test_init_with_key():
+    t = Thought(key="MyKey")
+    assert t.key == "MyKey"
+
+
 def test_init_with_title_and_description():
     t = Thought(title=TITLE, description=DESCRIPTION)
     assert t.title == TITLE

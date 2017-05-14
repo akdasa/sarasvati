@@ -1,13 +1,5 @@
 from api.brain import Thought
-from api.brain.model import Model, IdentityComponent
-from api.brain.thought import DefinitionComponent, LinksComponent
-
-_deserialization_options = {
-    IdentityComponent.COMPONENT_NAME: IdentityComponent,
-    DefinitionComponent.COMPONENT_NAME: DefinitionComponent,
-    LinksComponent.COMPONENT_NAME: LinksComponent,
-    "storage": "No storage"
-}
+from api.brain.model import Model
 
 
 def test_serialization_component_is_accessible():
@@ -34,31 +26,31 @@ def test_serialize_links():
         "links": [{"key": a.key, "kind": "child"}]}
 
 
-def test_deserialize():
+def test_deserialize(serialization_options):
     t = Thought()
     t.serialization.deserialize({
         "identity": {"key": "my-id"},
         "definition": {"title": "root", "description": "some text"}},
-        _deserialization_options)
+        serialization_options)
     assert t.key == "my-id"
     assert t.title == "root"
     assert t.description == "some text"
 
 
-def test_deserialize_create_component():
+def test_deserialize_create_component(serialization_options):
     m = Model()
     m.serialization.deserialize({
         "definition": {"title": "component", "description": "should create"}
-    }, _deserialization_options)
+    }, serialization_options)
     assert m.get_component("definition") is not None
     assert m.definition is not None
     assert m.definition.title == "component"
     assert m.definition.description == "should create"
 
 
-def test_deserialize_component_with_init_params():
+def test_deserialize_component_with_init_params(serialization_options):
     m = Model()
     m.serialization.deserialize({
         "links": {}
-    }, _deserialization_options)
+    }, serialization_options)
     assert m.links is not None

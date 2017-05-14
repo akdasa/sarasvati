@@ -3,7 +3,7 @@ from api.brain.model import Model, Component
 
 
 class Thought(Model):
-    def __init__(self, title=None, description=None):
+    def __init__(self, title=None, description=None, key=None):
         """
         Initializes new instance of the Thought class.
         :type description: str
@@ -11,7 +11,7 @@ class Thought(Model):
         :param title: Title of the thought
         :param description: Short description of the thought
         """
-        super().__init__(components=[
+        super().__init__(key=key, components=[
             DefinitionComponent(title, description),
             LinksComponent(self)
         ])
@@ -192,24 +192,14 @@ class LinksComponent(Component):
     def deserialize(self, data, options=None):
         links_count = len(data)
 
-        # increase depth level to avoid deserialization of
-        # whole database
-        my_options = (options or {}).copy()
-        if "depth" not in my_options:
-            my_options["depth"] = 0
-        else:
-            my_options["depth"] += 1
-
         # get storage to retrieve linked thoughts
-        storage = my_options.get("storage", None)
-        if not storage and links_count > 0:
-            raise Exception("No 'storage' specified to load linked thoughts")
+        my_options = options or {}
+        get_linked = my_options.get("get_linked", None)
+        if not get_linked and links_count > 0:
+            raise Exception("No 'get_linked' specified to load linked thoughts")
 
-        # deserialize each link
-        for link in data:
-            thought = storage.get(link["key"], my_options)
-            if thought is None:
-                raise Exception("No link '{}' found".format(link["key"]))
+        for link in data:  # create lazy Thoughts for each link
+            thought = get_linked(link["key"])
             self.add(thought, link["kind"])
 
     def __get_links_of_kind(self, kind):

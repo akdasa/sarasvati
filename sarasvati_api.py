@@ -1,3 +1,4 @@
+import sys
 from api.commands import CommandException
 from api.instance import set_api
 from api.event import Event
@@ -41,6 +42,13 @@ class SarasvatiApi:
             raise CommandException("More than one entity found")
         else:
             return lst[0]
+
+    def get_application_plugin(self):
+        plugin_name = sys.argv[1] if len(sys.argv) > 1 else "Application.Gui"
+        plugins = self.__plugins.find("application")
+        filtered = filter(lambda x: x.info.name == plugin_name, plugins)
+        result = list(filtered)
+        return result[0] if len(result) > 0 else None
 
 
 class SarasvatiApiEvents:
