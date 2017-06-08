@@ -1,7 +1,7 @@
 import pytest
 
-from api.brain import Thought
-from sarasvati.storage_local import LocalStorage
+from sarasvati.brain import Thought
+from plugins.storage_local import LocalStorage
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
-from api.brain import Thought
-from api import get_api
-from api.storage import Storage
+from sarasvati.brain import Thought
+from sarasvati import get_api
+from sarasvati.storage import Storage
 from .cache import StorageCache
 from .internal import InternalStorage
 

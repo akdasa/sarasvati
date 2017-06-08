@@ -1,4 +1,4 @@
-from api.commands import Command
+from sarasvati.commands import Command
 import colored
 from colored import stylize
 

@@ -1,5 +1,5 @@
-from api.brain import Thought
-from api.brain.model import Model
+from sarasvati.brain import Thought
+from sarasvati.brain.model import Model
 
 
 def test_serialization_component_is_accessible():

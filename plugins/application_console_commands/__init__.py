@@ -1,4 +1,4 @@
-from api.plugins import CommandsPlugin
+from sarasvati.plugins import CommandsPlugin
 from .commands import *
 from ._maps import *
 

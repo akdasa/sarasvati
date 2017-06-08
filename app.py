@@ -1,4 +1,4 @@
-from sarasvati_api import SarasvatiApi
+from api import SarasvatiApi
 import logging
 
 # Logging configuration

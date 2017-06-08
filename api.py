@@ -1,10 +1,10 @@
-from api.brain.model import IdentityComponent
-from api.brain.thought import DefinitionComponent, LinksComponent, Thought
-from api.commands import CommandException
-from api import set_api
-from api.event import Event
-from api.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin, SectionPlugin, ToolboxPlugin
-from sarasvati.commands_generic import CreateCommand, LinkCommand
+from sarasvati.brain.model import IdentityComponent
+from sarasvati.brain.thought import DefinitionComponent, LinksComponent, Thought
+from sarasvati.commands import CommandException
+from sarasvati import set_api
+from sarasvati.event import Event
+from sarasvati.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin, SectionPlugin, ToolboxPlugin
+from plugins.commands_generic import CreateCommand, LinkCommand
 from optparse import OptionParser
 
 

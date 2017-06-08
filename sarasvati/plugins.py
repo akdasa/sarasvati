@@ -3,12 +3,12 @@ from inspect import signature
 from yapsy.IPlugin import IPlugin as YapsyPlugin
 from yapsy.PluginManager import PluginManager as YapsyPluginManager
 
-from api import get_api
+from sarasvati import get_api
 
 
 class PluginManager:
     __EXTENSION = "plugin"
-    __CORE_PLUGINS_PATH = "sarasvati"
+    __CORE_PLUGINS_PATH = "plugins"
 
     def __init__(self, path="plugins", categories=None):
         """

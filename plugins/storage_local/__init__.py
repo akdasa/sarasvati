@@ -1,4 +1,4 @@
-from api.plugins import StoragePlugin
+from sarasvati.plugins import StoragePlugin
 from .storage import LocalStorage
 
 

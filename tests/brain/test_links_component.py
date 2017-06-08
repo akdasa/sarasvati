@@ -1,6 +1,6 @@
 import pytest
 
-from api.brain import Thought
+from sarasvati.brain import Thought
 
 
 def test_add():

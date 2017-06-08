@@ -1,5 +1,5 @@
-from api.brain import Thought
-from api.commands import Command
+from sarasvati.brain import Thought
+from sarasvati.commands import Command
 
 
 class ActivateCommand(Command):

@@ -1,10 +1,10 @@
 import pytest
 
-from api.brain import Brain
-from api.brain.model import IdentityComponent
-from api.brain.thought import DefinitionComponent, LinksComponent
-from api.commands import Command
-from sarasvati.storage_local import LocalStorage
+from sarasvati.brain import Brain
+from sarasvati.brain.model import IdentityComponent
+from sarasvati.brain.thought import DefinitionComponent, LinksComponent
+from sarasvati.commands import Command
+from plugins.storage_local import LocalStorage
 
 
 class DummyCommand(Command):

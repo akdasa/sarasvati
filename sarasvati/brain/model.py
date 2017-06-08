@@ -248,5 +248,3 @@ class SerializationComponent(Component):
 
     def on_added(self, composite):
         self.__model = composite
-
-

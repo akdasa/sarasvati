@@ -1,6 +1,6 @@
 import pytest
 
-from api.brain import Thought
+from sarasvati.brain import Thought
 
 
 def test_get_return_none_with_empty_database(empty_storage):

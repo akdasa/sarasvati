@@ -1,7 +1,8 @@
-from api.application import SarasvatiApplication
-from api.brain import Brain
 from prompt_toolkit import prompt as ptprompt
 from prompt_toolkit.history import InMemoryHistory
+
+from sarasvati.application import SarasvatiApplication
+from sarasvati.brain import Brain
 from .processor import Processor
 
 

@@ -1,4 +1,4 @@
-from api.brain import Thought
+from sarasvati.brain import Thought
 
 TITLE = "My Thought"
 DESCRIPTION = "Some Description"

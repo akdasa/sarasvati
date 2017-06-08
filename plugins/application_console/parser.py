@@ -1,6 +1,6 @@
 import shlex
 
-from api.commands import CommandException
+from sarasvati.commands import CommandException
 
 
 class Parser:

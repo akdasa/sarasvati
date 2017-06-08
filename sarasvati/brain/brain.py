@@ -1,5 +1,5 @@
-from api.brain.model import Composite, Component
-from api.commands import CommandException
+from sarasvati.brain.model import Composite, Component
+from sarasvati.commands import CommandException
 
 
 class Brain(Composite):

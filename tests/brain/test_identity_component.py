@@ -1,6 +1,6 @@
 import pytest
 
-from api.brain.model import IdentityComponent
+from sarasvati.brain.model import IdentityComponent
 
 
 def test_init_with_key_generated():

@@ -1,6 +1,6 @@
-from api.commands import CommandException
-from sarasvati.application_console.parser import Parser
-from api import get_api
+from sarasvati.commands import CommandException
+from plugins.application_console.parser import Parser
+from sarasvati import get_api
 
 
 class Processor:

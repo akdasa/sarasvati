@@ -1,6 +1,6 @@
 import pytest
 
-from api.brain import Thought, Link
+from sarasvati.brain import Thought, Link
 
 
 def test_invalid_kind():

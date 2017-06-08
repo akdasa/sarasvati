@@ -1,6 +1,6 @@
 import pytest
 
-from api.brain.model import Composite, Component
+from sarasvati.brain.model import Composite, Component
 
 
 def test_composite_has_no_components_after_init():

@@ -1,4 +1,4 @@
-from api import get_api
+from sarasvati import get_api
 
 
 class SarasvatiApplication:

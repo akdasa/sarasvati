@@ -1,4 +1,4 @@
-from api.brain.model import Component
+from sarasvati.brain.model import Component
 
 
 def test_init_component():

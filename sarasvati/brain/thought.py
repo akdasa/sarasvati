@@ -1,5 +1,5 @@
-from api.brain.link import Link
-from api.brain.model import Model, Component
+from sarasvati.brain.link import Link
+from sarasvati.brain.model import Model, Component
 
 
 class Thought(Model):
@@ -206,4 +206,3 @@ class LinksComponent(Component):
         links = filter(lambda x: x.kind == kind, self.__links.values())
         thoughts = map(lambda x: x.destination, links)
         return list(thoughts)
-
