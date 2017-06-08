@@ -1,5 +1,3 @@
-import sys
-
 from api.brain.model import IdentityComponent
 from api.brain.thought import DefinitionComponent, LinksComponent, Thought
 from api.commands import CommandException
@@ -7,11 +5,13 @@ from api.instance import set_api
 from api.event import Event
 from api.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin, SectionPlugin, ToolboxPlugin
 from sarasvati.commands_generic import CreateCommand, LinkCommand
+from optparse import OptionParser
 
 
 class SarasvatiApi:
     def __init__(self):
         set_api(self)
+
         self.__events = SarasvatiApiEvents()
         self.__actions = SarasvatiApiActions(self)
         self.__serialization = SarasvatiApiSerialization()
@@ -23,6 +23,9 @@ class SarasvatiApi:
                 "section": SectionPlugin,
                 "toolbox": ToolboxPlugin
             })
+        self.__parser = OptionParser()
+        self.__parser.add_option("-a", "--app", action="store", type="string", dest="app_plugin", help="runs plugin")
+        (self.__cmd_options, args) = self.__parser.parse_args()
 
     @property
     def plugins(self):
@@ -52,7 +55,7 @@ class SarasvatiApi:
             return lst[0]
 
     def get_application_plugin(self):
-        plugin_name = sys.argv[1] if len(sys.argv) > 1 else "Application.Console"
+        plugin_name = self.__cmd_options.app_plugin or "Application.Console"
         plugins = self.__plugins.find("application")
         filtered = filter(lambda x: x.info.name == plugin_name, plugins)
         result = list(filtered)

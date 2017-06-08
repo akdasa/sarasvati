@@ -18,3 +18,4 @@ if application is not None:
     application.deactivate()
 else:
     logging.critical("No specified application plugin found")
+    print("No specified application plugin found")
