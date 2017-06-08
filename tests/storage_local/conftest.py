@@ -1,7 +1,6 @@
 import pytest
 
-from api.brain import Brain, Thought
-from sarasvati.section_plex.plex import Plex, PlexLayout, PlexStateDiff
+from api.brain import Thought
 from sarasvati.storage_local import LocalStorage
 
 

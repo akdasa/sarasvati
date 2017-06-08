@@ -3,7 +3,7 @@ from inspect import signature
 from yapsy.IPlugin import IPlugin as YapsyPlugin
 from yapsy.PluginManager import PluginManager as YapsyPluginManager
 
-from api.instance import get_api
+from api import get_api
 
 
 class PluginManager:

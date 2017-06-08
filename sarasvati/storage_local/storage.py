@@ -1,5 +1,5 @@
 from api.brain import Thought
-from api.instance import get_api
+from api import get_api
 from api.storage import Storage
 from .cache import StorageCache
 from .internal import InternalStorage

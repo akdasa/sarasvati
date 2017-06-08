@@ -9,8 +9,8 @@ version = "0.0.1 Born"
 logging.info("Sarasvati " + version)
 
 # Get one application plugin and activate it
-api = SarasvatiApi()
-application = api.get_application_plugin()
+_api_instance = SarasvatiApi()
+application = _api_instance.get_application_plugin()
 
 # Run application
 if application is not None:

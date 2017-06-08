@@ -1,3 +1,3 @@
 from sarasvati_api import SarasvatiApi
 
-api = SarasvatiApi()
+_api_instance = SarasvatiApi()

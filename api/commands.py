@@ -1,5 +1,5 @@
 from abc import abstractmethod, ABCMeta
-from api.instance import get_api
+from api import get_api
 
 
 class Command(metaclass=ABCMeta):
