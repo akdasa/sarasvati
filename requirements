@@ -2,4 +2,4 @@ pytest
 yapsy
 colored
 tinydb
-pyqt5
+prompt_toolkit
