@@ -52,7 +52,7 @@ class SarasvatiApi:
             return lst[0]
 
     def get_application_plugin(self):
-        plugin_name = sys.argv[1] if len(sys.argv) > 1 else "Application.Gui"
+        plugin_name = sys.argv[1] if len(sys.argv) > 1 else "Application.Console"
         plugins = self.__plugins.find("application")
         filtered = filter(lambda x: x.info.name == plugin_name, plugins)
         result = list(filtered)

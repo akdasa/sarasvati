@@ -1,8 +1,0 @@
-[Core]
-Name = Toolbox.Plex.Quick
-Module = toolbox_plex_quick
-
-[Documentation]
-Author = Advaita Krishna das
-Version = 0.1
-Description = Provides quick actions for thought

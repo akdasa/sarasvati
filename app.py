@@ -2,7 +2,7 @@ from sarasvati_api import SarasvatiApi
 import logging
 
 # Logging configuration
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(filename='sarasvati.log',level=logging.DEBUG)
 
 # Sarasvati Application info
 version = "0.0.1 Born"
