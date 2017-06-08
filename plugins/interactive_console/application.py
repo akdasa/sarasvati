@@ -1,10 +1,7 @@
-from prompt_toolkit import prompt as ptprompt
-from prompt_toolkit.history import InMemoryHistory
-
 from sarasvati.application import SarasvatiApplication
 from sarasvati.brain import Brain
 from .processor import Processor
-
+from .prompt import get_prompt
 
 class SarasvatiConsoleApplication(SarasvatiApplication):
     __QUIT_COMMAND = "quit"
@@ -28,11 +25,10 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
         """
         Starts application
         """
-        history = InMemoryHistory()
         query = None
         while not self.__is_quit_command(query):
             prompt = self.__processor.prompt
-            query = ptprompt(prompt, history=history)
+            query = get_prompt(prompt)
             self.__processor.execute(query)
 
     def __is_quit_command(self, query):
