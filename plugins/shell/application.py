@@ -3,6 +3,7 @@ from sarasvati.brain import Brain
 from .processor import Processor
 from .prompt import get_prompt
 
+
 class SarasvatiConsoleApplication(SarasvatiApplication):
     __QUIT_COMMAND = "quit"
 
@@ -19,7 +20,7 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
         commands = self.__collect_commands(command_plugins)
         self.__brain = Brain(storage)
         self.__processor = Processor(self.__brain, commands)
-        self._api.brain = self.__brain
+        self._api.brain = self.__brain  # todo: ugly
 
     def run(self):
         """

@@ -1,3 +1,5 @@
+from logging import error
+
 from sarasvati import get_api
 from sarasvati.commands import CommandException
 from .parser import Parser
@@ -29,7 +31,7 @@ class Processor:
 
     @property
     def prompt(self):
-        active_thought = self.__api.brain.state.active_thought
+        active_thought = self.__api.brain.state.active_thought  # todo: custom_state_func
         if active_thought:
             return str(active_thought.title) + "> "
         return "> "
@@ -40,6 +42,5 @@ class Processor:
             if command:
                 self.__brain.commands.execute(command)
         except CommandException as e:
+            error(e)
             print(e)
-
-

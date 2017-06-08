@@ -55,7 +55,7 @@ class SarasvatiApi:
             return lst[0]
 
     def get_application_plugin(self):
-        plugin_name = self.__cmd_options.app_plugin or "Interactive Console"
+        plugin_name = self.__cmd_options.app_plugin or "Shell"
         plugins = self.__plugins.find("application")
         filtered = filter(lambda x: x.info.name == plugin_name, plugins)
         result = list(filtered)
