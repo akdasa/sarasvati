@@ -1,5 +1,3 @@
-from logging import error
-
 from pycopa import parse
 
 from sarasvati import get_api
@@ -20,15 +18,10 @@ class Processor:
         Executes specified query
         :param line: Command to execute
         """
-        try:
-            args = parse(line)
-            command = args.get("command")
-            handler = self.__get_handler(command)
-            result = handler(self.__api, args)
-            self.__print_result(result)
-        except CommandException as e:
-            error(e)
-            print(e)
+        args = parse(line)
+        command = args.get("command")
+        handler = self.__get_handler(command)
+        return handler(self.__api, args)
 
     def __get_handler(self, command):
         handler = self.__commands.get(command)
@@ -36,12 +29,3 @@ class Processor:
             raise CommandException("Unknown command '{}'".format(command))
         return handler
 
-    @staticmethod
-    def __print_result(result):
-        if not result:
-            return
-        if isinstance(result, list):
-            for e in result:
-                print(e)
-        else:
-            print(result)

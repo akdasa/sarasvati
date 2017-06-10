@@ -1,40 +1,43 @@
 from plugins.commands.commands import SetDescriptionCommand, LinkCommand, CreateCommand
 from sarasvati.commands import CommandException
 
-__NOTHING_ERR = "No thought '{}' found to link with."
-__AMBIGUOUS_ERR = "Multiple thoughts ({}) found. Unable to link."
-
 
 def create(api, args):
     # /create Thought title desc:some description parent:My Brain as:child
     title = args.get("arg")
-    description = args.get("desc")
+    desc = args.get("desc")
     parent = args.get("parent")
     as_ = args.get("as")
-    thought = None
+    active = api.brain.state.active_thought
+    pt = None
 
     # validation
     if not title:
         raise CommandException("No title specified")
     if parent and as_:
         raise CommandException("'parent' and 'as' arguments cannot be used simultaneously")
+    if as_ and not active:
+        raise CommandException("'as' argument can be used only with activated thought")
+    if as_ and (as_ not in ["child", "parent", "reference"]):
+        raise CommandException("Wrong link type in 'as' argument")
 
-    if title:  # create thought using title specified
-        thought = api.brain.commands.execute(CreateCommand(title))
+    # gather required
+    if parent:
+        pt = api.find_one_by_title(parent, "parent")
 
-    if description:  # set description
-        api.brain.commands.execute(SetDescriptionCommand(thought, description))
+    # create thought using title specified
+    thought = api.execute(CreateCommand(title))
+    result = "Thought '{}' created".format(title)
+
+    if desc:  # set description
+        api.execute(SetDescriptionCommand(thought, desc))
 
     if parent:  # link with parent specified
-        search_result = api.brain.search.by_title(parent)
-        pt = api.get_one(search_result,
-                         __NOTHING_ERR.format(parent),
-                         __AMBIGUOUS_ERR.format(parent))
-        api.brain.commands.execute(LinkCommand(thought, pt, "parent"))
+        api.execute(LinkCommand(thought, pt, "parent"))
+        result = "Thought '{}' created as parent of '{}'".format(title, pt.title)
 
-    if as_:  # link with active link
-        if api.brain.state.active_thought is None:
-            raise CommandException("'as' can be used only with activated thought")
+    if as_ and active:  # link with active link
+        api.execute(LinkCommand(active, thought, as_))
+        result = "Thought '{}' created as {} of '{}'".format(title, as_, active.title)
 
-        api.brain.commands.execute(LinkCommand(api.brain.state.active_thought, thought, as_))
-
+    return result

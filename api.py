@@ -17,6 +17,7 @@ class SarasvatiApi:
         set_api(self)
 
         self.brain = None
+        self.execute = None
         self.__events = SarasvatiApiEvents()
         # self.__actions = SarasvatiApiActions(self)
         self.__serialization = SarasvatiApiSerialization()
@@ -31,12 +32,19 @@ class SarasvatiApi:
         self.__parser.add_option("-a", "--app", action="store", type="string", dest="app_plugin", help="runs plugin")
         (self.__cmd_options, args) = self.__parser.parse_args()
 
+    def find_one_by_title(self, title, arg_name):
+        _n = "No thought found for '{}' argument".format(arg_name)
+        _m = "Multiple thoughts found for '{}' argument".format(arg_name)
+        search = self.brain.search.by_title(title)
+        return self.get_one(search, _n, _m)
+
     def open_brain(self, path):
         logging.info("Opening brain from {}".format(path))
         storage_path = os.path.join(path, "db.json")
         storage_plugin = self.__plugins.get("storage")
         storage = storage_plugin.open(storage_path)
         self.brain = Brain(storage)
+        self.execute = self.brain.commands.execute
         return self.brain
 
     @property
