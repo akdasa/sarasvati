@@ -37,6 +37,12 @@ class DeleteCommand(Command):
         self.__thought = thought
 
     def execute(self):
+        # todo: remove all links to this thought
+        # /c 1
+        # /c 2 parent:1
+        # /d 1
+        # /show 2
+        # /ls
         self._api.brain.storage.remove(self.__thought)
 
     def revert(self):
