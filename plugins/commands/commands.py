@@ -89,10 +89,17 @@ class LinkCommand(Command):
         self.__kind = kind
 
     def execute(self):
-        return self.__source.links.add(self.__destination, self.__kind)
+        self.__source.links.add(self.__destination, self.__kind)
+        self.__destination.links.add(self.__source, self.__back(self.__kind))
 
     def revert(self):
         self.__source.links.remove(self.__destination)
+        self.__destination.links.remove(self.__source)
 
     def on_completed(self):
         self._api.brain.storage.update(self.__source)
+        self._api.brain.storage.update(self.__destination)
+
+    @staticmethod
+    def __back(kind):
+        return {"child": "parent", "parent": "child", "reference": "reference"}.get(kind)

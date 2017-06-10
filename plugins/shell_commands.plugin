@@ -1,6 +1,6 @@
 [Core]
-Name = Application.Console.Commands
-Module = application_console_commands
+Name = Shell Commands
+Module = shell_commands
 
 [Documentation]
 Author = Advaita Krishna das

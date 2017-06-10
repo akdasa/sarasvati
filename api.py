@@ -4,7 +4,6 @@ from sarasvati.commands import CommandException
 from sarasvati import set_api
 from sarasvati.event import Event
 from sarasvati.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin, SectionPlugin, ToolboxPlugin
-from plugins.commands_generic import CreateCommand, LinkCommand
 from optparse import OptionParser
 
 
@@ -13,7 +12,7 @@ class SarasvatiApi:
         set_api(self)
 
         self.__events = SarasvatiApiEvents()
-        self.__actions = SarasvatiApiActions(self)
+        #self.__actions = SarasvatiApiActions(self)
         self.__serialization = SarasvatiApiSerialization()
         self.__plugins = PluginManager(
             categories={
@@ -35,22 +34,22 @@ class SarasvatiApi:
     def events(self):
         return self.__events
 
-    @property
-    def actions(self):
-        return self.__actions
+    # @property
+    # def actions(self):
+    #     return self.__actions
 
     @property
     def serialization(self):
         return self.__serialization
 
     @staticmethod
-    def get_one(lst):
+    def get_one(lst, nothing_err="Nothing found", more_err="More than one entity found"):
         """Returns one element from list, otherwise raises exception"""
         lst_len = len(lst)
         if lst_len == 0:
-            raise CommandException("Nothing found")
+            raise CommandException(nothing_err)
         elif lst_len > 1:
-            raise CommandException("More than one entity found")
+            raise CommandException(more_err)
         else:
             return lst[0]
 
@@ -70,31 +69,31 @@ class SarasvatiApiEvents:
         self.thoughtChanged = Event()
 
 
-class SarasvatiApiActions:
-    def __init__(self, api):
-        self.__api = api
-
-    def create_thought(self, title):
-        command = CreateCommand(title)
-        thought = self.__api.brain.commands.execute(command)
-        self.__api.events.thoughtCreated.notify(thought)
-        return thought
-
-    def create_linked_thought(self, root, kind, title):
-        ex = self.__api.brain.commands.execute
-        thought = ex(CreateCommand(title))
-        ex(LinkCommand(root, thought, "child"))
-        ex(LinkCommand(thought, root, "parent"))
-
-        self.__api.events.thoughtCreated.notify(thought)
-        return thought
-
-    def updating_thought(self, thought):
-        self.__api.events.thoughtChanging.notify(thought)
-
-    def update_thought(self, thought):
-        self.__api.brain.storage.update(thought)
-        self.__api.events.thoughtChanged.notify(thought)
+# class SarasvatiApiActions:
+#     def __init__(self, api):
+#         self.__api = api
+#
+#     def create_thought(self, title):
+#         command = CreateCommand(title)
+#         thought = self.__api.brain.commands.execute(command)
+#         self.__api.events.thoughtCreated.notify(thought)
+#         return thought
+#
+#     def create_linked_thought(self, root, kind, title):
+#         ex = self.__api.brain.commands.execute
+#         thought = ex(CreateCommand(title))
+#         ex(LinkCommand(root, thought, "child"))
+#         ex(LinkCommand(thought, root, "parent"))
+#
+#         self.__api.events.thoughtCreated.notify(thought)
+#         return thought
+#
+#     def updating_thought(self, thought):
+#         self.__api.events.thoughtChanging.notify(thought)
+#
+#     def update_thought(self, thought):
+#         self.__api.brain.storage.update(thought)
+#         self.__api.events.thoughtChanged.notify(thought)
 
 
 class SarasvatiApiSerialization:

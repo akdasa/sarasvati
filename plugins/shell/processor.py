@@ -9,15 +9,16 @@ class Processor:
     __REVERT_COMMAND = "revert"
     __QUIT_COMMAND = "quit"
 
-    def __init__(self, brain, commands):
+    def __init__(self, brain, commands, state=None):
         """
         Initializes new instance of the Processor class.
         :param commands: Dictionary of commands meta
         :param brain: Brain to manipulate with
         """
-        self.__brain = brain
+        self.__brain = brain # удалить. используется только для отката команд
+        self.__parser = Parser(commands)
+        self.__state = state
         self.__api = get_api()
-        self.__parser = Parser(self.__api, commands)
 
     def execute(self, line):
         """
@@ -31,16 +32,23 @@ class Processor:
 
     @property
     def prompt(self):
-        active_thought = self.__api.brain.state.active_thought  # todo: custom_state_func
-        if active_thought:
-            return str(active_thought.title) + "> "
+        if self.__state:
+            return str(self.__state()) + "> "
         return "> "
 
     def __execute_line(self, line):
         try:
-            command = self.__parser.parse(line)
-            if command:
-                self.__brain.commands.execute(command)
+            handler, args = self.__parser.parse(line)
+            if not handler:
+                return
+
+            result = handler(self.__api, args)
+            if result:
+                if isinstance(result, list):
+                    for e in result:
+                        print(e)
+                else:
+                    print(result)
         except CommandException as e:
             error(e)
             print(e)

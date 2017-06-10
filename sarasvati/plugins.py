@@ -104,34 +104,8 @@ class CommandsPlugin(Plugin):
     def get_console_commands(self):
         return self.__console_commands
 
-    def _register_console_command(self, name, command_class, arguments_map=None):
-        init_params_count = len(signature(command_class.__init__).parameters)
-        arguments_count = None if arguments_map else init_params_count - 1
-        self.__console_commands[name] = CommandMeta(name, command_class, arguments_map, arguments_count)
-
-
-class CommandMeta:
-    def __init__(self, name, command_class, arguments_map=None, arguments_count=None):
-        self.__name = name
-        self.__command_class = command_class
-        self.__arguments_map = arguments_map
-        self.__arguments_count = arguments_count
-
-    @property
-    def name(self):
-        return self.__name
-
-    @property
-    def command_class(self):
-        return self.__command_class
-
-    @property
-    def arguments_map(self):
-        return self.__arguments_map
-
-    @property
-    def arguments_count(self):
-        return self.__arguments_count
+    def _register_console_command(self, name, handler):
+        self.__console_commands[name] = handler
 
 
 class SectionPlugin(Plugin):
