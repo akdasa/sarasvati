@@ -1,6 +1,3 @@
-from abc import abstractmethod
-from inspect import signature
-
 from yapsy.IPlugin import IPlugin as YapsyPlugin
 from yapsy.PluginManager import PluginManager as YapsyPluginManager
 
@@ -55,7 +52,8 @@ class PluginManager:
         elif count > 1:
             raise Exception("More than one plugin found")
 
-    def __convert(self, obj):
+    @staticmethod
+    def __convert(obj):
         obj.plugin_object.info = PluginInfo(obj.name, obj.version)
         return obj.plugin_object
 
@@ -96,27 +94,6 @@ class CommandsPlugin(Plugin):
     def _register_console_command(self, name, handler):
         self.__console_commands[name] = handler
 
-
-class SectionPlugin(Plugin):
-    def __init__(self):
-        super().__init__()
-
-    def get_widget(self):
-        pass
-
-    def get_section_name(self):
-        pass
-
-
-class ToolboxPlugin(Plugin):
-    def get_widget(self):
-        pass
-
-    def get_section_name(self):
-        pass
-
-    def get_order(self):
-        return 0
 
 
 class ProcessorPlugin(Plugin):

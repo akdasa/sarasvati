@@ -8,7 +8,7 @@ from sarasvati.brain.thought import DefinitionComponent, LinksComponent, Thought
 from sarasvati.commands import CommandException
 from sarasvati import set_api
 from sarasvati.event import Event
-from sarasvati.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin, SectionPlugin, ToolboxPlugin, ProcessorPlugin
+from sarasvati.plugins import *
 from optparse import OptionParser
 
 
@@ -18,15 +18,13 @@ class SarasvatiApi:
 
         self.brain = None
         self.__events = SarasvatiApiEvents()
-        #self.__actions = SarasvatiApiActions(self)
+        # self.__actions = SarasvatiApiActions(self)
         self.__serialization = SarasvatiApiSerialization()
         self.__plugins = PluginManager(
             categories={
                 "application": ApplicationPlugin,
                 "storage": StoragePlugin,
                 "commands": CommandsPlugin,
-                "section": SectionPlugin,
-                "toolbox": ToolboxPlugin,
                 "processor": ProcessorPlugin
             })
         self.__parser = OptionParser()
