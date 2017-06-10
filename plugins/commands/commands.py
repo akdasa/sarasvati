@@ -28,7 +28,7 @@ class CreateCommand(Command):
         return self.__created
 
     def revert(self):
-        self._api.brain.storage.delete(self.__created)
+        self._api.brain.storage.remove(self.__created)
 
 
 class DeleteCommand(Command):

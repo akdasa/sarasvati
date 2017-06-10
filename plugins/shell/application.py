@@ -19,7 +19,7 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
         storage = storage_plugin.get_storage()
         commands = self.__collect_commands(command_plugins)
         self.__brain = Brain(storage)
-        self.__processor = Processor(self.__brain, commands, state=self.__prompt_state)
+        self.__processor = Processor(commands, state=self.__prompt_state)
         self._api.brain = self.__brain  # todo: ugly
 
     def run(self):

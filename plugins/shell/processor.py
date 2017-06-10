@@ -9,13 +9,11 @@ class Processor:
     __REVERT_COMMAND = "revert"
     __QUIT_COMMAND = "quit"
 
-    def __init__(self, brain, commands, state=None):
+    def __init__(self, commands, state=None):
         """
         Initializes new instance of the Processor class.
         :param commands: Dictionary of commands meta
-        :param brain: Brain to manipulate with
         """
-        self.__brain = brain # удалить. используется только для отката команд
         self.__parser = Parser(commands)
         self.__state = state
         self.__api = get_api()
@@ -25,9 +23,7 @@ class Processor:
         Executes specified query
         :param line: Command to execute
         """
-        if line == self.__REVERT_COMMAND:
-            self.__brain.commands.revert()
-        elif line != self.__QUIT_COMMAND:
+        if line != self.__QUIT_COMMAND:
             self.__execute_line(line)
 
     @property
