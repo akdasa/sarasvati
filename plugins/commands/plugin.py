@@ -18,3 +18,4 @@ class GenericCommandsPlugin(CommandsPlugin):
         self._register_console_command("/update", update)
         self._register_console_command("/link", link)
         self._register_console_command("/revert", revert)
+        self._register_console_command("/open", open_)
