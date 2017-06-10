@@ -1,0 +1,8 @@
+[Core]
+Name = Commands Processor
+Module = processor
+
+[Documentation]
+Author = Advaita Krishna das
+Version = 0.1
+Description = Provides commands processor

@@ -1,9 +1,14 @@
+import os
+
+import logging
+
+from sarasvati.brain import Brain
 from sarasvati.brain.model import IdentityComponent
 from sarasvati.brain.thought import DefinitionComponent, LinksComponent, Thought
 from sarasvati.commands import CommandException
 from sarasvati import set_api
 from sarasvati.event import Event
-from sarasvati.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin, SectionPlugin, ToolboxPlugin
+from sarasvati.plugins import ApplicationPlugin, StoragePlugin, PluginManager, CommandsPlugin, SectionPlugin, ToolboxPlugin, ProcessorPlugin
 from optparse import OptionParser
 
 
@@ -11,6 +16,7 @@ class SarasvatiApi:
     def __init__(self):
         set_api(self)
 
+        self.brain = None
         self.__events = SarasvatiApiEvents()
         #self.__actions = SarasvatiApiActions(self)
         self.__serialization = SarasvatiApiSerialization()
@@ -20,11 +26,20 @@ class SarasvatiApi:
                 "storage": StoragePlugin,
                 "commands": CommandsPlugin,
                 "section": SectionPlugin,
-                "toolbox": ToolboxPlugin
+                "toolbox": ToolboxPlugin,
+                "processor": ProcessorPlugin
             })
         self.__parser = OptionParser()
         self.__parser.add_option("-a", "--app", action="store", type="string", dest="app_plugin", help="runs plugin")
         (self.__cmd_options, args) = self.__parser.parse_args()
+
+    def open_brain(self, path):
+        logging.info("Opening brain from {}".format(path))
+        storage_path = os.path.join(path, "db.json")
+        storage_plugin = self.__plugins.get("storage")
+        storage = storage_plugin.open(storage_path)
+        self.brain = Brain(storage)
+        return self.brain
 
     @property
     def plugins(self):

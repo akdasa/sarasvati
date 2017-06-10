@@ -1,8 +1,9 @@
 from logging import error
 
+from pycopa import parse
+
 from sarasvati import get_api
 from sarasvati.commands import CommandException
-from .parser import Parser
 
 
 class Processor:
@@ -12,7 +13,6 @@ class Processor:
         :param commands: Dictionary of commands meta
         """
         self.__commands = commands
-        self.__parser = Parser()
         self.__api = get_api()
 
     def execute(self, line):
@@ -21,7 +21,7 @@ class Processor:
         :param line: Command to execute
         """
         try:
-            args = self.__parser.parse(line)
+            args = parse(line)
             command = args.get("command")
             handler = self.__get_handler(command)
             result = handler(self.__api, args)

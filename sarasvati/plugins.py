@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from inspect import signature
 
 from yapsy.IPlugin import IPlugin as YapsyPlugin
@@ -80,19 +81,7 @@ class ApplicationPlugin(Plugin):
 
 
 class StoragePlugin(Plugin):
-    def add(self, thought):
-        pass
-
-    def update(self, thought):
-        pass
-
-    def delete(self, thought):
-        pass
-
-    def search(self, query):
-        pass
-
-    def get(self, query):
+    def open(self, path):
         pass
 
 
@@ -128,3 +117,8 @@ class ToolboxPlugin(Plugin):
 
     def get_order(self):
         return 0
+
+
+class ProcessorPlugin(Plugin):
+    def get(self):
+        pass
