@@ -32,5 +32,5 @@ def link(api, args):
     if not as_:
         raise CommandException("No 'as' argument specified")
 
-    api.brain.commands.execute(LinkCommand(thought, to_thought, as_))
+    api.brain.commands.execute(LinkCommand(to_thought, thought, as_))
     return "'{}' linked to '{}' as {}".format(thought.title, to_thought.title, as_)

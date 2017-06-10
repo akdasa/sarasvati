@@ -3,6 +3,7 @@ from colored import stylize
 
 __TITLE_STYLE = colored.fg("green")
 __LINK_STYLE = colored.fg("blue") + colored.attr("underlined")
+__DESC_STYLE = colored.fg("dark_gray")
 __NOTHING_ERR = "No thought '{}' found to show."
 __AMBIGUOUS_ERR = "Multiple thoughts ({}) found. Unable to show."
 
@@ -24,9 +25,12 @@ def show(api, args):
     print(stylize(thought.title, __TITLE_STYLE))
     print(thought.description)
 
-    for thought in thought.links.all:
-        print("Link:", stylize(thought.title, __LINK_STYLE))
-
+    links = thought.links.all
+    for thought in links:
+        link = links[thought]
+        print("{}: {} {}".format(link.kind.capitalize(),
+                                 stylize(thought.title, __LINK_STYLE),
+                                 stylize(thought.description, __DESC_STYLE)))
 
 def quit_(api, args):
     print("Good bye, take care!")
