@@ -19,7 +19,7 @@ def update(api, args):
         search = api.brain.search.by_title(arg)
         thought = api.get_one(search,
                               __NOTHING_ERR.format(title),
-                              __AMBIGUOUS_ERR.format(len(title)))
+                              __AMBIGUOUS_ERR.format(len(search)))
     else:
         if not api.brain.state.active_thought:
             raise CommandException(__NO_ACTIVE_ERR)
