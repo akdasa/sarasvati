@@ -26,3 +26,7 @@ def show(api, args):
 
     for thought in thought.links.all:
         print("Link:", stylize(thought.title, __LINK_STYLE))
+
+
+def quit_(api, args):
+    print("Good bye, take care!")

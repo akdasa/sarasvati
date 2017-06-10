@@ -24,6 +24,3 @@ class SarasvatiConsoleApplicationPlugin(ApplicationPlugin):
         self.__application = SarasvatiConsoleApplication(
             storage_plugin=self.__storage, command_plugins=self.__commands)
         self.__application.run()
-
-    def deactivate(self):
-        print(self.__BYE_MESSAGE)

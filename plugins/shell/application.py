@@ -5,7 +5,7 @@ from .prompt import get_prompt
 
 
 class SarasvatiConsoleApplication(SarasvatiApplication):
-    __QUIT_COMMAND = "quit"
+    __QUIT_COMMANDS = ["/quit", "/q"]
 
     def __init__(self, storage_plugin, command_plugins):
         """
@@ -19,7 +19,7 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
         storage = storage_plugin.get_storage()
         commands = self.__collect_commands(command_plugins)
         self.__brain = Brain(storage)
-        self.__processor = Processor(commands, state=self.__prompt_state)
+        self.__processor = Processor(commands)
         self._api.brain = self.__brain  # todo: ugly
 
     def run(self):
@@ -28,12 +28,11 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
         """
         query = None
         while not self.__is_quit_command(query):
-            prompt = self.__processor.prompt
-            query = get_prompt(prompt)
+            query = get_prompt(self.__prompt_state())
             self.__processor.execute(query)
 
     def __is_quit_command(self, query):
-        return query == self.__QUIT_COMMAND
+        return query in self.__QUIT_COMMANDS
 
     @staticmethod
     def __collect_commands(command_plugins):
@@ -46,5 +45,5 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
     def __prompt_state(self):
         thought = self.__brain.state.active_thought
         if thought:
-            return thought.title
-        return ""
+            return thought.title + "> "
+        return "> "
