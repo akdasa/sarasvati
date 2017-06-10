@@ -105,8 +105,7 @@ class BrainSearchComponent(Component):
         """
         return self.__storage.search(query)
 
-    # TODO rename to by_key
-    def by_id(self, key):
+    def by_key(self, key):
         """
         Returns thought
         :param key: Identity of thought
