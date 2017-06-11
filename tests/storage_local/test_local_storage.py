@@ -94,3 +94,15 @@ def test_cache_linked_lazy(storage):
     assert storage.cache.is_lazy("Brain") is False
     assert storage.cache.is_lazy("Tasks") is False
     assert storage.cache.is_lazy("Recipes") is False
+
+
+def test_cache_linked_lazy_1(storage):
+    storage.get("Brain")
+    assert storage.cache.is_lazy("Read 'Alice in wunderland'") is True
+
+
+#def test_cache_linked_lazy_2(storage, thoughts):
+#    brain = storage.get("Brain")
+#    tasks = thoughts["Tasks"]
+#    storage.remove(tasks)
+#    assert tasks not in brain.links.all

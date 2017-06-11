@@ -1,17 +1,17 @@
 from pycopa import parse
 
-from sarasvati import get_api
 from sarasvati.commands import CommandException
 
 
 class Processor:
-    def __init__(self, commands):
+    def __init__(self, api, commands):
         """
         Initializes new instance of the Processor class.
+        :param api: Instance to pass to handlers
         :param commands: Dictionary of commands meta
         """
+        self.__api = api
         self.__commands = commands
-        self.__api = get_api()
 
     def execute(self, line):
         """

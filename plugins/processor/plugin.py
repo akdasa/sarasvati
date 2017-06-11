@@ -12,4 +12,4 @@ class GenericProcessorPlugin(ProcessorPlugin):
         for plugin in command_plugins:
             c = plugin.get_console_commands()
             commands.update(c)
-        return Processor(commands)
+        return Processor(self._api, commands)
