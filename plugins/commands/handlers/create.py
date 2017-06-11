@@ -4,7 +4,7 @@ from sarasvati.commands import CommandException
 
 def create(api, args):
     # /create Thought title desc:some description parent:My Brain as:child
-    title = args.get("arg")
+    title = args.get("arg") or args.get("title")
     desc = args.get("desc")
     parent = args.get("parent")
     as_ = args.get("as")

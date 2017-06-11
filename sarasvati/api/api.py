@@ -23,6 +23,8 @@ class SarasvatiApi(Composite):
             SarasvatiUtilitiesApiComponent()
         ])
 
+        self.__processor = self.plugins.get("processor").get()
+
     @property
     def plugins(self):
         return self.get_component(SarasvatiPluginsApiComponent.COMPONENT_NAME)
@@ -34,6 +36,10 @@ class SarasvatiApi(Composite):
     @property
     def utilities(self):
         return self.get_component(SarasvatiUtilitiesApiComponent.COMPONENT_NAME)
+
+    @property
+    def processor(self):
+        return self.__processor
 
     def open_brain(self, path):
         logging.info("Opening brain from {}".format(path))
