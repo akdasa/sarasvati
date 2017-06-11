@@ -239,7 +239,7 @@ class SerializationComponent(Component):
             if self.__model.has_component(key):
                 component = self.__model.get_component(key)
                 component.deserialize(component_data, options)
-            else:
+            else:  # create new component if not exist
                 component = get_component(key)
                 if not component:
                     raise Exception("No component provided for {} by '{}'".format(key, self.__GET_COMPONENT))
