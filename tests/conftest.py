@@ -16,6 +16,7 @@ class TestsSarasvatiApi(SarasvatiApi):
         self.execute = self.brain.commands.execute
         return self.brain
 
+_d = TestsSarasvatiApi()
 
 @pytest.fixture
 def api():
