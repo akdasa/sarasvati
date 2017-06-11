@@ -9,7 +9,6 @@ def create(api, args):
     parent = args.get("parent")
     as_ = args.get("as")
     active = api.brain.state.active_thought
-    pt = None
 
     # validation
     if not title:
@@ -22,8 +21,7 @@ def create(api, args):
         raise CommandException("Wrong link type in 'as' argument")
 
     # gather required
-    if parent:
-        pt = api.utilities.find_one_by_title(parent, "parent")
+    pt = api.utilities.find_one_by_title(parent, "parent") if parent else None
 
     # create thought using title specified
     thought = api.execute(CreateCommand(title))
@@ -35,8 +33,7 @@ def create(api, args):
     if parent:  # link with parent specified
         api.execute(LinkCommand(thought, pt, "parent"))
         result = "Thought '{}' created as parent of '{}'".format(title, pt.title)
-
-    if as_ and active:  # link with active link
+    elif as_ and active:  # link with active link
         api.execute(LinkCommand(active, thought, as_))
         result = "Thought '{}' created as {} of '{}'".format(title, as_, active.title)
 
