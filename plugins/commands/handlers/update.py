@@ -15,7 +15,7 @@ def update(api, args):
         raise CommandException("No active thought to update")
 
     # get required data
-    thought = api.find_one_by_title(arg) if arg else active
+    thought = api.utilities.find_one_by_title(arg) if arg else active
 
     # execute
     if title:

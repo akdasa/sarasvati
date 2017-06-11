@@ -23,7 +23,7 @@ def create(api, args):
 
     # gather required
     if parent:
-        pt = api.find_one_by_title(parent, "parent")
+        pt = api.utilities.find_one_by_title(parent, "parent")
 
     # create thought using title specified
     thought = api.execute(CreateCommand(title))

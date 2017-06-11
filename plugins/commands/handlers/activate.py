@@ -8,5 +8,5 @@ def activate(api, args):
     if not title:
         raise CommandException("No title specified")
 
-    thought = api.find_one_by_title(title)
+    thought = api.utilities.find_one_by_title(title)
     api.brain.commands.execute(ActivateCommand(thought))

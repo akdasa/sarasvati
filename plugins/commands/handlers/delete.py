@@ -10,7 +10,7 @@ def delete(api, args):
         raise CommandException("No title specified nor activated thought")
 
     if title:
-        thought = api.find_one_by_title(title)
+        thought = api.utilities.find_one_by_title(title)
         api.execute(DeleteCommand(thought))
         return "Thought '{}' deleted".format(title)
     else:
