@@ -7,20 +7,21 @@ class SarasvatiSerializationApiComponent(Component):
 
     def __init__(self):
         super().__init__(self.COMPONENT_NAME)
+        self.__options = {}
+        self.register(IdentityComponent.COMPONENT_NAME, IdentityComponent)
+        self.register(DefinitionComponent.COMPONENT_NAME, DefinitionComponent)
+        self.register(LinksComponent.COMPONENT_NAME, LinksComponent)
+
+    def register(self, component_name, component_class):
+        self.__options[component_name] = component_class
 
     def get_options(self, storage):
         return {
             "get_component": self.__get_component,
             "get_linked": self.__get_linked(storage)}
 
-    @staticmethod
-    # TODO: set serialization map
-    def __get_component(key):
-        options = {
-            IdentityComponent.COMPONENT_NAME: IdentityComponent,
-            DefinitionComponent.COMPONENT_NAME: DefinitionComponent,
-            LinksComponent.COMPONENT_NAME: LinksComponent}
-        res = options.get(key, None)
+    def __get_component(self, key):
+        res = self.__options.get(key, None)
         if res:
             return res()
         return None
