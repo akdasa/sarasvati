@@ -4,7 +4,7 @@ from sarasvati.brain import Brain
 from sarasvati.brain.model import IdentityComponent
 from sarasvati.brain.thought import DefinitionComponent, LinksComponent
 from sarasvati.commands import Command
-from plugins.storage_local import LocalStorage
+from plugins.storage import LocalStorage
 
 
 class DummyCommand(Command):

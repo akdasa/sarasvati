@@ -1,7 +1,7 @@
 import pytest
 
 from sarasvati.brain import Thought
-from plugins.storage_local import LocalStorage
+from plugins.storage import LocalStorage
 
 
 @pytest.fixture
@@ -11,7 +11,7 @@ def root_thought():
 
 @pytest.fixture
 def storage():
-    return LocalStorage("./tests/storage_local/fixtures/full_brain.json")
+    return LocalStorage("./tests/storage/fixtures/full_brain.json")
 
 
 @pytest.fixture

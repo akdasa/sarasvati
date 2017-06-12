@@ -1,0 +1,8 @@
+[Core]
+Name = Local Storage
+Module = storage
+
+[Documentation]
+Author = Advaita Krishna das
+Version = 0.1
+Description = Provides local storage interface
