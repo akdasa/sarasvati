@@ -61,15 +61,11 @@ class LocalStorage(Storage):
         """
         result = []
 
-        # if search for one thought
-        if query["field"] == "identity.key" and query["operator"] == "=":
-            key = query["value"]
-            thought = self.__cache.get(key)
-            if self.__cache.is_cached_with_links(key):
-                return [thought]
-            elif self.__cache.is_cached(key) and not self.__cache.is_lazy(key):
-                self.__load_linked(thought)
-                return [thought]
+        # if search for one thought by identity.key
+        if self.__key_equality_query(query):
+            value = self.__get_by_key(query)
+            if value:
+                return value
 
         # get it from db
         db_search_result = self.__db.search(query)
@@ -130,6 +126,19 @@ class LocalStorage(Storage):
         Returns cache
         """
         return self.__cache
+
+    @staticmethod
+    def __key_equality_query(query):
+        return query["field"] == "identity.key" and query["operator"] == "="
+
+    def __get_by_key(self, query):
+        key = query["value"]
+        thought = self.__cache.get(key)
+        if self.__cache.is_cached_with_links(key):
+            return [thought]
+        elif self.__cache.is_cached(key) and not self.__cache.is_lazy(key):
+            self.__load_linked(thought)
+            return [thought]
 
     def __load_linked(self, thought):
         for linked in thought.links.all:

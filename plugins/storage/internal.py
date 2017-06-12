@@ -18,6 +18,7 @@ class InternalStorage:
         return self.__db.contains(Query().identity.key == key)
 
     def insert(self, data):
+        self.__logger.debug("Insert '{}'".format(data))
         self.__db.insert(data)
 
     def update(self, key, data):
