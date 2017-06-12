@@ -10,6 +10,16 @@ class StorageCache:
         self.thoughts = {}
         self.lazy = {}
 
+    def status(self, key):
+        """
+        Returns thought by key, None if nothong found
+        :type key: str
+        :rtype: Thought
+        :param key: Key
+        :return: Thought
+        """
+        return self.thoughts.get(key, None), self.lazy.get(key, False)
+
     def get(self, key):
         """
         Returns thought by key, None if nothong found

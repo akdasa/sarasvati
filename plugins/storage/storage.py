@@ -71,12 +71,10 @@ class LocalStorage(Storage):
         db_search_result = self.__db.search(query)
         for db_entity in db_search_result:
             key = db_entity["identity"]["key"]
-            in_cache = self.__cache.is_cached(key)
-            is_lazy = self.__cache.is_lazy(key)
+            cached, lazy = self.__cache.status(key)
+            thought = cached or Thought()
 
-            thought = Thought() if not in_cache else self.__cache.get(key)
-
-            if not in_cache or is_lazy:
+            if not cached or lazy:
                 thought.serialization.deserialize(db_entity, self.__options)
 
             self.__cache.add(thought)  # remove lazy flag
@@ -133,10 +131,10 @@ class LocalStorage(Storage):
 
     def __get_by_key(self, query):
         key = query["value"]
-        thought = self.__cache.get(key)
+        thought, is_lazy = self.__cache.status(key)
         if self.__cache.is_cached_with_links(key):
             return [thought]
-        elif self.__cache.is_cached(key) and not self.__cache.is_lazy(key):
+        elif self.__cache.is_cached(key) and not is_lazy:
             self.__load_linked(thought)
             return [thought]
 
