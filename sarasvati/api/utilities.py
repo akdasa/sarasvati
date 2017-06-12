@@ -16,10 +16,10 @@ class SarasvatiUtilitiesApiComponent(Component):
         brain = self.__composite.brain
 
         if not arg_name:
-            _n = "No thought '{}' found".format(title)
+            _n = "No '{}' thought found".format(title)
             _m = "Multiple thoughts found"
         else:
-            _n = "No thought '{}' found for '{}' argument".format(title, arg_name)
+            _n = "No '{}' thought found for '{}' argument".format(title, arg_name)
             _m = "Multiple thoughts found for '{}' argument".format(arg_name)
         search = brain.search.by_title(title)
 

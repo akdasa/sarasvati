@@ -25,3 +25,9 @@ def test_delete_no_title_specified(api):
     with pytest.raises(CommandException) as exc:
         api.processor.execute("/d")
     assert exc.value.args[0] == "No title specified nor activated thought"
+
+
+def test_delete_not_exist(api):
+    with pytest.raises(CommandException) as exc:
+        api.processor.execute("/d not_exist")
+    assert exc.value.args[0] == "No 'not_exist' thought found"

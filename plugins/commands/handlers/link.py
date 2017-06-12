@@ -1,36 +1,28 @@
 from plugins.commands.commands import LinkCommand
+from plugins.processor.processor import CommandResult
 from sarasvati.commands import CommandException
-
-__NOTHING_ERR = "No thought '{}' found to update."
-__AMBIGUOUS_ERR = "Multiple thoughts ({}) found. Unable to update."
-__NO_ACTIVE_ERR = "No activated thought to update."
 
 
 def link(api, args):
     title = args.get("arg")
-    as_ = args.get("as")
     to_ = args.get("to")
+    as_ = args.get("as")
+    active = api.brain.state.active_thought
 
-    if title:
-        search = api.brain.search.by_title(title)
-        thought = api.get_one(search,
-                              __NOTHING_ERR.format(title),
-                              __AMBIGUOUS_ERR.format(len(search)))
-    else:
-        if not api.brain.state.active_thought:
-            raise CommandException(__NO_ACTIVE_ERR)
-        thought = api.brain.state.active_thought
-
-    if to_:
-        search = api.brain.search.by_title(to_)
-        to_thought = api.get_one(search,
-                                 __NOTHING_ERR.format(to_),
-                                 __AMBIGUOUS_ERR.format(len(to_)))
-    else:
+    # validate
+    if not title and not active:
+        raise CommandException("No title specified nor activated thought")
+    if not to_:
         raise CommandException("No 'to' argument specified")
-
     if not as_:
         raise CommandException("No 'as' argument specified")
+    if as_ not in ["child", "parent", "reference"]:
+        raise CommandException("Wrong link type in 'as' argument")
 
-    api.brain.commands.execute(LinkCommand(to_thought, thought, as_))
-    return "'{}' linked to '{}' as {}".format(thought.title, to_thought.title, as_)
+    # get required data
+    thought = api.utilities.find_one_by_title(title) if title else active
+    to_thought = api.utilities.find_one_by_title(to_, arg_name="to")
+
+    # execute
+    result = api.brain.commands.execute(LinkCommand(to_thought, thought, as_))
+    return CommandResult(result, message="'{}' linked to '{}' as {}".format(thought.title, to_thought.title, as_))
