@@ -1,6 +1,7 @@
 import colored
 from colored import stylize
 
+from plugins.processor.processor import CommandResult
 from sarasvati.application import SarasvatiApplication
 from sarasvati.commands import CommandException
 from .prompt import get_prompt
@@ -39,5 +40,7 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
         if isinstance(result, list):
             for e in result:
                 print(stylize(e, self.__OK_STYLE))
+        elif isinstance(result, CommandResult):
+            print(stylize(result.message, self.__OK_STYLE))
         else:
             print(stylize(result, self.__OK_STYLE))

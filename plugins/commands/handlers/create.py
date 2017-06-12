@@ -1,4 +1,5 @@
 from plugins.commands.commands import SetDescriptionCommand, LinkCommand, CreateCommand
+from plugins.processor.processor import CommandResult
 from sarasvati.commands import CommandException
 
 
@@ -25,16 +26,16 @@ def create(api, args):
 
     # create thought using title specified
     thought = api.execute(CreateCommand(title))
-    result = "Thought '{}' created".format(title)
+    message = "Thought '{}' created".format(title)
 
     if desc:  # set description
         api.execute(SetDescriptionCommand(thought, desc))
 
     if parent:  # link with parent specified
         api.execute(LinkCommand(thought, pt, "parent"))
-        result = "Thought '{}' created as parent of '{}'".format(title, pt.title)
+        message = "Thought '{}' created as parent of '{}'".format(title, pt.title)
     elif as_ and active:  # link with active link
         api.execute(LinkCommand(active, thought, as_))
-        result = "Thought '{}' created as {} of '{}'".format(title, as_, active.title)
+        message = "Thought '{}' created as {} of '{}'".format(title, as_, active.title)
 
-    return result
+    return CommandResult(value=thought, message=message)
