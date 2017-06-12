@@ -1,9 +1,10 @@
 from plugins.commands.commands import DeleteCommand
+from plugins.processor.processor import CommandResult
 from sarasvati.commands import CommandException
 
 
 def delete(api, args):
-    title = args.get("arg")
+    title = args.get("arg") or args.get("title")
     active = api.brain.state.active_thought
 
     if not title and not active:
@@ -12,7 +13,7 @@ def delete(api, args):
     if title:
         thought = api.utilities.find_one_by_title(title)
         api.execute(DeleteCommand(thought))
-        return "Thought '{}' deleted".format(title)
+        return CommandResult(thought, message="Thought '{}' deleted".format(title))
     else:
         api.execute(DeleteCommand(active))
-        return "Thought '{}' deleted".format(active.title)
+        return CommandResult(active, message="Thought '{}' deleted".format(active.title))
