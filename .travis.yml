@@ -17,3 +17,8 @@ install:
 
 script:
   - PYTHONPATH=. py.test
+  - PYTHONPATH=. coverage run ./tests/_invoke.py
+
+after_success:
+  - codeclimate-test-reporter
+  - coveralls
