@@ -1,5 +1,5 @@
-from sarasvati.brain import Thought
 from sarasvati import get_api
+from sarasvati.brain import Thought
 from sarasvati.storage import Storage
 from .cache import StorageCache
 from .internal import InternalStorage
@@ -63,7 +63,7 @@ class LocalStorage(Storage):
 
         # if search for one thought by identity.key
         if self.__key_equality_query(query):
-            value = self.__get_by_key(query)
+            value = self.__get_by_key(query["value"])
             if value:
                 return value
 
@@ -129,8 +129,7 @@ class LocalStorage(Storage):
     def __key_equality_query(query):
         return query["field"] == "identity.key" and query["operator"] == "="
 
-    def __get_by_key(self, query):
-        key = query["value"]
+    def __get_by_key(self, key):
         thought, is_lazy = self.__cache.status(key)
         if self.__cache.is_cached_with_links(key):
             return [thought]
@@ -139,11 +138,10 @@ class LocalStorage(Storage):
             return [thought]
 
     def __load_linked(self, thought):
-        for linked in thought.links.all:
-            if self.__cache.is_lazy(linked.key):
-                db_data = self.__db.search({"field": "identity.key", "operator": "=", "value": linked.key})
-                if len(db_data) == 0:
-                    raise Exception("No link '{}' found".format(linked.key))
-                linked.serialization.deserialize(db_data[0], self.__options)
-                self.__cache.add(linked, lazy=False)
-
+        lazy_links = filter(lambda x: self.__cache.is_lazy(x.key), thought.links.all)
+        for linked in lazy_links:
+            db_data = self.__db.search({"field": "identity.key", "operator": "=", "value": linked.key})
+            if len(db_data) == 0:
+                raise Exception("No link '{}' found".format(linked.key))
+            linked.serialization.deserialize(db_data[0], self.__options)
+            self.__cache.add(linked, lazy=False)
