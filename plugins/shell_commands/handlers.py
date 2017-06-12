@@ -17,10 +17,7 @@ def ls(api, args):
 
 def show(api, args):
     title = args.get("arg")
-    search = api.brain.search.by_title(title)
-    thought = api.get_one(search,
-                          __NOTHING_ERR.format(title),
-                          __AMBIGUOUS_ERR.format(len(search)))
+    thought = api.utilities.find_one_by_title(title)
 
     print(stylize(thought.title, __TITLE_STYLE))
     print(thought.description)

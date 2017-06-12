@@ -221,6 +221,9 @@ class BrainStorageComponent(Component):
         super().__init__(self.COMPONENT_NAME)
         self.__storage = storage
 
+    def get(self, key):
+        return self.__storage.get(key)
+
     def add(self, thought):
         self.__storage.add(thought)
 

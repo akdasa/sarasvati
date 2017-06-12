@@ -53,5 +53,6 @@ class InternalStorage:
 
 def _update_operation(data):
     def transform(element):
+        element.clear()
         element.update(data)
     return transform

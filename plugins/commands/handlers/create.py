@@ -9,6 +9,7 @@ def create(api, args):
     desc = args.get("desc")
     parent = args.get("parent")
     as_ = args.get("as")
+    key = args.get("key")
     active = api.brain.state.active_thought
 
     # validation
@@ -25,7 +26,7 @@ def create(api, args):
     pt = api.utilities.find_one_by_title(parent, "parent") if parent else None
 
     # create thought using title specified
-    thought = api.execute(CreateCommand(title))
+    thought = api.execute(CreateCommand(title, key=key))
     message = "Thought '{}' created".format(title)
 
     if desc:  # set description
@@ -39,3 +40,4 @@ def create(api, args):
         message = "Thought '{}' created as {} of '{}'".format(title, as_, active.title)
 
     return CommandResult(value=thought, message=message)
+

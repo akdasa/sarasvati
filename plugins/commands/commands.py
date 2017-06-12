@@ -17,13 +17,14 @@ class ActivateCommand(Command):
 
 
 class CreateCommand(Command):
-    def __init__(self, title):
+    def __init__(self, title, key=None):
         super().__init__()
         self.__created = None
         self.__title = title
+        self.__key = key
 
     def execute(self):
-        self.__created = Thought(self.__title)
+        self.__created = Thought(self.__title, key=self.__key)
         self._api.brain.storage.add(self.__created)
         return self.__created
 
@@ -37,12 +38,6 @@ class DeleteCommand(Command):
         self.__thought = thought
 
     def execute(self):
-        # todo: remove all links to this thought
-        # /c 1
-        # /c 2 parent:1
-        # /d 1
-        # /show 2
-        # /ls
         self._api.brain.storage.remove(self.__thought)
 
     def revert(self):

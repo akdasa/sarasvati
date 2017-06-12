@@ -8,11 +8,12 @@ from sarasvati.brain import Brain
 class TestsSarasvatiApi(SarasvatiApi):
     def __init__(self):
         super().__init__()
+        self.storage = None
         self.open_brain(None)
 
     def open_brain(self, path):
-        storage = LocalStorage(path)
-        self.brain = Brain(storage)
+        self.storage = LocalStorage(path)
+        self.brain = Brain(self.storage)
         self.execute = self.brain.commands.execute
         return self.brain
 

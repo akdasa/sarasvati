@@ -44,6 +44,12 @@ class LocalStorage(Storage):
         :type thought: Thought
         :param thought: Thought
         """
+        # delete references to thought
+        for linked in thought.links.all:
+            linked.links.remove(thought)
+            self.update(linked)
+
+        # remove thought itself
         self.__db.remove(thought.key)
         self.__cache.remove(thought)
 

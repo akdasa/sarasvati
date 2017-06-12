@@ -52,6 +52,17 @@ def test_remove_entity(empty_storage, root_thought):
     assert empty_storage.get(root_thought.key) is None
 
 
+def test_remove_entity_links(api):
+    api.processor.execute("/c one key:one")
+    api.processor.execute("/c two parent:one key:two")
+    api.processor.execute("/d one")
+    api.storage.cache.clear()
+
+    thought = api.storage.get("two")
+    assert len(thought.links.all) == 0
+    assert api.storage.get("one") is None
+
+
 def test_load_linked_child(empty_storage, root_thought):
     child_thought = Thought("Child")
     root_thought.links.add(child_thought, "child")
@@ -73,7 +84,7 @@ def test_load_linked_child_and_parent(storage):
 
 def test_load_linked_child_parent_and_lazy_child(storage):
     brain = storage.get("Brain")
-    cook = storage.get("Cook cake")
+    cook = storage.get("Task2")
     tasks = storage.get("Tasks")
 
     assert tasks in brain.links.children
@@ -98,11 +109,4 @@ def test_cache_linked_lazy(storage):
 
 def test_cache_linked_lazy_1(storage):
     storage.get("Brain")
-    assert storage.cache.is_lazy("Read 'Alice in wunderland'") is True
-
-
-#def test_cache_linked_lazy_2(storage, thoughts):
-#    brain = storage.get("Brain")
-#    tasks = thoughts["Tasks"]
-#    storage.remove(tasks)
-#    assert tasks not in brain.links.all
+    assert storage.cache.is_lazy("Task1") is True

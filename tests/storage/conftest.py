@@ -10,32 +10,20 @@ def root_thought():
 
 
 @pytest.fixture
-def storage():
-    return LocalStorage("./tests/storage/fixtures/full_brain.json")
+def storage(api):
+    api.processor.execute("/c Brain key:Brain")
+    api.processor.execute("/c Tasks parent:Brain key:Tasks")
+    api.processor.execute("/c Recipes parent:Brain key:Recipes")
+    api.processor.execute("/c Read 'Alice in wunderland' parent:Tasks key:Task1")
+    api.processor.execute("/c Cook cake parent:Tasks key:Task2")
+    api.processor.execute("/c Anthill cake parent:Recipes key:Recipe1")
+    api.processor.execute("/c Simple wounderful parent:Recipes key:Recipe2")
+    api.processor.execute("/c Party key:Party")
+    api.processor.execute("/c Guests parent:Party key:Guests")
 
+    api.storage.cache.clear()
 
-@pytest.fixture
-def thoughts(storage):
-    # Brain -> Tasks
-    # Brain -> Recipes
-    # Tasks -> Task1
-    # Tasks -> Task2
-    # Task2 -> Recipe1
-    # Recipes -> Recipe1
-    # Recipes -> Recipe2
-    # Recipe1 <-> Task1
-    return {
-        "Brain": storage.get("Brain"),
-        "Tasks": storage.get("Tasks"),
-        "Recipes": storage.get("Recipes"),
-        "Task1": storage.get("Read 'Alice in wunderland'"),
-        "Task2": storage.get("Cook cake"),
-        "Recipe1": storage.get("Recipe 'Anthill cake'"),
-        "Recipe2": storage.get("Simple wounderful"),
-        "Party": storage.get("Party"),
-        "Guests": storage.get("Guests"),
-    }
-
+    return api.storage
 
 @pytest.fixture
 def empty_storage():
