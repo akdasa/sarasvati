@@ -47,8 +47,6 @@ class DeleteCommand(Command):
 class SetTitleCommand(Command):
     def __init__(self, thought, title):
         super().__init__()
-        if thought is None:
-            raise ValueError("Thought is none")
         self.__thought = thought
         self.__new_title = title
         self.__old_title = thought.title
@@ -66,8 +64,6 @@ class SetTitleCommand(Command):
 class SetDescriptionCommand(Command):
     def __init__(self, thought, description):
         super().__init__()
-        if thought is None:
-            raise ValueError("Thought is none")
         self.__thought = thought
         self.__new_description = description
         self.__old_description = thought.description
