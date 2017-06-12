@@ -18,6 +18,7 @@ class TestsSarasvatiApi(SarasvatiApi):
 
 _d = TestsSarasvatiApi()
 
+
 @pytest.fixture
 def api():
     return TestsSarasvatiApi()

@@ -25,13 +25,13 @@ def test_brain_undo_command(brain, command):
     assert command.reverted is True
 
 
-def test_empty_undo_raises_exception(brain):
+def test_brain_empty_undo(brain):
     with pytest.raises(Exception) as ex:
         brain.commands.revert()
     assert ex.value.args[0] == "Nothing to undo"
 
 
-def test_cannot_execute_command_twice(brain, command):
+def test_brain_cannot_execute_command_twice(brain, command):
     brain.commands.execute(command)
     with pytest.raises(Exception) as exc:
         brain.commands.execute(command)

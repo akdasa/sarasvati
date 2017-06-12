@@ -7,7 +7,7 @@ def test_serialization_component_is_accessible():
     assert t.serialization is not None
 
 
-def test_serialize():
+def test_serialization():
     t = Thought("Root", "Description")
     r = t.serialization.serialize()
     assert r == {
@@ -15,7 +15,7 @@ def test_serialize():
         "definition": {"title": "Root", "description": "Description"}}
 
 
-def test_serialize_links():
+def test_serialization_links():
     t = Thought("Root", "Description")
     a = Thought("Another", "Thought")
     t.links.add(a, "child")
@@ -26,7 +26,7 @@ def test_serialize_links():
         "links": [{"key": a.key, "kind": "child"}]}
 
 
-def test_deserialize(serialization_options):
+def test_deserialization(serialization_options):
     t = Thought()
     t.serialization.deserialize({
         "identity": {"key": "my-id"},
@@ -37,7 +37,7 @@ def test_deserialize(serialization_options):
     assert t.description == "some text"
 
 
-def test_deserialize_create_component(serialization_options):
+def test_deserialization_create_component(serialization_options):
     m = Model()
     m.serialization.deserialize({
         "definition": {"title": "component", "description": "should create"}
@@ -48,7 +48,7 @@ def test_deserialize_create_component(serialization_options):
     assert m.definition.description == "should create"
 
 
-def test_deserialize_component_with_init_params(serialization_options):
+def test_deserialization_component_with_init_params(serialization_options):
     m = Model()
     m.serialization.deserialize({
         "links": {}

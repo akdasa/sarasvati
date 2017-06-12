@@ -1,10 +1,6 @@
 from sarasvati.brain import Thought
 
-TITLE = "My Thought"
-DESCRIPTION = "Some Description"
-
-
-def test_init_with_default_values():
+def test_thought_init():
     t = Thought()
     assert t.title is None
     assert t.description is None
@@ -16,21 +12,21 @@ def test_init_with_key():
 
 
 def test_init_with_title_and_description():
-    t = Thought(title=TITLE, description=DESCRIPTION)
-    assert t.title == TITLE
-    assert t.description == DESCRIPTION
+    t = Thought(title="title", description="desc")
+    assert t.title == "title"
+    assert t.description == "desc"
 
 
 def test_set_title():
     t = Thought()
-    t.title = TITLE
-    assert t.title is TITLE
+    t.title = "title"
+    assert t.title is "title"
 
 
 def test_set_description():
     t = Thought()
-    t.description = DESCRIPTION
-    assert t.description is DESCRIPTION
+    t.description = "desc"
+    assert t.description is "desc"
 
 
 def test_definition_component_is_accessible():
@@ -49,12 +45,12 @@ def test_thought_has_generated_key():
 
 
 def test_thought_string_representation():
-    t = Thought(title=TITLE)
+    t = Thought(title="title")
     assert str(t) == "<Thought:" + t.key + "/" + t.title + ">"
 
 
 def test_thought_basic_serialization():
-    model = Thought(TITLE, DESCRIPTION)
+    model = Thought("title", "desc")
     assert model.serialization.serialize() == {
         "identity": {"key": model.key},
-        "definition": {"title": TITLE, "description": DESCRIPTION}}
+        "definition": {"title": "title", "description": "desc"}}
