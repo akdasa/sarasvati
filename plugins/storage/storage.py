@@ -77,16 +77,11 @@ class LocalStorage(Storage):
             in_cache = self.__cache.is_cached(key)
             is_lazy = self.__cache.is_lazy(key)
 
-            if not in_cache:
-                thought = Thought()
+            thought = Thought() if not in_cache else self.__cache.get(key)
+
+            if not in_cache or is_lazy:
                 thought.serialization.deserialize(db_entity, self.__options)
-                self.__cache.add(thought)
-                self.__load_linked(thought)
-            else:
-                thought = self.__cache.get(key)
-                if is_lazy:
-                    thought.serialization.deserialize(db_entity, self.__options)
-                    self.__cache.add(thought)  # remove lazy flag
+                self.__cache.add(thought)  # remove lazy flag
                 self.__load_linked(thought)
 
             result.append(thought)

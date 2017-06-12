@@ -1,5 +1,5 @@
 from sarasvati.brain.model import Component
-from sarasvati.plugins import PluginManager, ApplicationPlugin, StoragePlugin, CommandsPlugin, ProcessorPlugin
+from sarasvati.plugins import *
 
 
 class SarasvatiPluginsApiComponent(Component):
