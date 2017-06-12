@@ -27,7 +27,7 @@ def test_create_and_desc(api):
 
 
 def test_create_empty_parent(api):
-    with pytest.raises(Exception) as exc:
+    with pytest.raises(CommandException) as exc:
         api.processor.execute("/c new thought parent:no_parent")
     assert exc.value.args[0] == "No 'no_parent' thought found for 'parent' argument"
 
