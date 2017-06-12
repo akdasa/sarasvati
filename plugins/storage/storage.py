@@ -64,12 +64,12 @@ class LocalStorage(Storage):
         # if search for one thought
         if query["field"] == "identity.key" and query["operator"] == "=":
             key = query["value"]
-            cached = self.__cache.get(key)
+            thought = self.__cache.get(key)
             if self.__cache.is_cached_with_links(key):
-                return [cached]
+                return [thought]
             elif self.__cache.is_cached(key) and not self.__cache.is_lazy(key):
-                self.__load_linked(cached)
-                return [cached]
+                self.__load_linked(thought)
+                return [thought]
 
         # get it from db
         db_search_result = self.__db.search(query)
@@ -82,8 +82,9 @@ class LocalStorage(Storage):
 
             if not in_cache or is_lazy:
                 thought.serialization.deserialize(db_entity, self.__options)
-                self.__cache.add(thought)  # remove lazy flag
-                self.__load_linked(thought)
+
+            self.__cache.add(thought)  # remove lazy flag
+            self.__load_linked(thought)
 
             result.append(thought)
 

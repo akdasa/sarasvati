@@ -100,13 +100,36 @@ def test_cache_linked(storage):
     assert storage.cache.is_cached("Recipes") is True
 
 
-def test_cache_linked_lazy(storage):
+def test_cache_linked_nearest_not_lazy(storage):
     storage.get("Brain")
     assert storage.cache.is_lazy("Brain") is False
     assert storage.cache.is_lazy("Tasks") is False
     assert storage.cache.is_lazy("Recipes") is False
 
 
-def test_cache_linked_lazy_1(storage):
+def test_cache_linked_far_lazy(storage):
     storage.get("Brain")
     assert storage.cache.is_lazy("Task1") is True
+
+
+def test_cache_linked_far_lazy_2(api):
+    api.processor.execute("/c root key:root")
+    api.processor.execute("/c child1 parent:root key:child1")
+    api.processor.execute("/c child2 parent:child1 key:child2")
+    api.storage.cache.clear()
+
+    api.processor.execute("/show root")
+    api.processor.execute("/show child1")
+    assert api.storage.cache.is_lazy("root") is False
+    assert api.storage.cache.is_lazy("child1") is False
+    assert api.storage.cache.is_lazy("child2") is False
+
+
+def test_cache_linked_far_lazy_3(api):
+    api.processor.execute("/c root key:root")
+    api.processor.execute("/c child1 parent:root key:child1")
+    api.processor.execute("/c child2 parent:child1 key:child2")
+    api.storage.cache.clear()
+
+    api.processor.execute("/show root")
+    assert api.storage.cache.is_lazy("child2") is True
