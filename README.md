@@ -5,3 +5,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/advaita-krishna-das/sarasvati/badge.svg?branch=master)](https://coveralls.io/github/advaita-krishna-das/sarasvati?branch=master)
 
 Personal knowledge database
+
+## Showcase
+[![asciicast](https://asciinema.org/a/6ynajc7n4yzyi2oi5cj98zbpv.png)](https://asciinema.org/a/6ynajc7n4yzyi2oi5cj98zbpv?speed=2)
