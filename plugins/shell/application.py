@@ -1,5 +1,6 @@
 import colored
 from colored import stylize
+from pycopa.exception import PycopaException
 
 from plugins.processor.processor import CommandResult
 from sarasvati.application import SarasvatiApplication
@@ -27,6 +28,8 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
             return self._processor.execute(query)
         except CommandException as e:
             print(stylize(e, self.__ERROR_STYLE))
+        except PycopaException as e:
+            print(stylize("Syntax error: " + str(e), self.__ERROR_STYLE))
 
     def __prompt_state(self):
         thought = self._brain.state.active_thought
@@ -35,12 +38,5 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
         return "> "
 
     def __print_result(self, result):
-        if not result:
-            return
-        if isinstance(result, list):
-            for e in result:
-                print(stylize(e, self.__OK_STYLE))
-        elif isinstance(result, CommandResult):
+        if isinstance(result, CommandResult):
             print(stylize(result.message, self.__OK_STYLE))
-        else:
-            print(stylize(result, self.__OK_STYLE))
