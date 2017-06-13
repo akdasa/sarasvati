@@ -7,4 +7,4 @@
 Personal knowledge database
 
 ## Showcase
-[![asciicast](https://asciinema.org/a/6ynajc7n4yzyi2oi5cj98zbpv.png)](https://asciinema.org/a/6ynajc7n4yzyi2oi5cj98zbpv?speed=2)
+[![asciicast](https://asciinema.org/a/577npasoge8wg3881rtq3sbzt.png)](https://asciinema.org/a/577npasoge8wg3881rtq3sbzt?speed=2)

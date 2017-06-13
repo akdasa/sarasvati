@@ -34,10 +34,11 @@ def create(api, args):
 
     if parent:  # link with parent specified
         api.execute(LinkCommand(thought, pt, "parent"))
-        message = "Thought '{}' created as parent of '{}'".format(title, pt.title)
+        message = "Thought '{}' created as child of '{}'".format(title, pt.title)
     elif as_ and active:  # link with active link
         api.execute(LinkCommand(active, thought, as_))
         message = "Thought '{}' created as {} of '{}'".format(title, as_, active.title)
 
+    api.brain.state.shortcuts.set("c", thought)
     return CommandResult(value=thought, message=message)
 

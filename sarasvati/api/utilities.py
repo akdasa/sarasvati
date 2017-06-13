@@ -21,6 +21,14 @@ class SarasvatiUtilitiesApiComponent(Component):
         else:
             _n = "No '{}' thought found for '{}' argument".format(title, arg_name)
             _m = "Multiple thoughts found for '{}' argument".format(arg_name)
+
+        if title.startswith("@"):
+            short = title[1:]
+            result = self.__composite.brain.state.shortcuts.get(short)
+            if not result:
+                raise CommandException("No thought found by {} shortcut".format(title))
+            return result
+
         search = brain.search.by_title(title)
 
         lst_len = len(search)

@@ -197,6 +197,7 @@ class BrainStateComponent(Component):
         """
         super().__init__(self.COMPONENT_NAME)
         self.__active_thought = None
+        self.__shortcuts = BrainShortcuts()
 
     def activate(self, thought):
         """
@@ -212,6 +213,24 @@ class BrainStateComponent(Component):
         :return: Thought
         """
         return self.__active_thought
+
+    @property
+    def shortcuts(self):
+        return self.__shortcuts
+
+
+class BrainShortcuts:
+    def __init__(self):
+        self.__dict = {}
+
+    def clear(self):
+        self.__dict = {}
+
+    def set(self, name, thought):
+        self.__dict["@" + str(name)] = thought
+
+    def get(self, name):
+        return self.__dict.get("@" + name)
 
 
 class BrainStorageComponent(Component):
