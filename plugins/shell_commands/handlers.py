@@ -4,8 +4,6 @@ from colored import stylize
 __TITLE_STYLE = colored.fg("green")
 __LINK_STYLE = colored.fg("blue") + colored.attr("underlined")
 __DESC_STYLE = colored.fg("dark_gray")
-__NOTHING_ERR = "No thought '{}' found to show."
-__AMBIGUOUS_ERR = "Multiple thoughts ({}) found. Unable to show."
 
 
 def ls(api, args):
@@ -17,10 +15,11 @@ def ls(api, args):
 
 def show(api, args):
     title = args.get("arg")
-    thought = api.utilities.find_one_by_title(title)
+    thought = api.utilities.find_one_by_title(title) if title else api.brain.state.active_thought
 
     print(stylize(thought.title, __TITLE_STYLE))
-    print(thought.description)
+    if thought.description:
+        print(thought.description)
 
     links = thought.links.all
     for thought in links:
