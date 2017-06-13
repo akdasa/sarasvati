@@ -59,28 +59,20 @@ class LocalStorage(Storage):
         :param query: Query 
         :return: Array of thoughts if found 
         """
-        result = []
+        # try get query result from cache first
+        result = self.__try_get_from_cache(query)
 
-        # if search for one thought by identity.key
-        if self.__key_equality_query(query):
-            value = self.__get_by_key(query["value"])
-            if value:
-                return value
+        # nothing found, fetch data from db
+        if not result:  # get it from db
+            db_search_result = self.__db.search(query)
+            for db_entity in db_search_result:
+                thought = self.__process_db_entry(db_entity)
+                self.__cache.add(thought)
+                result.append(thought)
 
-        # get it from db
-        db_search_result = self.__db.search(query)
-        for db_entity in db_search_result:
-            key = db_entity["identity"]["key"]
-            cached, lazy = self.__cache.status(key)
-            thought = cached or Thought()
-
-            if not cached or lazy:
-                thought.serialization.deserialize(db_entity, self.__options)
-
-            self.__cache.add(thought)  # remove lazy flag
+        # load linked thoughts
+        for thought in result:
             self.__load_linked(thought)
-
-            result.append(thought)
 
         return result
 
@@ -125,17 +117,24 @@ class LocalStorage(Storage):
         """
         return self.__cache
 
-    @staticmethod
-    def __key_equality_query(query):
-        return query["field"] == "identity.key" and query["operator"] == "="
+    def __process_db_entry(self, db_entity):
+        try:
+            key = db_entity["identity"]["key"]
+            cached, lazy = self.__cache.status(key)
+            thought = cached or Thought()
+            if not cached or lazy:
+                thought.serialization.deserialize(db_entity, self.__options)
+            return thought
+        except:
+            raise Exception("Error while processing DB entry")
 
-    def __get_by_key(self, key):
-        thought, is_lazy = self.__cache.status(key)
-        if self.__cache.is_cached_with_links(key):
-            return [thought]
-        elif self.__cache.is_cached(key) and not is_lazy:
-            self.__load_linked(thought)
-            return [thought]
+    def __try_get_from_cache(self, query):
+        if query["field"] == "identity.key" and query["operator"] == "=":
+            key = query["value"]
+            cached, is_lazy = self.__cache.status(key)
+            if cached and not is_lazy:
+                return [cached]
+        return []
 
     def __load_linked(self, thought):
         lazy_links = filter(lambda x: self.__cache.is_lazy(x.key), thought.links.all)
