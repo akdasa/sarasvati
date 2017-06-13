@@ -4,7 +4,7 @@ from sarasvati.commands import CommandException
 
 
 def activate(api, args):
-    title = args.get("arg") or args.get("title")
+    title = args.arg or args.title
 
     if not title:
         raise CommandException("No title specified")

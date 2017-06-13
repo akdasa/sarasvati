@@ -2,5 +2,6 @@
 __pycache__
 .cache/*
 db.json
+test_db.json
 .DS_Store
 sarasvati.log
