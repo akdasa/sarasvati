@@ -52,6 +52,14 @@ def test_remove_entity(empty_storage, root_thought):
     assert empty_storage.get(root_thought.key) is None
 
 
+def test_remove_entity_twice(empty_storage, root_thought):
+    empty_storage.add(root_thought)
+    empty_storage.remove(root_thought)
+    with pytest.raises(Exception) as exc:
+        empty_storage.remove(root_thought)
+    assert exc.value.args[0] == "Unable to remove a non-existent thought"
+
+
 def test_remove_entity_links(api):
     api.processor.execute("/c one key:one")
     api.processor.execute("/c two parent:one key:two")

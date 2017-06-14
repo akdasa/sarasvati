@@ -47,5 +47,12 @@ def show(api, args):
         shortcut_id += 1
 
 
+def show_shortcuts(api, args):
+    shortcuts = api.brain.state.shortcuts.all
+    for s in shortcuts:
+        v = shortcuts[s]
+        print(stylize(s, __SHORTCUT_STYLE), stylize(v.title, __TITLE_STYLE))
+
+
 def quit_(api, args):
     print("Good bye, take care!")

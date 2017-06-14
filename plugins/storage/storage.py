@@ -50,8 +50,11 @@ class LocalStorage(Storage):
             self.update(linked)
 
         # remove thought itself
-        self.__db.remove(thought.key)
-        self.__cache.remove(thought)
+        if self.__db.contains(thought.key):
+            self.__db.remove(thought.key)
+            self.__cache.remove(thought)
+        else:
+            raise Exception("Unable to remove a non-existent thought")
 
     def search(self, query):
         """

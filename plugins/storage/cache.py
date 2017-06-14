@@ -47,8 +47,11 @@ class StorageCache:
         :type thought: Thought
         :param thought: Thought
         """
-        del self.thoughts[thought.key]
-        del self.lazy[thought.key]
+        if thought.key in self.thoughts:
+            del self.thoughts[thought.key]
+
+        if thought.key in self.lazy:
+            del self.lazy[thought.key]
 
     def is_cached(self, key):
         """

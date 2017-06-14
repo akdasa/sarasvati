@@ -161,7 +161,9 @@ class BrainCommandsComponent(Component):
         """
         if self.__is_executed(command):
             raise Exception("Command already executed", command)
+
         self.__commands.append(command)
+
         try:
             if not command.can_execute():
                 raise CommandException("Command can not be executed")
@@ -169,19 +171,24 @@ class BrainCommandsComponent(Component):
             command.on_completed()
             return result
         except Exception as ex:
-            raise Exception("Error while executing command", command) from ex
+            message = ex.args[0]
+            raise CommandException(message) from ex
 
     def revert(self):
         """
         Reverts changes of last executed command back
-        :raises Exception: If nothing to undo
+        :raises CommandException: If nothing to revert
         """
         if len(self.__commands) <= 0:
-            raise Exception("Nothing to undo")
+            raise CommandException("Nothing to revert")
         command = self.__commands.pop()
         result = command.revert()
         command.on_completed()
         return result
+
+    @property
+    def history(self):
+        return self.__commands
 
     def __is_executed(self, command):
         """Is specified command was executed previously?"""
@@ -231,6 +238,10 @@ class BrainShortcuts:
 
     def get(self, name):
         return self.__dict.get("@" + name)
+
+    @property
+    def all(self):
+        return self.__dict
 
 
 class BrainStorageComponent(Component):

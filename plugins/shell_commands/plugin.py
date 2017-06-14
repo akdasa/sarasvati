@@ -7,6 +7,7 @@ class ShellCommandsPlugin(CommandsPlugin):
         super().__init__()
         self._register_console_command("/q", quit_)
         self._register_console_command("/s", show)
+        self._register_console_command("/@", show_shortcuts)
 
         self._register_console_command("/ls", ls)
         self._register_console_command("/show", show)

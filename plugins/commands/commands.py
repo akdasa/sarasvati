@@ -15,6 +15,10 @@ class ActivateCommand(Command):
     def revert(self):
         self._api.brain.state.activate(self.__prev)
 
+    @property
+    def view(self):
+        return "Activate '{}' thought".format(self.__thought.title)
+
 
 class CreateCommand(Command):
     def __init__(self, title, key=None):
@@ -31,6 +35,10 @@ class CreateCommand(Command):
     def revert(self):
         self._api.brain.storage.remove(self.__created)
 
+    @property
+    def view(self):
+        return "Create '{}' thought".format(self.__created.title)
+
 
 class DeleteCommand(Command):
     def __init__(self, thought):
@@ -43,39 +51,51 @@ class DeleteCommand(Command):
     def revert(self):
         self._api.brain.storage.add(self.__thought)
 
+    @property
+    def view(self):
+        return "Delete '{}' thought".format(self.__thought.title)
+
 
 class SetTitleCommand(Command):
     def __init__(self, thought, title):
         super().__init__()
         self.__thought = thought
-        self.__new_title = title
-        self.__old_title = thought.title
+        self.__new = title
+        self.__old = thought.title
 
     def execute(self):
-        self.__thought.title = self.__new_title
+        self.__thought.title = self.__new
 
     def revert(self):
-        self.__thought.title = self.__old_title
+        self.__thought.title = self.__old
 
     def on_completed(self):
         self._api.brain.storage.update(self.__thought)
+
+    @property
+    def view(self):
+        return "Set title to '{}' for '{}' thought".format(self.__new, self.__thought.title)
 
 
 class SetDescriptionCommand(Command):
     def __init__(self, thought, description):
         super().__init__()
         self.__thought = thought
-        self.__new_description = description
-        self.__old_description = thought.description
+        self.__new = description
+        self.__old = thought.description
 
     def execute(self):
-        self.__thought.description = self.__new_description
+        self.__thought.description = self.__new
 
     def revert(self):
-        self.__thought.description = self.__old_description
+        self.__thought.description = self.__old
 
     def on_completed(self):
         self._api.brain.storage.update(self.__thought)
+
+    @property
+    def view(self):
+        return "Set description to '{}' for '{}' thought".format(self.__new, self.__thought.title)
 
 
 class LinkCommand(Command):
@@ -97,6 +117,10 @@ class LinkCommand(Command):
     def on_completed(self):
         self._api.brain.storage.update(self.__source)
         self._api.brain.storage.update(self.__destination)
+
+    @property
+    def view(self):
+        return "Link '{}' to '{}' as {}".format(self.__source.title, self.__destination.title, self.__kind)
 
     @staticmethod
     def __back(kind):

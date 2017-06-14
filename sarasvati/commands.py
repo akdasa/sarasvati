@@ -31,6 +31,12 @@ class Command(metaclass=ABCMeta):
         """Calls when execution is completed"""
         pass
 
+    @property
+    def view(self):
+        """Return human readable representation of the command."""
+        class_name = self.__class__.__name__
+        return ''.join(map(lambda x: x if x.islower() else " " + x, class_name)).strip().replace(" Command", "")
+
 
 class CommandException(Exception):
     pass
