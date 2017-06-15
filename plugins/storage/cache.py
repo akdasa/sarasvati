@@ -72,28 +72,6 @@ class StorageCache:
         """
         return self.lazy.get(key, False)
 
-    def is_cached_with_links(self, key):
-        """
-        Is thought cached with all linked thoughts?
-        :rtype: bool
-        :type key: str
-        :param key: Key
-        :return: True if thought and all linked thoughts are cached
-        """
-        cached = self.get(key)
-        if cached and not self.has_lazy_children(cached):
-            return self.get(key)
-
-    def has_lazy_children(self, thought):
-        """
-        Has specified thought lazy links?
-        :param thought: Thought
-        :return: True, if one ot linked thoughts is lazy
-        """
-        all_links = thought.links.all
-        is_lazy_children = [self.is_lazy(x.key) for x in all_links]
-        return sum(is_lazy_children) > 0
-
     def clear(self):
         """
         Clears cache

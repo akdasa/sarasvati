@@ -141,3 +141,15 @@ def test_cache_linked_far_lazy_3(api):
 
     api.processor.execute("/show root")
     assert api.storage.cache.is_lazy("child2") is True
+
+
+def test_storage_search_contains(api):
+    thought = api.processor.execute("/c CaSe SeNsItIvE TiTlE").value
+    result = api.utilities.find_one_by_title("eNsItIv", operator="~")
+    assert result == thought
+
+
+def test_storage_search_contains_case(api):
+    thought = api.processor.execute("/c CaSe SeNsItIvE TiTlE").value
+    result = api.utilities.find_one_by_title("sensitive", operator="~~")
+    assert result == thought

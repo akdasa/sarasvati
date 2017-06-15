@@ -38,5 +38,8 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
         return "> "
 
     def __print_result(self, result):
-        if isinstance(result, CommandResult):
+        if not isinstance(result, CommandResult):
+            return
+
+        if result.message:
             print(stylize(result.message, self.__OK_STYLE))

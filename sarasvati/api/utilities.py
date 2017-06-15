@@ -12,7 +12,7 @@ class SarasvatiUtilitiesApiComponent(Component):
     def on_added(self, composite):
         self.__composite = composite
 
-    def find_one_by_title(self, title, arg_name=None):
+    def find_one_by_title(self, title, arg_name=None, operator="eq"):
         brain = self.__composite.brain
 
         if not arg_name:
@@ -29,7 +29,7 @@ class SarasvatiUtilitiesApiComponent(Component):
                 raise CommandException("No thought found by {} shortcut".format(title))
             return result
 
-        search = brain.search.by_title(title)
+        search = brain.search.by_title(title, operator=operator)
 
         lst_len = len(search)
         if lst_len == 0:
