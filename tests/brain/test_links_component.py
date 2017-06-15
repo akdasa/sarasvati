@@ -1,6 +1,6 @@
 import pytest
 
-from sarasvati.brain import Thought
+from sarasvati.brain import Thought, Link
 
 
 def test_links_component_add():
@@ -84,3 +84,24 @@ def test_links_component_linked_entity_without_storage_specified():
 def test_links_component_empty_links_without_storage_specified():
     t1 = Thought()
     t1.links.deserialize([])  # should not raise exception
+
+
+def test_links_component_add_link():
+    t1 = Thought()
+    t2 = Thought()
+    l1 = Link(source=t1, destination=t2, kind="child")
+    l2 = Link(source=t2, destination=t1, kind="parent")
+    t1.links.add_link(l1)
+    t2.links.add_link(l2)
+
+    assert t2 in t1.links.children
+    assert t1 in t2.links.parents
+
+
+def test_links_component_add_wrong_link():
+    t1 = Thought()
+    t2 = Thought()
+    l1 = Link(source=t2, destination=t1, kind="child")
+    with pytest.raises(ValueError) as ex:
+        t1.links.add_link(l1)
+    assert ex.value.args[0] == "link.source: points to another thought"

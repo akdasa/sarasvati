@@ -116,6 +116,17 @@ class LinksComponent(Component):
         self.__links = {}
         self.__source = source
 
+    def add_link(self, link):
+        """
+        Adds link
+        :param link: Link
+        :return: Link
+        """
+        if link.source is not self.__source:
+            raise ValueError("link.source: points to another thought")
+        self.__links[link.destination] = link
+        return link
+
     def add(self, destination, kind):
         """
         Adds link to destination thought
@@ -135,8 +146,7 @@ class LinksComponent(Component):
         if self.__source is destination:
             raise ValueError("Unable link thought to itself")
         link = Link(self.__source, destination, kind)
-        self.__links[destination] = link
-        return link
+        return self.add_link(link)
 
     def remove(self, destination):
         """
@@ -172,6 +182,9 @@ class LinksComponent(Component):
     def references(self):
         """Returns references"""
         return self.__get_links_of_kind("reference")
+
+    def to(self, thought):
+        return self.__links.get(thought, None)
 
     def by_kind(self, kind):
         """Returns links by specified kind"""

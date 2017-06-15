@@ -44,12 +44,23 @@ class DeleteCommand(Command):
     def __init__(self, thought):
         super().__init__()
         self.__thought = thought
+        self.__links = []
 
     def execute(self):
+        # cache links to be removed
+        for thought in self.__thought.links.all:
+            self.__links.append(thought.links.to(self.__thought))
+
+        # remove thought
         self._api.brain.storage.remove(self.__thought)
 
     def revert(self):
+        # add thought back to storage
         self._api.brain.storage.add(self.__thought)
+
+        # restore links
+        for link in self.__links:
+            link.source.links.add_link(link)
 
     @property
     def view(self):
