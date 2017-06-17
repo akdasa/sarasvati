@@ -5,3 +5,5 @@ db.json
 test_db.json
 .DS_Store
 sarasvati.log
+*.jsc
+*.qmlc

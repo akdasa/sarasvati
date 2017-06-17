@@ -211,6 +211,8 @@ class BrainStateComponent(Component):
         Activates specified thought
         :param thought: Thought to be activated
         """
+        from sarasvati import get_api  # todo
+        get_api().events.thought_activated.notify(thought)
         self.__active_thought = thought
 
     @property

@@ -2,6 +2,7 @@ import logging
 import os
 
 from sarasvati import set_api
+from sarasvati.api.events import SarasvatiEventsApiComponent
 from sarasvati.api.plugins import SarasvatiPluginsApiComponent
 from sarasvati.api.serialization import SarasvatiSerializationApiComponent
 from sarasvati.api.utilities import SarasvatiUtilitiesApiComponent
@@ -20,7 +21,8 @@ class SarasvatiApi(Composite):
         self.add_components([
             SarasvatiPluginsApiComponent(),
             SarasvatiSerializationApiComponent(),
-            SarasvatiUtilitiesApiComponent()
+            SarasvatiUtilitiesApiComponent(),
+            SarasvatiEventsApiComponent()
         ])
 
         self.__processor = self.plugins.get("processor").get()
@@ -36,6 +38,10 @@ class SarasvatiApi(Composite):
     @property
     def utilities(self):
         return self.get_component(SarasvatiUtilitiesApiComponent.COMPONENT_NAME)
+
+    @property
+    def events(self):
+        return self.get_component(SarasvatiEventsApiComponent.COMPONENT_NAME)
 
     @property
     def processor(self):

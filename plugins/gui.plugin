@@ -1,0 +1,8 @@
+[Core]
+Name = GUI
+Module = gui
+
+[Documentation]
+Author = Advaita Krishna das
+Version = 0.2
+Description = Graphical user interface
