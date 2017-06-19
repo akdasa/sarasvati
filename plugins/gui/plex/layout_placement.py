@@ -24,7 +24,7 @@ class PlexLayoutPlacement:
         return self.result
 
     def get_pos(self, thought):
-        return self.result[thought.key]
+        return self.result.get(thought.key, None)
 
     @staticmethod
     def __get_pos(state, thoughts):

@@ -9,8 +9,8 @@ class PlexLayout:
     def __init__(self):
         self.__prev = PlexState()
         self.__differ = PlexStateDiff()
-        self.__new_placement = PlexLayoutPlacement()
-        self.__old_placement = PlexLayoutPlacement()
+        self.__np = PlexLayoutPlacement()  # thought placements for new state
+        self.__pp = PlexLayoutPlacement()  # thought placements for previous state
 
     def change_to(self, state):
         """
@@ -20,8 +20,10 @@ class PlexLayout:
         :return: Array of commands to change state to new
         """
         result = []
-        self.__old_placement.place(self.__prev)
-        self.__new_placement.place(state)
+
+        # calculates placements for current and previous states
+        self.__pp.place(self.__prev)
+        self.__np.place(state)
 
         # calculate difference between previous and new state
         diffs = self.__differ.diff(self.__prev, state)
@@ -43,21 +45,23 @@ class PlexLayout:
         kind = ("child" if diff.new_state == "parent" else "parent")
         linked = self.__get_linked(diff.thought, kind)
         if linked:
-            old_pos = self.__old_placement.get_pos(linked)
+            old_pos = self.__pp.get_pos(linked)
             result.append(PlexLayoutAction(diff.thought, "set_pos_to", old_pos))
 
-        pos = self.__new_placement.get_pos(diff.thought)
+        # move added thought to the new position
+        pos = self.__np.get_pos(diff.thought)
         result.append(PlexLayoutAction(diff.thought, "move_to", pos))
 
     def __remove_thought(self, diff, result):
         parent = self.__get_linked(diff.thought, "parent")
-        if parent:
-            pos = self.__new_placement.get_pos(parent)
+        if parent:  # move node to the parent's position
+            pos = self.__np.get_pos(parent) or \
+                  self.__pp.get_pos(parent)
             result.append(PlexLayoutAction(diff.thought, "move_to", pos))
         result.append(PlexLayoutAction(diff.thought, "remove"))
 
     def __change_state(self, diff, result):
-        pos = self.__new_placement.get_pos(diff.thought)
+        pos = self.__np.get_pos(diff.thought)
         result.append(PlexLayoutAction(diff.thought, "move_to", pos))
 
     def __get_linked(self, thought, kind):
