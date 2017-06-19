@@ -1,39 +1,93 @@
-function processCommand(command) {
-    var cmd = command["cmd"]
-    var key = command["key"]
+// ======================= //
+// Plex commands processor //
+// ======================= //
+function processCommand(c) {
+    var cmd = c["cmd"]
+    var key = c["key"]
 
-    if (cmd == "add") {
-        add(key, command["title"])
-    } else if (cmd == "move_to") {
-        move(key, command["x"], command["y"])
-    } else if (cmd == "remove") {
-        remove(key)
+    switch (cmd) {
+        case "add":        add(key, c["title"]); break;
+        case "move_to":    move_to(key, c["x"], c["y"]); break;
+        case "set_pos_to": set_pos_to(key, c["x"], c["y"]); break;
+        case "remove":     remove(key); break;
+        case "link":       add_link(c["from"], c["to"]); break;
     }
 }
 
+// node commands
+
 function add(key, title) {
-    var plexNode = component.createObject(self, {
-        "x": self.width/2,
-        "y": self.height/2,
+    var node = nodeComponent.createObject(self, {
+        "key": key,
         "title": title,
-        "key": key
+        "x": self.width / 2,
+        "y": self.height / 2
     })
-    nodes[key] = plexNode
-    return plexNode
+    node.show()
+    nodes[key] = node
 }
 
-function move(key, x, y) {
+function move_to(key, x, y) {
+    nodes[key].move(x + self.width / 2, y + self.height / 2)
+}
+
+function set_pos_to(key, x, y) {
     var entity = nodes[key]
-    entity.move(
-        x + self.width / 2,
-        y + self.height / 2)
+    entity.x = x + self.width / 2  - entity.width / 2
+    entity.y = y + self.height / 2 - entity.height / 2
 }
 
 function remove(key) {
     var entity = nodes[key]
+    entity.destroyed123.connect(function() {
+        delete_link(entity.key)
+    })
     entity.selfDestroy()
 }
 
+// link commands
+
+function add_link(key, key2) {
+    if (links[key+key2]) {
+        print("Already exist")
+        return;
+    }
+    if (links[key2+key]) {
+        print("Already exist")
+        return;
+    }
+
+    var entity = nodes[key]
+    var entity2 = nodes[key2]
+
+    var link = linkComponent.createObject(self, {
+        "point1x": Qt.binding(function() { return entity.x + entity.width/2 }),
+        "point1y": Qt.binding(function() { return entity.y + entity.height/2 }),
+        "point2x": Qt.binding(function() { return entity2.x + entity2.width/2 }),
+        "point2y": Qt.binding(function() { return entity2.y + entity2.height/2 })
+    })
+
+    //links[key+key2] = link
+    links[key2+key] = link
+}
+
+function delete_link(key) {
+    for (var idx in links) {
+        var linkHash = idx
+        print("D: " + linkHash)
+        if (linkHash.startsWith(key) || linkHash.endsWith(key)) {
+            var lll = links[linkHash];
+            print("DELETING:" + linkHash)
+            lll.destroy()
+            delete links[linkHash]
+        }
+    }
+    print("LNKS LEN" + Object.keys(links).length)
+}
+
+// state
 
 var nodes = {}
-var component = Qt.createComponent("PlexNode.qml")
+var links = {}
+var nodeComponent = Qt.createComponent("PlexNode.qml")
+var linkComponent = Qt.createComponent("Link.qml")

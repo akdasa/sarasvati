@@ -3,8 +3,8 @@ import QtQuick 2.5
 Item {
     id: rootDraw
 
-    property int lineWidth: 8
-    property color lineColor: "#FFF"
+    property int lineWidth: 2
+    property color lineColor: "#000"
     property int point1x
     property int point1y
     property int point2x
@@ -13,7 +13,7 @@ Item {
 
     Item {
         id: priv
-        property int multiple: dottedAnimation ? 20 : 5;
+        property int multiple: dottedAnimation ? 5 : 5;
     }
 
     Behavior on opacity {

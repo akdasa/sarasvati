@@ -19,6 +19,7 @@ class ProcessorController(QObject):
             if hasattr(result, "message"):
                 self.commandResult.emit(result.message, True)
         except CommandException as ex:
+            # todo write log
             self.commandResult.emit(ex.args[0], False)
         except PycopaException as ex:
             self.commandResult.emit("Syntax error: {}".format(ex.args[0]), False)

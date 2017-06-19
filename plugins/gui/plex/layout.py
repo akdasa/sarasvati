@@ -1,56 +1,69 @@
-from .plex import PlexState
-from .state_diff import PlexStateDiff
 from .layout_action import PlexLayoutAction
 from .layout_placement import PlexLayoutPlacement
+from .plex import PlexState
+from .state_diff import PlexStateDiff
 
 
 class PlexLayout:
+    """Places nodes on plane"""
     def __init__(self):
-        self.old_state = PlexState()
-        self.state = PlexState()
-        self.differ = PlexStateDiff()
-        self.placement = PlexLayoutPlacement()
+        self.__prev = PlexState()
+        self.__differ = PlexStateDiff()
+        self.__new_placement = PlexLayoutPlacement()
+        self.__old_placement = PlexLayoutPlacement()
 
-    def change_to(self, new_state) -> []:
+    def change_to(self, state):
+        """
+        Changes plex layout to new one
+        :type state: PlexState
+        :param state: New layout state
+        :return: Array of commands to change state to new
+        """
         result = []
-        self.placement.place(new_state)
-        diffs = self.differ.diff(self.old_state, new_state)
+        self.__old_placement.place(self.__prev)
+        self.__new_placement.place(state)
+
+        # calculate difference between previous and new state
+        diffs = self.__differ.diff(self.__prev, state)
         for diff in diffs:
             if diff.old_state is None:  # new thought added
-                self.add_thought(diff, result)
+                self.__add_thought(diff, result)
             elif diff.new_state is None:  # old thought removed
-                self.remove_thought(diff, result)
+                self.__remove_thought(diff, result)
             else:  # thought changes state
-                self.change_state(diff, result)
-        self.old_state = new_state
+                self.__change_state(diff, result)
+        self.__prev = state
         return result
 
-    def add_thought(self, diff, result):
+    def __add_thought(self, diff, result):
+        # append "add" action
         result.append(PlexLayoutAction(diff.thought, "add"))
 
+        # set new thought to the parent's/child's position
         kind = ("child" if diff.new_state == "parent" else "parent")
-        linked_thought = self.get_linked(diff.thought, kind)
-        if linked_thought:
-            result.append(PlexLayoutAction(diff.thought, "set_pos_to", linked_thought))
+        linked = self.__get_linked(diff.thought, kind)
+        if linked:
+            old_pos = self.__old_placement.get_pos(linked)
+            result.append(PlexLayoutAction(diff.thought, "set_pos_to", old_pos))
 
-        pos = self.placement.get_pos(diff.thought)
+        pos = self.__new_placement.get_pos(diff.thought)
         result.append(PlexLayoutAction(diff.thought, "move_to", pos))
 
-    def remove_thought(self, diff, result):
-        parent = self.get_linked(diff.thought, "parent")
+    def __remove_thought(self, diff, result):
+        parent = self.__get_linked(diff.thought, "parent")
         if parent:
-            result.append(PlexLayoutAction(diff.thought, "move_to", parent))
+            pos = self.__new_placement.get_pos(parent)
+            result.append(PlexLayoutAction(diff.thought, "move_to", pos))
         result.append(PlexLayoutAction(diff.thought, "remove"))
 
-    def change_state(self, diff, result):
-        pos = self.placement.get_pos(diff.thought)
+    def __change_state(self, diff, result):
+        pos = self.__new_placement.get_pos(diff.thought)
         result.append(PlexLayoutAction(diff.thought, "move_to", pos))
 
-    def get_linked(self, thought, kind):
-        parents = thought.links.by_kind(kind)
-        for parent in parents:
-            tid = parent.key
-            state = self.old_state.get_state_by_thought_id(tid)
+    def __get_linked(self, thought, kind):
+        linked = thought.links.by_kind(kind)
+        for thought in linked:
+            state = self.__prev.get_state_by_thought_id(thought.key)
             if state is not None:
                 return state.thought
         return None

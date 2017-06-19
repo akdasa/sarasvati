@@ -7,10 +7,10 @@ Rectangle {
     id: self
     anchors.fill: parent
 
-     Connections {
+    Connections {
         target: plex
 
-        onCommandResult: {
+        onCommand: {
             Plex.processCommand(command)
         }
     }
