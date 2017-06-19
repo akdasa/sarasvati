@@ -23,7 +23,7 @@ Item {
     PathView {
         id: rooPath
         anchors.fill: parent
-        model: (Math.abs(point1x - point2x)+ Math.abs(point1y - point2y))/priv.multiple
+        model: Math.sqrt(Math.pow(Math.abs(point1x - point2x),2)+ Math.pow(Math.abs(point1y - point2y),2))/priv.multiple
         interactive: false
         delegate: Rectangle{ color:lineColor;width:lineWidth;height:lineWidth;radius: lineWidth/2;smooth: true }
         path: Path {
