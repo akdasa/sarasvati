@@ -50,8 +50,11 @@ class PlexLayoutPlacement:
                 y += 50
                 count = min(3, len(thoughts))
 
-        if state in ["reference"] and len(thoughts) > 0:
-            return {thoughts[0].key: [-100, 0]}
+        if state in ["reference"]:
+            y = 0
+            for rt in thoughts:
+                result[rt.key] = [-100, y]
+                y -= 50
 
         return result
 

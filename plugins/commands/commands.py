@@ -1,4 +1,5 @@
 from sarasvati.brain import Thought
+from sarasvati.brain import LinkType
 from sarasvati.commands import Command
 
 
@@ -118,7 +119,7 @@ class LinkCommand(Command):
 
     def execute(self):
         source = self.__source.links.add(self.__destination, self.__kind)
-        destination = self.__destination.links.add(self.__source, self.__back(self.__kind))
+        destination = self.__destination.links.add(self.__source, LinkType.opposite(self.__kind))
         return [source, destination]
 
     def revert(self):
@@ -133,6 +134,3 @@ class LinkCommand(Command):
     def view(self):
         return "Link '{}' to '{}' as {}".format(self.__source.title, self.__destination.title, self.__kind)
 
-    @staticmethod
-    def __back(kind):
-        return {"child": "parent", "parent": "child", "reference": "reference"}.get(kind)

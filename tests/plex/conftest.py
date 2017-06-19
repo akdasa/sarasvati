@@ -27,8 +27,8 @@ def brain(storage):
 
 
 @pytest.fixture
-def plex(brain):
-    return Plex(brain)
+def plex():
+    return Plex()
 
 
 @pytest.fixture

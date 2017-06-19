@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class Link:
     __VALID_LINK_KINDS = ["child", "parent", "reference"]
 
@@ -28,3 +31,13 @@ class Link:
     @property
     def kind(self):
         return self.__kind
+
+
+class LinkType(Enum):
+    Child = "child"
+    Parent = "parent"
+    Reference = "reference"
+
+    @staticmethod
+    def opposite(kind):
+        return {"child": "parent", "parent": "child", "reference": "reference"}.get(kind)

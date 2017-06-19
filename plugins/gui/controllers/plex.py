@@ -8,7 +8,7 @@ class PlexController(QObject):
     def __init__(self):
         QObject.__init__(self)
 
-        self.__plex = Plex(None)
+        self.__plex = Plex()
         self.__layout = PlexLayout()
 
         get_api().events.thought_activated.subscribe(self.__thought_activated)
@@ -29,8 +29,9 @@ class PlexController(QObject):
                 v["y"] = cmd.data[1]
             self.command.emit(v)
 
-        for links in thought.links.all:
-            self.command.emit({"cmd":"link", "from":thought.key, "to":links.key,"ft":thought.title, "tt":links.title})
+        if thought:
+            for links in thought.links.all:
+                self.command.emit({"cmd": "link", "from": thought.key, "to": links.key,"ft": thought.title, "tt": links.title})
 
     def __thought_activated(self, thought):
         self.__change_state(thought)

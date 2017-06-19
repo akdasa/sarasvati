@@ -216,6 +216,10 @@ class LinksComponent(Component):
             self.add(thought, link["kind"])
 
     def __get_links_of_kind(self, kind):
-        links = filter(lambda x: x.kind == kind, self.__links.values())
+        links = []
+        if isinstance(kind, str):
+            links = filter(lambda x: x.kind == kind, self.__links.values())
+        elif isinstance(kind, list):
+            links = filter(lambda x: x.kind in kind, self.__links.values())
         thoughts = map(lambda x: x.destination, links)
         return list(thoughts)

@@ -62,6 +62,7 @@ def test_brain_and_tasks1(plex, layout, thoughts):
     state = plex.activate(thoughts["Task1"])
 
     assert _s(layout.change_to(state)) == _s([
+        PlexLayoutAction(thoughts["Brain"], "move_to", [0, -100]),
         PlexLayoutAction(thoughts["Brain"], "remove"),
         PlexLayoutAction(thoughts["Tasks"], "move_to", [0, -100]),
         PlexLayoutAction(thoughts["Recipes"], "move_to", [0, 0]),
@@ -80,5 +81,4 @@ def test_twice_empty(plex, layout, thoughts):
 
 
 def _s(array):
-    #return array
     return sorted(array, key=lambda a: a.thought.key)

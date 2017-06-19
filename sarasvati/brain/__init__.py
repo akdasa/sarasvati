@@ -1,3 +1,3 @@
 from .thought import Thought
 from .brain import Brain
-from .link import Link
+from .link import Link, LinkType

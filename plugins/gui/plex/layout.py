@@ -1,3 +1,4 @@
+from sarasvati.brain import LinkType
 from .layout_action import PlexLayoutAction
 from .layout_placement import PlexLayoutPlacement
 from .plex import PlexState
@@ -6,6 +7,7 @@ from .state_diff import PlexStateDiff
 
 class PlexLayout:
     """Places nodes on plane"""
+
     def __init__(self):
         self.__prev = PlexState()
         self.__differ = PlexStateDiff()
@@ -42,8 +44,8 @@ class PlexLayout:
         result.append(PlexLayoutAction(diff.thought, "add"))
 
         # set new thought to the parent's/child's position
-        kind = ("child" if diff.new_state == "parent" else "parent")
-        linked = self.__get_linked(diff.thought, kind)
+        opposite = LinkType.opposite(diff.new_state)
+        linked = self.__linked(diff.thought, opposite)
         if linked:
             old_pos = self.__pp.get_pos(linked)
             result.append(PlexLayoutAction(diff.thought, "set_pos_to", old_pos))
@@ -53,10 +55,12 @@ class PlexLayout:
         result.append(PlexLayoutAction(diff.thought, "move_to", pos))
 
     def __remove_thought(self, diff, result):
-        parent = self.__get_linked(diff.thought, "parent")
-        if parent:  # move node to the parent's position
-            pos = self.__np.get_pos(parent) or \
-                  self.__pp.get_pos(parent)
+        # move removing thought to linked thought
+        opposite = LinkType.opposite(diff.new_state)
+        linked = self.__linked(diff.thought, opposite)
+        if linked:  # move node to the linked thought
+            pos = self.__np.get_pos(linked) or \
+                  self.__pp.get_pos(linked)
             result.append(PlexLayoutAction(diff.thought, "move_to", pos))
         result.append(PlexLayoutAction(diff.thought, "remove"))
 
@@ -64,8 +68,9 @@ class PlexLayout:
         pos = self.__np.get_pos(diff.thought)
         result.append(PlexLayoutAction(diff.thought, "move_to", pos))
 
-    def __get_linked(self, thought, kind):
-        linked = thought.links.by_kind(kind)
+    def __linked(self, thought, kind=None):
+        linked = thought.links.by_kind(kind) if kind else thought.links.all
+
         for thought in linked:
             state = self.__prev.get_state_by_thought_id(thought.key)
             if state is not None:
