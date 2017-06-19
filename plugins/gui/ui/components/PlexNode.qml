@@ -14,6 +14,11 @@ Rectangle {
     property string key
 
     signal destroyed123()
+    signal moved()
+
+    onXChanged: self.moved()
+    onYChanged: self.moved()
+
 
     Text {
         id: title

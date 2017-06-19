@@ -3,7 +3,7 @@ import QtQuick 2.5
 Item {
     id: rootDraw
 
-    property int lineWidth: 2
+    property int lineWidth: 3
     property color lineColor: "#000"
     property int point1x
     property int point1y
@@ -13,7 +13,7 @@ Item {
 
     Item {
         id: priv
-        property int multiple: dottedAnimation ? 5 : 5;
+        property int multiple: dottedAnimation ? 10 : 5;
     }
 
     Behavior on opacity {
@@ -37,7 +37,7 @@ Item {
             running: dottedAnimation
             loops: -1
             PropertyAnimation{ target: rooPath; property: "offset"; to: 0; duration: 0 }
-            PropertyAnimation{ target: rooPath; property: "offset"; to: 1; duration: 500 }
+            PropertyAnimation{ target: rooPath; property: "offset"; to: 1; duration: 1500 }
         }
     }
 }

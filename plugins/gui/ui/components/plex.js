@@ -23,6 +23,7 @@ function add(key, title) {
         "x": self.width / 2,
         "y": self.height / 2
     })
+    //node.moved.connect(canvas_repaint)
     node.show()
     nodes[key] = node
 }
@@ -66,6 +67,7 @@ function add_link(key, key2) {
         "point2x": Qt.binding(function() { return entity2.x + entity2.width/2 }),
         "point2y": Qt.binding(function() { return entity2.y + entity2.height/2 })
     })
+    //var link = { "from": entity, "to": entity2 }
 
     //links[key+key2] = link
     links[key2+key] = link
@@ -83,6 +85,12 @@ function delete_link(key) {
         }
     }
     print("LNKS LEN" + Object.keys(links).length)
+}
+
+// Canvas
+
+function canvas_repaint() {
+    canvas.requestPaint();
 }
 
 // state

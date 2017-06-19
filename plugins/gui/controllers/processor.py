@@ -18,6 +18,7 @@ class ProcessorController(QObject):
             result = self.__api.processor.execute(line)
             if hasattr(result, "message"):
                 self.commandResult.emit(result.message, True)
+            self.__api.brain.state.activate(self.__api.brain.state.active_thought)
         except CommandException as ex:
             # todo write log
             self.commandResult.emit(ex.args[0], False)
