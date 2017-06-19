@@ -80,4 +80,5 @@ def test_twice_empty(plex, layout, thoughts):
 
 
 def _s(array):
-    return sorted(array, key=lambda a: a.thought.key+a.name+str(a.data))
+    #return array
+    return sorted(array, key=lambda a: a.thought.key)
