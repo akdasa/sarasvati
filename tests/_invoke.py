@@ -6,4 +6,4 @@ class MyPlugin:
     def pytest_sessionfinish():
         print("*** test run reporting finishing")
 
-pytest.main(["-qq"], plugins=[MyPlugin()])
+pytest.main(["-vv"], plugins=[MyPlugin()])
