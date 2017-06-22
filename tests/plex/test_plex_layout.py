@@ -81,7 +81,5 @@ def test_twice_empty(plex, layout, thoughts):
 
 
 def equal(l1, l2):
-    if sorted(l1, key=lambda a: a.thought.key) == sorted(l2, key=lambda a: a.thought.key):
-        return True
-    else:
-        return False
+    assert sorted(l1, key=lambda a: a.thought.key) == \
+           sorted(l2, key=lambda a: a.thought.key)

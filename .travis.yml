@@ -19,5 +19,5 @@ script:
   - PYTHONPATH=. coverage run ./tests/_invoke.py
 
 after_success:
-  - codeclimate-test-reporter
+#  - codeclimate-test-reporter
   - coveralls
