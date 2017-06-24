@@ -6,9 +6,9 @@ function processCommand(c) {
     var key = c["key"]
 
     switch (cmd) {
-        case "add":        add(key, c["title"]); break;
-        case "move_to":    move_to(key, c["x"], c["y"]); break;
-        case "set_pos_to": set_pos_to(key, c["x"], c["y"]); break;
+        case "add":        add(key, c["title"], c["x"], c["y"]); break;
+        case "move":       move_to(key, c["x"], c["y"]); break;
+        //case "set_pos_to": set_pos_to(key, c["x"], c["y"]); break;
         case "remove":     remove(key); break;
         case "link":       add_link(c["from"], c["to"]); break;
     }
@@ -16,13 +16,15 @@ function processCommand(c) {
 
 // node commands
 
-function add(key, title) {
+function add(key, title, x ,y) {
     var node = nodeComponent.createObject(self, {
         "key": key,
-        "title": title,
-        "x": self.width / 2,
-        "y": self.height / 2
+        "title": title
     })
+
+    node.x = x + self.width / 2 - node.width/2
+    node.y = y + self.height / 2 - node.height/2
+
     //node.moved.connect(canvas_repaint)
     node.show()
     nodes[key] = node

@@ -24,7 +24,9 @@ class PlexController(QObject):
 
             if cmd.name == "add":
                 v["title"] = cmd.thought.title
-            if cmd.name == "move_to" or cmd.name == "set_pos_to":
+                v["x"] = cmd.data["pos"][0]
+                v["y"] = cmd.data["pos"][1]
+            if cmd.name == "move":  # or cmd.name == "set_pos_to":
                 v["x"] = cmd.data[0]
                 v["y"] = cmd.data[1]
             self.command.emit(v)

@@ -1,30 +1,34 @@
+from math import sqrt, pow
+
 from .state import PlexState
 
 
 class PlexLayoutPlacement:
     def __init__(self):
-        self.offset = {"child_x": 0, "parent_x": 0,"jump_y": 0}
-        self.result = {}
+        self.__offset = {"child_x": 0, "parent_x": 0, "jump_y": 0}
+        self.__result = {}
 
     def place(self, plex_state: PlexState):
-        self.offset = {"child_x": 0, "parent_x": 0,"jump_y": 0}
-        self.result = {}
+        self.__offset = {"child_x": 0, "parent_x": 0, "jump_y": 0}
+        self.__result = {}
         for state in ["root", "parent", "child", "reference"]:
             thoughts = plex_state.get_thoughts_by_state(state)
             thoughts = sorted(thoughts, key=lambda t: t.title)
 
             pos = self.__get_pos(state, thoughts)
-            self.result.update(
-                pos
-            )
+            self.__result.update(pos)
 
-            #for thought in sorted(thoughts, key=lambda t: t.title):
-            #    pos = self.__get_pos(state)
-            #    self.result[thought.key] = pos
-        return self.result
+        return self.__result
 
     def get_pos(self, thought):
-        return self.result.get(thought.key, None)
+        return self.__result.get(thought.key, None)
+
+    def distance(self, t1, t2):
+        pos1 = self.get_pos(t1)
+        pos2 = self.get_pos(t2)
+
+        if pos1 and pos2:
+            return sqrt(pow(pos2[0]-pos1[0], 2) + pow(pos2[1]-pos1[1], 2))
 
     @staticmethod
     def __get_pos(state, thoughts):
@@ -59,25 +63,3 @@ class PlexLayoutPlacement:
         return result
 
 
-
-
-
-    def __get_pos_old(self, state):
-        if state == "root":
-            return [0, 0]
-
-        if state == "parent":
-            x = self.offset["parent_x"]
-            self.offset["parent_x"] += 100
-            return [x, -100]
-
-        if state == "child":
-            x = self.offset["child_x"]
-            x += 100
-            self.offset["child_x"] += 100
-            return [x, 100]
-
-        if state == "reference":
-            y = self.offset["jump_y"]
-            self.offset["jump_y"] -= 40
-            return [-200, y]

@@ -33,14 +33,6 @@ def plex():
 
 @pytest.fixture
 def thoughts(brain):
-    # Brain -> Tasks
-    # Brain -> Recipes
-    # Tasks -> Task1
-    # Tasks -> Task2
-    # Task2 -> Recipe1
-    # Recipes -> Recipe1
-    # Recipes -> Recipe2
-    # Recipe1 <-> Task1
     return {
         "Brain": brain.search.by_key("Brain"),
         "Tasks": brain.search.by_key("Tasks"),
