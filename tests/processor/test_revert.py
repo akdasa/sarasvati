@@ -49,3 +49,17 @@ def test_revert_link(api):
     assert len(parent.links.all) == 0
     assert len(child.links.all) == 0
 
+
+def test_revert_transaction_create_1(api):
+    api.processor.execute("/c parent")
+    api.processor.execute("/c child parent:parent desc:some desc")
+    api.processor.execute("/r")
+    assert len(api.brain.commands.history) == 1
+
+
+def test_revert_transaction_create_2(api):
+    api.processor.execute("/c parent desc:some desc")
+    api.processor.execute("/c child parent:parent desc:some desc")
+    api.processor.execute("/r")
+    api.processor.execute("/r")
+    assert len(api.brain.commands.history) == 0

@@ -1,5 +1,5 @@
 from plugins.commands.commands import SetDescriptionCommand, LinkCommand, CreateCommand
-from sarasvati.commands import CommandException, CommandResult
+from sarasvati.commands import CommandException, CommandResult, Transaction
 
 
 def create(api, args):
@@ -10,6 +10,7 @@ def create(api, args):
     as_ = args.get("as")
     key = args.get("key")
     active = api.brain.state.active_thought
+    transaction = Transaction()
 
     # validation
     if not title:
@@ -25,17 +26,17 @@ def create(api, args):
     pt = api.utilities.find_one_by_title(parent, "parent") if parent else None
 
     # create thought using title specified
-    thought = api.execute(CreateCommand(title, key=key))
+    thought = api.execute(CreateCommand(title, key=key), transaction=transaction)
     message = "Thought '{}' created".format(title)
 
     if desc:  # set description
-        api.execute(SetDescriptionCommand(thought, desc))
+        api.execute(SetDescriptionCommand(thought, desc), transaction=transaction)
 
     if parent:  # link with parent specified
-        api.execute(LinkCommand(thought, pt, "parent"))
+        api.execute(LinkCommand(thought, pt, "parent"), transaction=transaction)
         message = "Thought '{}' created as child of '{}'".format(title, pt.title)
     elif as_ and active:  # link with active link
-        api.execute(LinkCommand(active, thought, as_))
+        api.execute(LinkCommand(active, thought, as_), transaction=transaction)
         message = "Thought '{}' created as {} of '{}'".format(title, as_, active.title)
 
     api.brain.state.shortcuts.set("c", thought)

@@ -1,3 +1,4 @@
+import uuid
 from abc import abstractmethod, ABCMeta
 from collections import namedtuple
 
@@ -41,6 +42,10 @@ class Command(metaclass=ABCMeta):
 
 
 class CommandException(Exception):
+    pass
+
+
+class Transaction:
     pass
 
 

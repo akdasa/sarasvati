@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from sarasvati.brain.model import Composite, Component
 from sarasvati.commands import CommandException
 
@@ -143,6 +145,8 @@ class BrainCommandsComponent(Component):
     """Provides interface to manipulate brain with commands"""
     COMPONENT_NAME = "commands"
 
+    __history = namedtuple("CommandHistory", ["command", "transaction"])
+
     def __init__(self):
         """
         Initializes new instance of the BrainCommandsComponent class.
@@ -150,11 +154,12 @@ class BrainCommandsComponent(Component):
         super().__init__(self.COMPONENT_NAME)
         self.__commands = []
 
-    def execute(self, command):
+    def execute(self, command, transaction=None):
         """
         Executes specified command
         :type command: Command
         :param command: Command to execute
+        :param transaction: Transaction
         :return: Result of execution
         :raises Exception: If command was already executed
         :raises Exception: If some exception raised while executing command
@@ -162,7 +167,7 @@ class BrainCommandsComponent(Component):
         if self.__is_executed(command):
             raise Exception("Command already executed", command)
 
-        self.__commands.append(command)
+        self.__commands.append(self.__history(command, transaction))
 
         try:
             if not command.can_execute():
@@ -181,18 +186,29 @@ class BrainCommandsComponent(Component):
         """
         if len(self.__commands) <= 0:
             raise CommandException("Nothing to revert")
-        command = self.__commands.pop()
-        result = command.revert()
-        command.on_completed()
-        return result
+
+        current_transaction = self.__commands[-1].transaction
+        while True:
+            h = self.__commands.pop()  # peek last command
+            print(h.command, h.transaction)
+            result = h.command.revert()
+            h.command.on_completed()
+
+            if h.transaction is None:
+                return result
+            elif current_transaction != h.transaction:
+                self.__commands.append(h)
+                return None
+            if len(self.__commands) == 0:
+                return None
 
     @property
     def history(self):
-        return self.__commands
+        return [a.command for a in self.__commands]
 
     def __is_executed(self, command):
         """Is specified command was executed previously?"""
-        return command in self.__commands
+        return command in [a.command for a in self.__commands]
 
 
 class BrainStateComponent(Component):
