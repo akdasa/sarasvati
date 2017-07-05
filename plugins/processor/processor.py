@@ -1,11 +1,6 @@
-from collections import namedtuple
-
 from pycopa import parse
 
 from sarasvati.commands import CommandException
-
-
-CommandResult = namedtuple("CommandResult", ["value", "message"])
 
 
 class Processor:

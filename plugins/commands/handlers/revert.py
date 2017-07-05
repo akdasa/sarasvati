@@ -1,4 +1,4 @@
-from plugins.processor.processor import CommandResult
+from sarasvati.commands import CommandResult
 
 
 def revert(api, args):

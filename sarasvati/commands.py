@@ -1,4 +1,6 @@
 from abc import abstractmethod, ABCMeta
+from collections import namedtuple
+
 from sarasvati import get_api
 
 
@@ -40,3 +42,6 @@ class Command(metaclass=ABCMeta):
 
 class CommandException(Exception):
     pass
+
+
+CommandResult = namedtuple("CommandResult", ["value", "message"])

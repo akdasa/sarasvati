@@ -1,6 +1,5 @@
 from plugins.commands.commands import ActivateCommand
-from plugins.processor.processor import CommandResult
-from sarasvati.commands import CommandException
+from sarasvati.commands import CommandException, CommandResult
 
 
 def activate(api, args):

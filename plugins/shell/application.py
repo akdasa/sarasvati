@@ -2,9 +2,8 @@ import colored
 from colored import stylize
 from pycopa.exception import PycopaException
 
-from plugins.processor.processor import CommandResult
 from sarasvati.application import SarasvatiApplication
-from sarasvati.commands import CommandException
+from sarasvati.commands import CommandException, CommandResult
 from .prompt import get_prompt
 
 
