@@ -45,13 +45,13 @@ class PlexLayout:
         return result
 
     def __add(self, diff, result):
-        if diff.new_state == "root":
-            data = {"pos": [0, 0]}
-        else:
+        data = {"pos": [0, 0]}
+        if diff.new_state != "root":
             opposite = LinkType.opposite(diff.new_state)
             linked = self.__linked(diff.thought, opposite)
-            pos = self.__p().get_pos(linked)
-            data = {"pos": pos, "key": linked.key}
+            if linked:
+                pos = self.__p().get_pos(linked)
+                data = {"pos": pos, "key": linked.key}
 
         result.append(PlexLayoutAction(diff.thought, "add", data))
         self.__move(diff.thought, result, not_to=data["pos"])
@@ -63,14 +63,14 @@ class PlexLayout:
     def __remove(self, diff, result):
         action = PlexLayoutAction(diff.thought, "remove")
 
-        if diff.old_state == "root":
-            action.data = None
-        else:
+        if diff.old_state != "root":
             opposite = LinkType.opposite(diff.old_state)
             linked = self.__linked(diff.thought, opposite)
             new_pos = self.__np.get_pos(linked)
             if new_pos:
                 result.append(PlexLayoutAction(diff.thought, "move", new_pos))
+            else:
+                result.append(PlexLayoutAction(diff.thought, "move", [0, 0]))
 
         result.append(action)
         self.__move(diff.thought, result)

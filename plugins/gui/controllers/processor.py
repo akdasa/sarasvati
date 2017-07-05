@@ -1,3 +1,4 @@
+import logging
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from pycopa.exception import PycopaException
 
@@ -18,11 +19,12 @@ class ProcessorController(QObject):
             result = self.__api.processor.execute(line)
             if hasattr(result, "message"):
                 self.commandResult.emit(result.message, True)
-            self.__api.brain.state.activate(self.__api.brain.state.active_thought)
         except CommandException as ex:
-            # todo write log
+            logging.exception("Command exception")
             self.commandResult.emit(ex.args[0], False)
         except PycopaException as ex:
+            logging.exception("Syntax error")
             self.commandResult.emit("Syntax error: {}".format(ex.args[0]), False)
         except Exception as ex:
+            logging.exception("Exception")
             self.commandResult.emit(ex.args[0], False)

@@ -21,6 +21,8 @@ class PlexLayoutPlacement:
         return self.__result
 
     def get_pos(self, thought):
+        if not thought:
+            raise ValueError("Thought is not specified to get position for")
         return self.__result.get(thought.key, None)
 
     def distance(self, t1, t2):
