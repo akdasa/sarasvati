@@ -7,4 +7,7 @@ Your Brain can store an unlimited amount of all kinds of information. Write note
 Activate any idea or file in seconds. Sarasvati not only brings up the right idea but lets you see how it relates to everything else... so you are prepared for anything. This means you can shift contexts quickly and get an immediate visual briefing by viewing connected topics. 
 
 # Showcase
+![Showcase](view.gif)
+
+# For console
 <script type="text/javascript" src="https://asciinema.org/a/577npasoge8wg3881rtq3sbzt.js" id="asciicast-577npasoge8wg3881rtq3sbzt" async data-speed="2"></script>
