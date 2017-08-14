@@ -190,7 +190,6 @@ class BrainCommandsComponent(Component):
         current_transaction = self.__commands[-1].transaction
         while True:
             h = self.__commands.pop()  # peek last command
-            print(h.command, h.transaction)
             result = h.command.revert()
             h.command.on_completed()
 

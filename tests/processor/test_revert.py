@@ -61,5 +61,7 @@ def test_revert_transaction_create_2(api):
     api.processor.execute("/c parent desc:some desc")
     api.processor.execute("/c child parent:parent desc:some desc")
     api.processor.execute("/r")
+    assert len(api.brain.commands.history) != 0
+
     api.processor.execute("/r")
     assert len(api.brain.commands.history) == 0
