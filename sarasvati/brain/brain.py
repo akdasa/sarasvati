@@ -188,18 +188,14 @@ class BrainCommandsComponent(Component):
             raise CommandException("Nothing to revert")
 
         current_transaction = self.__commands[-1].transaction
-        while True:
-            h = self.__commands.pop()  # peek last command
-            result = h.command.revert()
-            h.command.on_completed()
-
-            if h.transaction is None:
-                return result
-            elif current_transaction != h.transaction:
-                self.__commands.append(h)
-                return None
-            if len(self.__commands) == 0:
-                return None
+        if current_transaction is not None:
+            while len(self.__commands) > 0:
+                last = self.__commands[-1]  # check last command
+                if last.transaction != current_transaction:
+                    break
+                self.__revert_last()
+        else:
+            return self.__revert_last()
 
     @property
     def history(self):
@@ -208,6 +204,13 @@ class BrainCommandsComponent(Component):
     def __is_executed(self, command):
         """Is specified command was executed previously?"""
         return command in [a.command for a in self.__commands]
+
+    def __revert_last(self):
+        """Reverts last one command"""
+        h = self.__commands.pop()  # peek last command
+        result = h.command.revert()
+        h.command.on_completed()
+        return result
 
 
 class BrainStateComponent(Component):
