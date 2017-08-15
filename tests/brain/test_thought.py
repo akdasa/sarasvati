@@ -1,5 +1,6 @@
 from sarasvati.brain import Thought
 
+
 def test_thought_init():
     t = Thought()
     assert t.title is None

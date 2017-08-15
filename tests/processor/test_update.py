@@ -33,6 +33,7 @@ def test_update_not_found(api):
         api.processor.execute("/u new title:old")
     assert exc.value.args[0] == "No 'new' thought found"
 
+
 def test_update_no_active(api):
     with pytest.raises(CommandException) as exc:
         api.processor.execute("/u title:old")

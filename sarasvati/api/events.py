@@ -1,5 +1,4 @@
 from sarasvati.brain.model import Component
-from sarasvati.commands import CommandException
 from sarasvati.event import Event
 
 

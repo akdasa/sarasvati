@@ -1,4 +1,3 @@
-import uuid
 from abc import abstractmethod, ABCMeta
 from collections import namedtuple
 

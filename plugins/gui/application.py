@@ -15,6 +15,7 @@ class SarasvatiGuiApplication(SarasvatiApplication):
         self.__processor = ProcessorController()
         self.__brain = BrainController()
 
+    # noinspection PyUnresolvedReferences
     def run(self):
         self.__app = QGuiApplication(sys.argv)
         engine = QQmlApplicationEngine()

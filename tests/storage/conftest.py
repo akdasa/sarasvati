@@ -25,6 +25,7 @@ def storage(api):
 
     return api.storage
 
+
 @pytest.fixture
 def empty_storage():
     return LocalStorage(None)

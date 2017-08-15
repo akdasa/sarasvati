@@ -95,7 +95,6 @@ class CommandsPlugin(Plugin):
         self.__console_commands[name] = handler
 
 
-
 class ProcessorPlugin(Plugin):
     def get(self):
         pass

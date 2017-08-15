@@ -36,7 +36,7 @@ def test_root_and_two_children(api, plex, layout):
         PlexLayoutAction(root, "add", {"pos": [0, 0]}),
         PlexLayoutAction(child1, "add", {"pos": [0, 0], "key": root.key}),
         PlexLayoutAction(child1, "move", [-100, 100]),
-        PlexLayoutAction(child2, "add", {"pos": [0, 0],"key": root.key}),
+        PlexLayoutAction(child2, "add", {"pos": [0, 0], "key": root.key}),
         PlexLayoutAction(child2, "move", [100, 100])
     ])
 

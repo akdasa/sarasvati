@@ -33,7 +33,8 @@ class PlexController(QObject):
 
         if thought:
             for links in thought.links.all:
-                self.command.emit({"cmd": "link", "from": thought.key, "to": links.key,"ft": thought.title, "tt": links.title})
+                self.command.emit({"cmd": "link", "from": thought.key, "to": links.key,
+                                   "ft": thought.title, "tt": links.title})
 
     def __thought_activated(self, thought):
         self.__change_state(thought)
