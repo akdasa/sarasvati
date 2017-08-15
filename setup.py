@@ -13,7 +13,20 @@ def get_files(path):
     return [(d, [os.path.join(d, f) for f in files])
             for d, folders, files in os.walk(path)]
 
-OPTIONS = {'includes': ["PyQt5", "yapsy", "colored", "tinydb", "prompt_toolkit", "pycopa"]}
+OPTIONS = {
+    'includes': ["PyQt5", "yapsy", "colored", "tinydb", "prompt_toolkit", "pycopa"],
+    'argv_emulation': True,
+    'iconfile': 'app.icns',
+    'plist': {
+        'CFBundleName': "Sarasvati",
+        'CFBundleDisplayName': "Sarasvati",
+        'CFBundleGetInfoString': "Sarasvati personal knowledge database",
+        'CFBundleIdentifier': "org.akd.sarasvati",
+        'CFBundleVersion': "1.0",
+        'CFBundleShortVersionString': "1.0",
+        'NSHumanReadableCopyright': u"Copyright © 2017, Advaita Krishna das"
+    },
+}
 
 setup(
     app=["./app.py"],
