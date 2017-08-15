@@ -1,5 +1,5 @@
-from plugins.commands.commands import DeleteCommand
 from sarasvati.commands import CommandException, CommandResult
+from ..commands import DeleteCommand
 
 
 def delete(api, args):

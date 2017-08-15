@@ -3,8 +3,8 @@ import sys
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 
-from plugins.gui.controllers import *
 from sarasvati.application import SarasvatiApplication
+from .controllers import *
 
 
 class SarasvatiGuiApplication(SarasvatiApplication):

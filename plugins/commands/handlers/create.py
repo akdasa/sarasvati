@@ -1,5 +1,5 @@
-from plugins.commands.commands import SetDescriptionCommand, LinkCommand, CreateCommand
 from sarasvati.commands import CommandException, CommandResult, Transaction
+from ..commands import SetDescriptionCommand, LinkCommand, CreateCommand
 
 
 def create(api, args):

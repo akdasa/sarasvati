@@ -7,3 +7,5 @@ test_db.json
 sarasvati.log
 *.jsc
 *.qmlc
+build
+dist

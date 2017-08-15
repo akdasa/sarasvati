@@ -1,5 +1,5 @@
-from plugins.commands.commands import SetTitleCommand, SetDescriptionCommand
 from sarasvati.commands import CommandException, CommandResult
+from ..commands import SetTitleCommand, SetDescriptionCommand
 
 
 def update(api, args):

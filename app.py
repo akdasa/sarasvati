@@ -19,3 +19,11 @@ if application is not None:
 else:
     logging.critical("No specified application plugin found")
     print("No specified application plugin found")
+
+
+# used by py2app to find all dependencies
+from plugins.commands import *
+from plugins.gui import *
+from plugins.processor import *
+from plugins.shell_commands import *
+from plugins.storage import *

@@ -12,7 +12,7 @@ class SarasvatiApi(GenericSarasvatiApi):
         (self.__cmd_options, args) = self.__parser.parse_args()
 
     def get_application_plugin(self):
-        plugin_name = self.__cmd_options.app_plugin or "Shell"
+        plugin_name = self.__cmd_options.app_plugin or "GUI"
         plugins = self.plugins.find("application")
         filtered = filter(lambda x: x.info.name == plugin_name, plugins)
         result = list(filtered)
