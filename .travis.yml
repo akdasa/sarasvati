@@ -10,7 +10,7 @@ python:
   - "3.6-dev" # 3.6 development branch
 
 install:
-  - pip install -r requirements
+  - pip install -r requirements.txt
   - pip install codeclimate-test-reporter
   - pip install coveralls
 
