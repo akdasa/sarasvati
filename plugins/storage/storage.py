@@ -9,7 +9,6 @@ class LocalStorage(Storage):
     def __init__(self, path="db.json"):
         """
         Initializes new instance of the LocalStorage class
-        :type path: str
         :param path: path
         """
         super().__init__()

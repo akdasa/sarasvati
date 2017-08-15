@@ -5,6 +5,9 @@ class Plex:
     """
     Plex is a slice of the brain
     """
+    def __init__(self):
+        self.__state = None
+
     def activate(self, thought):
         """
         Activate thought
@@ -13,12 +16,16 @@ class Plex:
         :param thought: Thought
         :return: State of the plex
         """
-        state = PlexState()
+        self.__state = PlexState()
 
         if thought:
-            state.add(thought, "root")
+            self.__state.add(thought, "root")
             links = thought.links.all
             for link_key in links:
                 link = links[link_key]
-                state.add(link.destination, link.kind)
-        return state
+                self.__state.add(link.destination, link.kind)
+        return self.__state
+
+    @property
+    def state(self):
+        return self.__state

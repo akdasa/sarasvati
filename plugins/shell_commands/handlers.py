@@ -47,6 +47,7 @@ def show(api, args):
         shortcut_id += 1
 
 
+# noinspection PyUnusedLocal
 def show_shortcuts(api, args):
     shortcuts = api.brain.state.shortcuts.all
     for s in shortcuts:
@@ -54,5 +55,6 @@ def show_shortcuts(api, args):
         print(stylize(s, __SHORTCUT_STYLE), stylize(v.title, __TITLE_STYLE))
 
 
+# noinspection PyUnusedLocal
 def quit_(api, args):
     print("Good bye, take care!")
