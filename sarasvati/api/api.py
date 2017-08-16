@@ -17,6 +17,7 @@ class SarasvatiApi(Composite):
 
         self.brain = None
         self.execute = None  # todo Convert to method
+        self.storage = None
 
         self.add_components([
             SarasvatiPluginsApiComponent(),
@@ -51,7 +52,7 @@ class SarasvatiApi(Composite):
         logging.info("Opening brain from {}".format(path))
         storage_path = os.path.join(path, "db.json")
         storage_plugin = self.plugins.get("storage")
-        storage = storage_plugin.open(storage_path)
-        self.brain = Brain(storage)
+        self.storage = storage_plugin.open(storage_path)
+        self.brain = Brain(self.storage)
         self.execute = self.brain.commands.execute
         return self.brain

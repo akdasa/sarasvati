@@ -1,5 +1,7 @@
 import uuid
 
+from sarasvati.api_shortcuts import get_serializer
+from sarasvati.brain.serialization import ComponentSerializer
 from sarasvati.models import Composite, Component
 
 
@@ -82,18 +84,21 @@ class IdentityComponent(Component):
         """
         self.__key = value
 
-    def serialize(self, options=None):
-        return {"key": self.__key}
 
-    def deserialize(self, data, options=None):
+class IdentityComponentSerializer(ComponentSerializer):
+    def serialize(self, component):
+        return {"key": component.key}
+
+    def deserialize(self, data, component=None):
+        result = component or IdentityComponent()
         if "key" not in data:
             raise Exception("Required 'key' does not present in data")
-        self.__key = data.get("key", None)
+        result.key = data.get("key", None)
+        return result
 
 
 class SerializationComponent(Component):
     COMPONENT_NAME = "serialization"
-    __GET_COMPONENT = "get_component"
 
     def __init__(self):
         """
@@ -102,7 +107,7 @@ class SerializationComponent(Component):
         super().__init__(self.COMPONENT_NAME)
         self.__model = None
 
-    def serialize(self, options=None):
+    def serialize(self):
         """
         Serializes object
         :type options: dict
@@ -110,37 +115,33 @@ class SerializationComponent(Component):
         :param options: User specified options
         :return: Dictionary
         """
+
         result = {}
         for component in self.__model.components:
             if component.name == self.COMPONENT_NAME:
                 continue  # do not serialize myself
 
-            data = component.serialize(options)
+            serializer = get_serializer(component.name)
+            data = serializer.serialize(component)
             if data:
                 result[component.name] = data
         return result
 
-    def deserialize(self, data, options=None):
+    def deserialize(self, data):
         """
         Deserialize specified data into model
         :param data: Data to deserialize from
         :param options: User specified options
         """
-        get_component = options.get(self.__GET_COMPONENT, None)
-        if not get_component:
-            raise Exception("No '{}' specified".format(self.__GET_COMPONENT))
-
         for key in data.keys():
             component_data = data[key]
+            serializer = get_serializer(key)
 
             if self.__model.has_component(key):
                 component = self.__model.get_component(key)
-                component.deserialize(component_data, options)
+                serializer.deserialize(component_data, component)
             else:  # create new component if not exist
-                component = get_component(key)
-                if not component:
-                    raise Exception("No component provided for {} by '{}'".format(key, self.__GET_COMPONENT))
-                component.deserialize(component_data, options)
+                component = serializer.deserialize(component_data)
                 self.__model.add_component(component)
 
     def on_added(self, composite):

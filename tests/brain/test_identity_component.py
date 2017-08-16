@@ -1,6 +1,6 @@
 import pytest
 
-from sarasvati.brain.model import IdentityComponent
+from sarasvati.brain.model import IdentityComponent, IdentityComponentSerializer
 
 
 def test_identity_component_init():
@@ -27,16 +27,19 @@ def test_identity_component_key_set():
 
 def test_identity_component_deserialize_without_key():
     i = IdentityComponent()
+    s = IdentityComponentSerializer()
     with pytest.raises(Exception):
-        i.deserialize({"test": "123"})
+        s.deserialize({"test": "123"}, i)
 
 
 def test_identity_component_serialize():
     i = IdentityComponent()
-    assert i.serialize() == {"key": i.key}
+    s = IdentityComponentSerializer()
+    assert s.serialize(i) == {"key": i.key}
 
 
 def test_identity_component_deserialize():
     i = IdentityComponent()
-    i.deserialize({"key": "123"})
+    s = IdentityComponentSerializer()
+    s.deserialize({"key": "123"}, i)
     assert i.key == "123"

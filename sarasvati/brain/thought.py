@@ -1,5 +1,6 @@
 from sarasvati.brain.link import Link
 from sarasvati.brain.model import Model
+from sarasvati.brain.serialization import ComponentSerializer
 from sarasvati.models import Component
 
 
@@ -91,13 +92,17 @@ class DefinitionComponent(Component):
     def description(self, value):
         self.__description = value
 
-    def serialize(self, options=None):
-        return {"title": self.title,
-                "description": self.description}
 
-    def deserialize(self, data, options=None):
-        self.title = data.get("title", None)
-        self.description = data.get("description", None)
+class DefinitionComponentSerializer(ComponentSerializer):
+    def serialize(self, component=None):
+        return {"title": component.title,
+                "description": component.description}
+
+    def deserialize(self, data, component=None):
+        result = component or DefinitionComponent()
+        result.title = data.get("title", None)
+        result.description = data.get("description", None)
+        return result
 
 
 class LinksComponent(Component):
@@ -194,28 +199,6 @@ class LinksComponent(Component):
     def on_added(self, composite):
         self.__source = composite
 
-    def serialize(self, options=None):
-        result = []
-        for key in self.__links:
-            l = self.__links[key]
-            result.append({"key": l.destination.key, "kind": l.kind})
-        if len(result) == 0:
-            return None
-        return result
-
-    def deserialize(self, data, options=None):
-        links_count = len(data)
-
-        # get storage to retrieve linked thoughts
-        my_options = options or {}
-        get_linked = my_options.get("get_linked", None)
-        if not get_linked and links_count > 0:
-            raise Exception("No 'get_linked' specified to load linked thoughts")
-
-        for link in data:  # create lazy Thoughts for each link
-            thought = get_linked(link["key"])
-            self.add(thought, link["kind"])
-
     def __get_links_of_kind(self, kind):
         links = []
         if isinstance(kind, str):
@@ -224,3 +207,32 @@ class LinksComponent(Component):
             links = filter(lambda x: x.kind in kind, self.__links.values())
         thoughts = map(lambda x: x.destination, links)
         return list(thoughts)
+
+
+class LinksComponentSerializer(ComponentSerializer):
+    def __init__(self, get_linked=None):
+        self.__get_linked = get_linked
+
+    def serialize(self, component):
+        result = []
+        for key in component.all:
+            l = component.all[key]
+            result.append({"key": l.destination.key, "kind": l.kind})
+        if len(result) == 0:
+            return None
+        return result
+
+    def deserialize(self, data, component=None):
+        result = component or LinksComponent()
+        links_count = len(data)
+
+        # get storage to retrieve linked thoughts
+        if not self.__get_linked and links_count > 0:
+            raise Exception("No 'get_linked' specified to load linked thoughts")
+
+        for link in data:  # create lazy Thoughts for each link
+            thought = self.__get_linked(link["key"])
+            result.add(thought, link["kind"])
+
+        return result
+

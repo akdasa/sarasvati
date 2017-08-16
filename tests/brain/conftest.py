@@ -2,8 +2,6 @@ import pytest
 
 from plugins.storage import LocalStorage
 from sarasvati.brain import Brain
-from sarasvati.brain.model import IdentityComponent
-from sarasvati.brain.thought import DefinitionComponent, LinksComponent
 from sarasvati.commands import Command
 
 
@@ -28,22 +26,4 @@ def brain():
 @pytest.fixture
 def command():
     return DummyCommand()
-
-
-@pytest.fixture
-def serialization_options():
-    return {
-        "get_component": _get_component
-    }
-
-
-def _get_component(key):
-    options = {
-        IdentityComponent.COMPONENT_NAME: IdentityComponent,
-        DefinitionComponent.COMPONENT_NAME: DefinitionComponent,
-        LinksComponent.COMPONENT_NAME: LinksComponent}
-    res = options.get(key, None)
-    if res:
-        return res()
-    return None
 

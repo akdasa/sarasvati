@@ -1,11 +1,10 @@
 import pytest
 
 from sarasvati.brain import Thought
-from plugins.storage import LocalStorage
 
 
 @pytest.fixture
-def root_thought():
+def thought():
     return Thought("Root", key="Root")
 
 
@@ -27,6 +26,6 @@ def storage(api):
 
 
 @pytest.fixture
-def empty_storage():
-    return LocalStorage(None)
+def empty_storage(api):
+    return api.storage  #LocalStorage(None)
 

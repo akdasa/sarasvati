@@ -1,6 +1,7 @@
-from sarasvati.brain.model import IdentityComponent
+from sarasvati.brain.model import IdentityComponent, IdentityComponentSerializer
 from sarasvati.models import Component
-from sarasvati.brain.thought import DefinitionComponent, LinksComponent, Thought
+from sarasvati.brain.thought import DefinitionComponent, LinksComponent, Thought, DefinitionComponentSerializer, \
+    LinksComponentSerializer
 
 
 class SarasvatiSerializationApiComponent(Component):
@@ -9,6 +10,7 @@ class SarasvatiSerializationApiComponent(Component):
     def __init__(self):
         super().__init__(self.COMPONENT_NAME)
         self.__options = {}
+        self.__api = None
         self.register(IdentityComponent.COMPONENT_NAME, IdentityComponent)
         self.register(DefinitionComponent.COMPONENT_NAME, DefinitionComponent)
         self.register(LinksComponent.COMPONENT_NAME, LinksComponent)
@@ -16,16 +18,13 @@ class SarasvatiSerializationApiComponent(Component):
     def register(self, component_name, component_class):
         self.__options[component_name] = component_class
 
-    def get_options(self, storage):
+    def get(self, name):
+        storage = self.__api.storage
         return {
-            "get_component": self.__get_component,
-            "get_linked": self.__get_linked(storage)}
-
-    def __get_component(self, key):
-        res = self.__options.get(key, None)
-        if res:
-            return res()
-        return None
+            IdentityComponent.COMPONENT_NAME: IdentityComponentSerializer(),
+            DefinitionComponent.COMPONENT_NAME: DefinitionComponentSerializer(),
+            LinksComponent.COMPONENT_NAME: LinksComponentSerializer(self.__get_linked(storage))
+        }.get(name, None)
 
     @staticmethod
     def __get_linked(storage):
@@ -38,3 +37,6 @@ class SarasvatiSerializationApiComponent(Component):
             else:
                 return cached
         return result
+
+    def on_added(self, composite):
+        self.__api = composite

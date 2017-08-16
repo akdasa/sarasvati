@@ -26,31 +26,30 @@ def test_serialization_links():
         "links": [{"key": a.key, "kind": "child"}]}
 
 
-def test_deserialization(serialization_options):
+def test_deserialization():
     t = Thought()
     t.serialization.deserialize({
         "identity": {"key": "my-id"},
-        "definition": {"title": "root", "description": "some text"}},
-        serialization_options)
+        "definition": {"title": "root", "description": "some text"}})
     assert t.key == "my-id"
     assert t.title == "root"
     assert t.description == "some text"
 
 
-def test_deserialization_create_component(serialization_options):
+def test_deserialization_create_component():
     m = Model()
     m.serialization.deserialize({
         "definition": {"title": "component", "description": "should create"}
-    }, serialization_options)
+    })
     assert m.get_component("definition") is not None
     assert m.definition is not None
     assert m.definition.title == "component"
     assert m.definition.description == "should create"
 
 
-def test_deserialization_component_with_init_params(serialization_options):
+def test_deserialization_component_with_init_params():
     m = Model()
     m.serialization.deserialize({
         "links": {}
-    }, serialization_options)
+    })
     assert m.links is not None

@@ -1,4 +1,3 @@
-from sarasvati import get_api
 from sarasvati.brain import Thought
 from sarasvati.storage import Storage
 from .cache import StorageCache
@@ -14,7 +13,6 @@ class LocalStorage(Storage):
         super().__init__()
         self.__cache = StorageCache()
         self.__db = InternalStorage(path)
-        self.__options = get_api().serialization.get_options(self)
 
     def add(self, thought):
         """
@@ -125,7 +123,7 @@ class LocalStorage(Storage):
             cached, lazy = self.__cache.status(key)
             thought = cached or Thought()
             if not cached or lazy:
-                thought.serialization.deserialize(db_entity, self.__options)
+                thought.serialization.deserialize(db_entity)
             return thought
         except:
             raise Exception("Error while processing DB entry")
@@ -144,5 +142,5 @@ class LocalStorage(Storage):
             db_data = self.__db.search({"field": "identity.key", "operator": "=", "value": linked.key})
             if len(db_data) == 0:
                 raise Exception("No link '{}' found".format(linked.key))
-            linked.serialization.deserialize(db_data[0], self.__options)
+            linked.serialization.deserialize(db_data[0])
             self.__cache.add(linked, lazy=False)
