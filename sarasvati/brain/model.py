@@ -1,7 +1,6 @@
 import uuid
 
 from sarasvati.api_shortcuts import get_serializer
-from sarasvati.brain.serialization import ComponentSerializer
 from sarasvati.models import Composite, Component
 
 
@@ -85,18 +84,6 @@ class IdentityComponent(Component):
         self.__key = value
 
 
-class IdentityComponentSerializer(ComponentSerializer):
-    def serialize(self, component):
-        return {"key": component.key}
-
-    def deserialize(self, data, component=None):
-        result = component or IdentityComponent()
-        if "key" not in data:
-            raise Exception("Required 'key' does not present in data")
-        result.key = data.get("key", None)
-        return result
-
-
 class SerializationComponent(Component):
     COMPONENT_NAME = "serialization"
 
@@ -131,7 +118,6 @@ class SerializationComponent(Component):
         """
         Deserialize specified data into model
         :param data: Data to deserialize from
-        :param options: User specified options
         """
         for key in data.keys():
             component_data = data[key]

@@ -1,6 +1,7 @@
 import pytest
 
-from sarasvati.brain.model import IdentityComponent, IdentityComponentSerializer
+from sarasvati.brain.model import IdentityComponent
+from sarasvati.brain.serialization import IdentityComponentSerializer
 
 
 def test_identity_component_init():

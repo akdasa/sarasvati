@@ -1,7 +1,7 @@
 import pytest
 
 from sarasvati.brain import Thought, Link
-from sarasvati.brain.thought import LinksComponentSerializer
+from sarasvati.brain.serialization import LinksComponentSerializer
 
 
 def test_links_component_add():
