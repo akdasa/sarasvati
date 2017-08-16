@@ -6,6 +6,10 @@ def test_thought_init():
     assert t.title is None
     assert t.description is None
 
+    assert t.serialization is not None
+    assert t.definition is not None
+    assert t.links is not None
+
 
 def test_init_with_key():
     t = Thought(key="MyKey")
@@ -28,16 +32,6 @@ def test_set_description():
     t = Thought()
     t.description = "desc"
     assert t.description is "desc"
-
-
-def test_definition_component_is_accessible():
-    t = Thought()
-    assert t.definition is not None
-
-
-def test_links_component_is_accessible():
-    t = Thought()
-    assert t.links is not None
 
 
 def test_thought_has_generated_key():

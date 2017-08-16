@@ -1,16 +1,14 @@
 import pytest
 
+from sarasvati.commands import Transaction
 
-def test_brain_commands_accessible(brain):
+
+def test_brain_init(brain):
     assert brain.commands is not None
-
-
-def test_brain_search_accessible(brain):
     assert brain.search is not None
-
-
-def test_brain_stats_accessible(brain):
     assert brain.stats is not None
+    assert brain.state is not None
+    assert brain.storage is not None
 
 
 def test_brain_execute_command(brain, command):
@@ -36,3 +34,29 @@ def test_brain_cannot_execute_command_twice(brain, command):
     with pytest.raises(Exception) as exc:
         brain.commands.execute(command)
     assert exc.value.args[0] == "Command already executed"
+
+
+def test_brain_revert_command_with_transaction(brain, command, command2):
+    t = Transaction()
+    brain.commands.execute(command, transaction=Transaction)
+    brain.commands.execute(command2, transaction=Transaction)
+    brain.commands.revert()
+    assert len(brain.commands.history) == 0
+
+
+def test_brain_revert_command_with_different_transaction(brain, command, command2):
+    t = Transaction()
+    brain.commands.execute(command, transaction=Transaction)
+    brain.commands.execute(command2)
+    brain.commands.revert()
+    assert len(brain.commands.history) == 1
+    assert brain.commands.history == [command]
+
+
+def test_brain_revert_command_with_different_transaction_2(brain, command, command2):
+    t = Transaction()
+    brain.commands.execute(command)
+    brain.commands.execute(command2, transaction=Transaction)
+    brain.commands.revert()
+    assert len(brain.commands.history) == 1
+    assert brain.commands.history == [command]

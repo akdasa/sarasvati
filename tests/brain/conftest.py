@@ -1,7 +1,5 @@
 import pytest
 
-from plugins.storage import LocalStorage
-from sarasvati.brain import Brain
 from sarasvati.commands import Command
 
 
@@ -19,11 +17,15 @@ class DummyCommand(Command):
 
 
 @pytest.fixture
-def brain():
-    return Brain(LocalStorage(None))
+def brain(api):
+    return api.brain
 
 
 @pytest.fixture
 def command():
     return DummyCommand()
 
+
+@pytest.fixture
+def command2():
+    return DummyCommand()
