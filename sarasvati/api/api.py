@@ -16,7 +16,6 @@ class SarasvatiApi(Composite):
         super().__init__()
 
         self.brain = None
-        self.execute = None  # todo Convert to method
         self.storage = None
 
         self.add_components([
@@ -44,9 +43,11 @@ class SarasvatiApi(Composite):
     def events(self):
         return self.get_component(SarasvatiEventsApiComponent.COMPONENT_NAME)
 
-    @property
-    def processor(self):
-        return self.__processor
+    def execute(self, command, transaction=None):
+        if isinstance(command, str):
+            return self.__processor.execute(command)
+        else:
+            return self.brain.commands.execute(command, transaction)
 
     def open_brain(self, path):
         logging.info("Opening brain from {}".format(path))
@@ -54,5 +55,4 @@ class SarasvatiApi(Composite):
         storage_plugin = self.plugins.get("storage")
         self.storage = storage_plugin.open(storage_path)
         self.brain = Brain(self.storage)
-        self.execute = self.brain.commands.execute
         return self.brain

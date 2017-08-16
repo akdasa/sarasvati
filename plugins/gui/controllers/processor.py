@@ -16,7 +16,7 @@ class ProcessorController(QObject):
     @pyqtSlot(str, name="execute")
     def execute(self, line):
         try:
-            result = self.__api.processor.execute(line)
+            result = self.__api.execute(line)
             if hasattr(result, "message"):
                 self.commandResult.emit(result.message, True)
         except CommandException as ex:

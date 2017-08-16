@@ -61,9 +61,9 @@ def test_remove_entity_twice(empty_storage, thought):
 
 
 def test_remove_entity_links(api):
-    api.processor.execute("/c one key:one")
-    api.processor.execute("/c two parent:one key:two")
-    api.processor.execute("/d one")
+    api.execute("/c one key:one")
+    api.execute("/c two parent:one key:two")
+    api.execute("/d one")
     api.storage.cache.clear()
 
     thought = api.storage.get("two")
@@ -121,35 +121,35 @@ def test_cache_linked_far_lazy(storage):
 
 
 def test_cache_linked_far_lazy_2(api):
-    api.processor.execute("/c root key:root")
-    api.processor.execute("/c child1 parent:root key:child1")
-    api.processor.execute("/c child2 parent:child1 key:child2")
+    api.execute("/c root key:root")
+    api.execute("/c child1 parent:root key:child1")
+    api.execute("/c child2 parent:child1 key:child2")
     api.storage.cache.clear()
 
-    api.processor.execute("/show root")
-    api.processor.execute("/show child1")
+    api.execute("/show root")
+    api.execute("/show child1")
     assert api.storage.cache.is_lazy("root") is False
     assert api.storage.cache.is_lazy("child1") is False
     assert api.storage.cache.is_lazy("child2") is False
 
 
 def test_cache_linked_far_lazy_3(api):
-    api.processor.execute("/c root key:root")
-    api.processor.execute("/c child1 parent:root key:child1")
-    api.processor.execute("/c child2 parent:child1 key:child2")
+    api.execute("/c root key:root")
+    api.execute("/c child1 parent:root key:child1")
+    api.execute("/c child2 parent:child1 key:child2")
     api.storage.cache.clear()
 
-    api.processor.execute("/show root")
+    api.execute("/show root")
     assert api.storage.cache.is_lazy("child2") is True
 
 
 def test_storage_search_contains(api):
-    thought = api.processor.execute("/c CaSe SeNsItIvE TiTlE").value
+    thought = api.execute("/c CaSe SeNsItIvE TiTlE").value
     result = api.utilities.find_one_by_title("eNsItIv", operator="~")
     assert result == thought
 
 
 def test_storage_search_contains_case(api):
-    thought = api.processor.execute("/c CaSe SeNsItIvE TiTlE").value
+    thought = api.execute("/c CaSe SeNsItIvE TiTlE").value
     result = api.utilities.find_one_by_title("sensitive", operator="~~")
     assert result == thought

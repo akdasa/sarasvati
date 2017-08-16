@@ -9,7 +9,7 @@ def test_twice_empty(plex, layout, thoughts):
 
 
 def test_root(api, plex, layout):
-    root = api.processor.execute("/c root").value
+    root = api.execute("/c root").value
     state = plex.activate(root)
     equal(layout.change_to(state), [
         PlexLayoutAction(root, "add", {"pos": [0, 0]})
@@ -17,8 +17,8 @@ def test_root(api, plex, layout):
 
 
 def test_root_and_child(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    child = api.processor.execute("/c child parent:root").value
+    root = api.execute("/c root").value
+    child = api.execute("/c child parent:root").value
     state = plex.activate(root)
     equal(layout.change_to(state), [
         PlexLayoutAction(root, "add", {"pos": [0, 0]}),
@@ -28,9 +28,9 @@ def test_root_and_child(api, plex, layout):
 
 
 def test_root_and_two_children(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    child1 = api.processor.execute("/c child1 parent:root").value
-    child2 = api.processor.execute("/c child2 parent:root").value
+    root = api.execute("/c root").value
+    child1 = api.execute("/c child1 parent:root").value
+    child2 = api.execute("/c child2 parent:root").value
     state = plex.activate(root)
     equal(layout.change_to(state), [
         PlexLayoutAction(root, "add", {"pos": [0, 0]}),
@@ -42,8 +42,8 @@ def test_root_and_two_children(api, plex, layout):
 
 
 def test_child_and_root(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    child = api.processor.execute("/c child parent:root").value
+    root = api.execute("/c root").value
+    child = api.execute("/c child parent:root").value
     state = plex.activate(child)
     equal(layout.change_to(state), [
         PlexLayoutAction(child, "add", {"pos": [0, 0]}),
@@ -53,11 +53,11 @@ def test_child_and_root(api, plex, layout):
 
 
 def test_child_and_two_root(api, plex, layout):
-    root1 = api.processor.execute("/c root1").value
-    root2 = api.processor.execute("/c root2").value
-    child = api.processor.execute("/c child").value
-    api.processor.execute("/l child to:root1 as:parent")
-    api.processor.execute("/l child to:root2 as:parent")
+    root1 = api.execute("/c root1").value
+    root2 = api.execute("/c root2").value
+    child = api.execute("/c child").value
+    api.execute("/l child to:root1 as:parent")
+    api.execute("/l child to:root2 as:parent")
 
     state = plex.activate(child)
     equal(layout.change_to(state), [
@@ -70,9 +70,9 @@ def test_child_and_two_root(api, plex, layout):
 
 
 def test_root_and_reference(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    ref = api.processor.execute("/c ref").value
-    api.processor.execute("/l ref to:root as:reference")
+    root = api.execute("/c root").value
+    ref = api.execute("/c ref").value
+    api.execute("/l ref to:root as:reference")
 
     state = plex.activate(root)
     equal(layout.change_to(state), [
@@ -83,11 +83,11 @@ def test_root_and_reference(api, plex, layout):
 
 
 def test_root_and_two_references(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    ref1 = api.processor.execute("/c ref1").value
-    ref2 = api.processor.execute("/c ref2").value
-    api.processor.execute("/l ref1 to:root as:reference")
-    api.processor.execute("/l ref2 to:root as:reference")
+    root = api.execute("/c root").value
+    ref1 = api.execute("/c ref1").value
+    ref2 = api.execute("/c ref2").value
+    api.execute("/l ref1 to:root as:reference")
+    api.execute("/l ref2 to:root as:reference")
 
     state = plex.activate(root)
     equal(layout.change_to(state), [
@@ -100,9 +100,9 @@ def test_root_and_two_references(api, plex, layout):
 
 
 def test_change_root_and_child1(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    child1 = api.processor.execute("/c child1 parent:root").value
-    child2 = api.processor.execute("/c child2 parent:child1").value
+    root = api.execute("/c root").value
+    child1 = api.execute("/c child1 parent:root").value
+    child2 = api.execute("/c child2 parent:child1").value
     state1 = plex.activate(root)
     state2 = plex.activate(child1)
     layout.change_to(state1)
@@ -115,9 +115,9 @@ def test_change_root_and_child1(api, plex, layout):
 
 
 def test_change_child_and_root(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    child1 = api.processor.execute("/c child1 parent:root").value
-    child2 = api.processor.execute("/c child2 parent:root").value
+    root = api.execute("/c root").value
+    child1 = api.execute("/c child1 parent:root").value
+    child2 = api.execute("/c child2 parent:root").value
     state1 = plex.activate(child1)
     state2 = plex.activate(root)
     layout.change_to(state1)
@@ -131,10 +131,10 @@ def test_change_child_and_root(api, plex, layout):
 
 
 def test_change_root_and_children(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    child11 = api.processor.execute("/c child11 parent:root").value
-    child12 = api.processor.execute("/c child12 parent:root").value
-    child21 = api.processor.execute("/c child21 parent:child11").value
+    root = api.execute("/c root").value
+    child11 = api.execute("/c child11 parent:root").value
+    child12 = api.execute("/c child12 parent:root").value
+    child21 = api.execute("/c child21 parent:child11").value
     state1 = plex.activate(root)
     state2 = plex.activate(child11)
     layout.change_to(state1)
@@ -150,9 +150,9 @@ def test_change_root_and_children(api, plex, layout):
 
 
 def test_change_root_and_reference(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    ref = api.processor.execute("/c ref").value
-    api.processor.execute("/l ref to:root as:reference")
+    root = api.execute("/c root").value
+    ref = api.execute("/c ref").value
+    api.execute("/l ref to:root as:reference")
     state1 = plex.activate(root)
     state2 = plex.activate(ref)
     layout.change_to(state1)
@@ -164,9 +164,9 @@ def test_change_root_and_reference(api, plex, layout):
 
 
 def test_remove_root_and_child(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    child1 = api.processor.execute("/c child1 parent:root").value
-    child2 = api.processor.execute("/c child2 parent:child1").value
+    root = api.execute("/c root").value
+    child1 = api.execute("/c child1 parent:root").value
+    child2 = api.execute("/c child2 parent:child1").value
     state1 = plex.activate(child1)
     state2 = plex.activate(child2)
     layout.change_to(state1)
@@ -180,10 +180,10 @@ def test_remove_root_and_child(api, plex, layout):
 
 
 def test_remove_linked(api, plex, layout):
-    root = api.processor.execute("/c root").value
-    child1 = api.processor.execute("/c child1 parent:root").value
-    ref = api.processor.execute("/c ref").value
-    api.processor.execute("/l ref to:root as:reference")
+    root = api.execute("/c root").value
+    child1 = api.execute("/c child1 parent:root").value
+    ref = api.execute("/c ref").value
+    api.execute("/l ref to:root as:reference")
 
     state1 = plex.activate(root)
     state2 = plex.activate(child1)

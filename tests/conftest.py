@@ -14,7 +14,6 @@ class TestsSarasvatiApi(SarasvatiApi):
     def open_brain(self, path):
         self.storage = LocalStorage(path)
         self.brain = Brain(self.storage)
-        self.execute = self.brain.commands.execute
         return self.brain
 
 _d = TestsSarasvatiApi()
