@@ -1,4 +1,4 @@
-from sarasvati.brain.model import Component
+from sarasvati.models import Component
 from sarasvati.plugins import *
 
 

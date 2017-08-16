@@ -7,7 +7,7 @@ from sarasvati.api.plugins import SarasvatiPluginsApiComponent
 from sarasvati.api.serialization import SarasvatiSerializationApiComponent
 from sarasvati.api.utilities import SarasvatiUtilitiesApiComponent
 from sarasvati.brain import Brain
-from sarasvati.brain.model import Composite
+from sarasvati.models import Composite
 
 
 class SarasvatiApi(Composite):

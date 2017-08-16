@@ -1,5 +1,6 @@
 from sarasvati.brain.link import Link
-from sarasvati.brain.model import Model, Component
+from sarasvati.brain.model import Model
+from sarasvati.models import Component
 
 
 class Thought(Model):

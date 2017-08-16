@@ -1,4 +1,5 @@
-from sarasvati.brain.model import Model, Component
+from sarasvati.brain.model import Model
+from sarasvati.models import Component
 
 
 def test_model_init_with_specified_components():

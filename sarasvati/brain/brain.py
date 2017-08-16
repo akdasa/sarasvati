@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from sarasvati.brain.model import Composite, Component
+from sarasvati.models import Composite, Component
 from sarasvati.commands import CommandException
 
 

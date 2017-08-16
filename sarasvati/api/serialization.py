@@ -1,4 +1,5 @@
-from sarasvati.brain.model import IdentityComponent, Component
+from sarasvati.brain.model import IdentityComponent
+from sarasvati.models import Component
 from sarasvati.brain.thought import DefinitionComponent, LinksComponent, Thought
 
 
