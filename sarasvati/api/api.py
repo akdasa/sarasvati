@@ -30,8 +30,6 @@ class SarasvatiApi(Composite):
             SarasvatiCommandsApiComponent()
         ])
 
-        self.__processor = self.plugins.get("processor").get()
-
     @property
     def plugins(self):
         return self.get_component(SarasvatiPluginsApiComponent.COMPONENT_NAME)
