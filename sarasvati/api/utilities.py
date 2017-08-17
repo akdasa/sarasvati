@@ -1,5 +1,5 @@
-from sarasvati.models import Component
 from sarasvati.commands import CommandException
+from sarasvati.models import Component
 
 
 class SarasvatiUtilitiesApiComponent(Component):

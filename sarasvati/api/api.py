@@ -2,6 +2,7 @@ import logging
 import os
 
 from sarasvati import set_api
+from sarasvati.api.commands import SarasvatiCommandsApiComponent
 from sarasvati.api.events import SarasvatiEventsApiComponent
 from sarasvati.api.plugins import SarasvatiPluginsApiComponent
 from sarasvati.api.serialization import SarasvatiSerializationApiComponent
@@ -11,6 +12,9 @@ from sarasvati.models import Composite
 
 
 class SarasvatiApi(Composite):
+    """
+    Sarasvati application programming interface
+    """
     def __init__(self):
         set_api(self)
         super().__init__()
@@ -22,7 +26,8 @@ class SarasvatiApi(Composite):
             SarasvatiPluginsApiComponent(),
             SarasvatiSerializationApiComponent(),
             SarasvatiUtilitiesApiComponent(),
-            SarasvatiEventsApiComponent()
+            SarasvatiEventsApiComponent(),
+            SarasvatiCommandsApiComponent()
         ])
 
         self.__processor = self.plugins.get("processor").get()
@@ -43,11 +48,12 @@ class SarasvatiApi(Composite):
     def events(self):
         return self.get_component(SarasvatiEventsApiComponent.COMPONENT_NAME)
 
+    @property
+    def commands(self):
+        return self.get_component(SarasvatiCommandsApiComponent.COMPONENT_NAME)
+
     def execute(self, command, transaction=None):
-        if isinstance(command, str):
-            return self.__processor.execute(command)
-        else:
-            return self.brain.commands.execute(command, transaction)
+        return self.commands.execute(command, transaction)
 
     def open_brain(self, path):
         logging.info("Opening brain from {}".format(path))
