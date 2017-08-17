@@ -24,7 +24,7 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
 
     def __execute(self, query):
         try:
-            return self._processor.execute(query)
+            return self._api.execute(query)
         except CommandException as e:
             print(stylize(e, self.__ERROR_STYLE))
         except PycopaException as e:
