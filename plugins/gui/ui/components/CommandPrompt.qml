@@ -4,11 +4,6 @@ import QtQuick.Controls.Styles 1.4
 
 Rectangle {
     id: root
-    anchors.margins: 5
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    opacity: .75
 
     TextField {
         id: self

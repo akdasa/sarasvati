@@ -5,7 +5,6 @@ import "plex.js" as Plex
 
 Rectangle {
     id: self
-    anchors.fill: parent
 
     /*Canvas {
         id: canvas

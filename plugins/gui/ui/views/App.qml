@@ -10,10 +10,17 @@ ApplicationWindow {
     width: 640
     height: 480
 
-    Plex {
-    }
+    SplitView {
+        anchors.fill: parent
+        orientation: Qt.Horizontal
 
-    CommandPrompt {
+        Plex {
+            Layout.fillWidth: true
+        }
 
+        Panel {
+            Layout.maximumWidth: 400
+            Layout.minimumWidth: 250
+        }
     }
 }
