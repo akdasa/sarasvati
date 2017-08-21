@@ -16,12 +16,5 @@ Rectangle {
     ColumnLayout {
         id: column
         width: parent.width
-
-        CommandPrompt {
-            height: 45
-            color: "whitesmoke"
-            Layout.fillWidth: true
-            Layout.margins: 5
-        }
     }
 }
