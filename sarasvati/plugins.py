@@ -98,3 +98,8 @@ class CommandsPlugin(Plugin):
 class ProcessorPlugin(Plugin):
     def get(self):
         pass
+
+
+class ToolboxPlugin(Plugin):
+    def get(self, engine):
+        pass

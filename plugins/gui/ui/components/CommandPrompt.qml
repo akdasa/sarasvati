@@ -8,18 +8,9 @@ Rectangle {
     TextField {
         id: self
         placeholderText: "Command Prompt"
-        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
 
-        style: TextFieldStyle {
-            background: Rectangle {
-                color: "#eee"
-                radius: 5
-                border.color: "grey"
-                border.width: 1
-            }
-        }
 
         onAccepted: {
             processor.execute(self.text)

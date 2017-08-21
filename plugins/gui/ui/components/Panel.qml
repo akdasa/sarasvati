@@ -5,22 +5,23 @@ import QtQuick.Layouts 1.3
 
 Rectangle {
     color: "whitesmoke"
+    default property alias data: column.data
+
+    function append(toolbox) {
+        toolbox.parent = column
+        toolbox.Layout.fillWidth = true
+        toolbox.Layout.margins = 5
+    }
 
     ColumnLayout {
-        anchors.fill: parent
+        id: column
+        width: parent.width
 
         CommandPrompt {
+            height: 45
             color: "whitesmoke"
-            anchors.margins: 5
             Layout.fillWidth: true
             Layout.margins: 5
-            height: 50;
-        }
-
-        Rectangle {
-            color: "whitesmoke";
-            Layout.fillWidth: true;
-            Layout.fillHeight: true
         }
     }
 }

@@ -12,7 +12,8 @@ class SarasvatiPluginsApiComponent(Component):
                 "application": ApplicationPlugin,
                 "storage": StoragePlugin,
                 "commands": CommandsPlugin,
-                "processor": ProcessorPlugin
+                "processor": ProcessorPlugin,
+                "toolbox": ToolboxPlugin
             })
 
     def find(self, category):

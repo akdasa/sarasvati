@@ -19,6 +19,7 @@ ApplicationWindow {
         }
 
         Panel {
+            objectName: "panel"
             Layout.maximumWidth: 400
             Layout.minimumWidth: 250
         }
