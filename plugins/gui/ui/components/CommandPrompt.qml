@@ -11,7 +11,6 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
 
-
         onAccepted: {
             processor.execute(self.text)
             self.text = ""

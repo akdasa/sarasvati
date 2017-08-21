@@ -14,10 +14,11 @@ class QuickEditToolbox(QQuickItem):
 
     @pyqtSlot(str, str, name="changed")
     def changed(self, title, description):
+        if not self.__thought:
+            return
         self.__thought.title = title
         self.__thought.description = description
         get_api().brain.storage.update(self.__thought)
-        pass
 
     def __thought_activated(self, thought):
         self.__thought = thought
