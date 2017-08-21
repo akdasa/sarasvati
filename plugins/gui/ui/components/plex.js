@@ -11,6 +11,7 @@ function processCommand(c) {
         //case "set_pos_to": set_pos_to(key, c["x"], c["y"]); break;
         case "remove":     remove(key); break;
         case "link":       add_link(c["from"], c["to"]); break;
+        case "change":     change(c["key"], c["title"])
     }
 }
 
@@ -46,6 +47,11 @@ function remove(key) {
         delete_link(entity.key)
     })
     entity.selfDestroy()
+}
+
+function change(key, title) {
+    var entity = nodes[key];
+    entity.title = title;
 }
 
 // link commands

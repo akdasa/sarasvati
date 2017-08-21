@@ -1,14 +1,25 @@
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtQuick import QQuickItem
 
+from sarasvati import get_api
+
 
 class QuickEditToolbox(QQuickItem):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.__thought = None
+        get_api().events.thought_activated.subscribe(self.__thought_activated)
 
-    activated = pyqtSignal(dict, arguments=['data'])
+    activated = pyqtSignal(str, str, arguments=['thought_title', 'thought_description'])
 
-    @pyqtSlot(str, name="execute")
-    def execute(self, line):
-        print("123" + line)
-        self.activated.emit({"test": 123})
+    @pyqtSlot(str, str, name="changed")
+    def changed(self, title, description):
+        self.__thought.title = title
+        self.__thought.description = description
+        get_api().brain.storage.update(self.__thought)
+        pass
+
+    def __thought_activated(self, thought):
+        self.__thought = thought
+        self.activated.emit(thought.title,
+                            thought.description or "")

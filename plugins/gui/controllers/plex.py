@@ -12,6 +12,7 @@ class PlexController(QObject):
         self.__layout = PlexLayout()
 
         get_api().events.thought_activated.subscribe(self.__thought_activated)
+        get_api().events.thought_changed.subscribe(self.__thought_changed)
 
     command = pyqtSignal(dict, arguments=['command'])
 
@@ -38,3 +39,6 @@ class PlexController(QObject):
 
     def __thought_activated(self, thought):
         self.__change_state(thought)
+
+    def __thought_changed(self, thought):
+        self.command.emit({"cmd": "change", "key": thought.key, "title": thought.title})

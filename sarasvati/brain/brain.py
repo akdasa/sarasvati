@@ -1,5 +1,6 @@
 from collections import namedtuple
 
+from sarasvati import get_api
 from sarasvati.models import Composite, Component
 from sarasvati.commands import CommandException
 
@@ -279,6 +280,7 @@ class BrainStorageComponent(Component):
 
     def update(self, thought):
         self.__storage.update(thought)
+        get_api().events.thought_changed.notify(thought)  # todo
 
     def remove(self, thought):
         self.__storage.remove(thought)
