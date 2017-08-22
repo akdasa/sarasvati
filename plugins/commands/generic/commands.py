@@ -1,5 +1,5 @@
-from sarasvati.brain import Thought
 from sarasvati.brain import LinkType
+from sarasvati.brain import Thought
 from sarasvati.commands import Command
 
 
@@ -9,12 +9,21 @@ class ActivateCommand(Command):
         self.__thought = thought
         self.__prev = None
 
+        self.__before_activated = self._api.events.thought_before_activated
+        self.__activated = self._api.events.thought_activated
+
+    def before_execution(self):
+        self.__before_activated.notify(self.__thought)
+
     def execute(self):
         self.__prev = self._api.brain.state.active_thought
         self._api.brain.state.activate(self.__thought)
+        self.__activated.notify(self.__thought)
 
     def revert(self):
-        self._api.brain.state.activate(self.__prev)
+        if self.__prev is not None:
+            self._api.brain.state.activate(self.__prev)
+            self.__activated.notify(self.__prev)
 
     @property
     def view(self):

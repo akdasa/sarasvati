@@ -29,6 +29,10 @@ class Command(metaclass=ABCMeta):
         """
         return True
 
+    def before_execution(self):
+        """Calls before execution"""
+        pass
+
     def on_completed(self):
         """Calls when execution is completed"""
         pass

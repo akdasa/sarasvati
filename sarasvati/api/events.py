@@ -7,6 +7,7 @@ class SarasvatiEventsApiComponent(Component):
 
     def __init__(self):
         super().__init__(self.COMPONENT_NAME)
+        self.thought_before_activated = Event()
         self.thought_activated = Event()
         self.thought_changed = Event()
         self.thought_changing = Event()

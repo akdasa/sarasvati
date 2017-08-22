@@ -168,11 +168,13 @@ class BrainCommandsComponent(Component):
         if self.__is_executed(command):
             raise Exception("Command already executed", command)
 
-        self.__commands.append(self.__history(command, transaction))
-
         try:
             if not command.can_execute():
                 raise CommandException("Command can not be executed")
+            command.before_execution()
+
+            self.__commands.append(self.__history(command, transaction))
+
             result = command.execute()
             command.on_completed()
             return result
@@ -225,13 +227,12 @@ class BrainStateComponent(Component):
         self.__active_thought = None
         self.__shortcuts = BrainShortcuts()
 
+    # todo: to be removed (use da Activate command)
     def activate(self, thought):
         """
         Activates specified thought
         :param thought: Thought to be activated
         """
-        from sarasvati import get_api  # todo
-        get_api().events.thought_activated.notify(thought)
         self.__active_thought = thought
 
     @property

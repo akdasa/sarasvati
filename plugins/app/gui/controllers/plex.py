@@ -13,7 +13,7 @@ class PlexController(QObject):
 
         get_api().events.thought_activated.subscribe(self.__thought_activated)
         get_api().events.thought_changed.subscribe(self.__thought_changed)
-        get_api().events.thought_changing.subscribe(self.__thought_changed)
+        get_api().events.thought_changing.subscribe(self.__thought_changing)
 
     command = pyqtSignal(QVariant, arguments=['command'])
 
@@ -43,3 +43,8 @@ class PlexController(QObject):
 
     def __thought_changed(self, thought):
         self.command.emit({"cmd": "change", "key": thought.key, "title": thought.title})
+
+    def __thought_changing(self, data):
+        emit_data = data.copy()
+        emit_data["cmd"] = "change"
+        self.command.emit(emit_data)

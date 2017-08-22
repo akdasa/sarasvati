@@ -15,7 +15,7 @@ QuickEditToolbox {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            onTextChanged: Controller.update(false)
+            onTextChanged: Controller.update()
         }
 
         TextArea {
@@ -23,7 +23,7 @@ QuickEditToolbox {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            onTextChanged: Controller.update(false)
+            onTextChanged: Controller.update()
         }
     }
 

@@ -1,5 +1,6 @@
 from PyQt5.QtCore import QObject, pyqtSlot
 
+from plugins.commands.generic.commands import ActivateCommand
 from sarasvati import get_api
 
 
@@ -10,4 +11,4 @@ class BrainController(QObject):
     @pyqtSlot(str, name="activate")
     def activate(self, key):
         thought = get_api().brain.search.by_key(key)
-        get_api().brain.state.activate(thought)
+        get_api().execute(ActivateCommand(thought))
