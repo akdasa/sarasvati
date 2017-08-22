@@ -12,14 +12,17 @@ logging.info("Sarasvati " + version)
 _api_instance = SarasvatiApi()
 application = _api_instance.get_application_plugin()
 
-# Run application
-if application is not None:
+try:
+    # Run application
+    if application is None:
+        raise Exception("No specified application plugin found")
     application.activate()
     application.deactivate()
-else:
-    logging.critical("No specified application plugin found")
-    print("No specified application plugin found")
+except Exception as ex:
+    logging.exception(ex)
 
+    import report
+    report.show(ex)
 
 # used by py2app to find all dependencies
 #from plugins.commands import *
