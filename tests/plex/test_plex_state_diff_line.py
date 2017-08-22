@@ -1,4 +1,4 @@
-from plugins.gui.plex import PlexStateDiffLine
+from plugins.app.gui.plex import PlexStateDiffLine
 from sarasvati.brain import Thought
 
 

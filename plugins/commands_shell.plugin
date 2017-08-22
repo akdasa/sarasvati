@@ -1,6 +1,6 @@
 [Core]
 Name = Shell Commands
-Module = shell_commands
+Module = commands/shell
 
 [Documentation]
 Author = Advaita Krishna das

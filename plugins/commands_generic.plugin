@@ -1,6 +1,6 @@
 [Core]
 Name = Generic commands
-Module = commands
+Module = commands/generic
 
 [Documentation]
 Author = Advaita Krishna das

@@ -1,6 +1,6 @@
 [Core]
 Name = Commands Processor
-Module = processor
+Module = processor/generic
 
 [Documentation]
 Author = Advaita Krishna das

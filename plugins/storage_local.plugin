@@ -1,6 +1,6 @@
 [Core]
 Name = Local Storage
-Module = storage
+Module = storage/local
 
 [Documentation]
 Author = Advaita Krishna das

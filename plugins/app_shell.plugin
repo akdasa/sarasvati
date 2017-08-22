@@ -1,6 +1,6 @@
 [Core]
 Name = Shell
-Module = shell
+Module = app/shell
 
 [Documentation]
 Author = Advaita Krishna das

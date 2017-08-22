@@ -1,6 +1,6 @@
 import pytest
 
-from plugins.gui.plex import Plex, PlexLayout, PlexStateDiff
+from plugins.app.gui.plex import Plex, PlexLayout, PlexStateDiff
 from sarasvati.brain import Brain
 
 

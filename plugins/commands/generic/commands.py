@@ -133,4 +133,3 @@ class LinkCommand(Command):
     @property
     def view(self):
         return "Link '{}' to '{}' as {}".format(self.__source.title, self.__destination.title, self.__kind)
-

@@ -30,6 +30,7 @@ ApplicationWindow {
         onCommandResult: {
             var component = Qt.createComponent("../components/Message.qml")
             var link = component.createObject(root, {"message": message, "x": 10, "y": 10})
+            //console.log("Error loading component:", component.errorString());
         }
     }
 }

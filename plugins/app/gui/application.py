@@ -26,7 +26,7 @@ class SarasvatiGuiApplication(SarasvatiApplication):
         engine.rootContext().setContextProperty("processor", self.__processor)
         engine.rootContext().setContextProperty("brain", self.__brain)
 
-        engine.load("plugins/gui/ui/views/App.qml")  # todo
+        engine.load("plugins/app/gui/ui/views/App.qml")  # todo
         engine.quit.connect(self.__app.quit)
 
         self.__init_panel(engine)

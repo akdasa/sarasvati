@@ -1,6 +1,6 @@
 import pytest
 
-from plugins.storage import LocalStorage
+from plugins.storage.local import LocalStorage
 from sarasvati.api import SarasvatiApi
 from sarasvati.brain import Brain
 

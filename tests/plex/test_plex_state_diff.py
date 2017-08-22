@@ -1,4 +1,4 @@
-from plugins.gui.plex import PlexStateDiffLine
+from plugins.app.gui.plex import PlexStateDiffLine
 
 
 def test_activate_same_no_diff(plex, differ, thoughts):

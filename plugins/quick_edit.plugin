@@ -1,6 +1,6 @@
 [Core]
 Name = Quick Edit
-Module = quick_edit
+Module = quick/edit
 
 [Documentation]
 Author = Advaita Krishna das

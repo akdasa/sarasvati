@@ -1,6 +1,6 @@
 [Core]
 Name = GUI
-Module = gui
+Module = app/gui
 
 [Documentation]
 Author = Advaita Krishna das

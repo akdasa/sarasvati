@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QObject, pyqtSignal
 
-from plugins.gui.plex import Plex, PlexLayout
+from ..plex import Plex, PlexLayout
 from sarasvati import get_api
 
 

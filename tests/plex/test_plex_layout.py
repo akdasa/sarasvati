@@ -1,4 +1,4 @@
-from plugins.gui.plex import PlexLayoutAction
+from plugins.app.gui.plex import PlexLayoutAction
 
 
 def test_twice_empty(plex, layout, thoughts):
