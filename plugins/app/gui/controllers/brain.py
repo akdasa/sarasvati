@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QObject, pyqtSlot
 
-from plugins.commands.generic.commands import ActivateCommand
+from sarasvati.commands import ActivateCommand
 from sarasvati import get_api
 
 

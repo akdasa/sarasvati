@@ -1,5 +1,5 @@
-from sarasvati.commands import CommandException, CommandResult, Transaction
-from ..commands import SetDescriptionCommand, LinkCommand, CreateCommand
+from sarasvati.commands import CommandException, CommandResult, Transaction, CreateCommand, SetDescriptionCommand, \
+    LinkCommand
 
 
 def create(api, args):

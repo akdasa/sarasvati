@@ -1,5 +1,4 @@
-from sarasvati.commands import CommandException, CommandResult
-from ..commands import DeleteCommand
+from sarasvati.commands import CommandException, CommandResult, DeleteCommand
 
 
 def delete(api, args):

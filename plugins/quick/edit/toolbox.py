@@ -1,9 +1,8 @@
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtQuick import QQuickItem
 
-from plugins.commands.generic.commands import SetDescriptionCommand, SetTitleCommand
 from sarasvati import get_api
-from sarasvati.commands import Transaction
+from sarasvati.commands import Transaction, SetTitleCommand, SetDescriptionCommand
 
 
 class QuickEditToolbox(QQuickItem):
@@ -45,8 +44,11 @@ class QuickEditToolbox(QQuickItem):
 
     def __thought_activated(self, thought):
         self.__thought = None
-        self.activated.emit(thought.title,
-                            thought.description or "")
+        if thought is not None:
+            self.activated.emit(thought.title,
+                                thought.description or "")
+        else:
+            self.activated.emit("", "")
         self.__thought = thought
 
     def __thought_changed(self, thought):
@@ -55,10 +57,11 @@ class QuickEditToolbox(QQuickItem):
                                 thought.description or "")
 
     def __update_thought(self):
-        t = Transaction()
-        c1 = SetTitleCommand(self.__thought, self.__new_title)
-        c2 = SetDescriptionCommand(self.__thought, self.__new_description)
-        self.__api.execute(c1, t)
-        self.__api.execute(c2, t)
-        self.__api.events.message.notify(("Updated", True))
-        self.__update_required = False
+        if self.__thought is not None:
+            t = Transaction()
+            c1 = SetTitleCommand(self.__thought, self.__new_title)
+            c2 = SetDescriptionCommand(self.__thought, self.__new_description)
+            self.__api.execute(c1, t)
+            self.__api.execute(c2, t)
+            self.__api.events.message.notify(("Updated", True))
+            self.__update_required = False
