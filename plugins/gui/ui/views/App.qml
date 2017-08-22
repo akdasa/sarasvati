@@ -24,4 +24,12 @@ ApplicationWindow {
             Layout.minimumWidth: 250
         }
     }
+
+    Connections {
+        target: processor
+        onCommandResult: {
+            var component = Qt.createComponent("../components/Message.qml")
+            var link = component.createObject(root, {"message": message, "x": 10, "y": 10})
+        }
+    }
 }

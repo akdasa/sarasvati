@@ -16,6 +16,7 @@ class SarasvatiGuiApplication(SarasvatiApplication):
         self.__plex = PlexController()
         self.__processor = ProcessorController()
         self.__brain = BrainController()
+        self._api.events.message.subscribe(self.__on_message)
 
     # noinspection PyUnresolvedReferences
     def run(self):
@@ -40,3 +41,7 @@ class SarasvatiGuiApplication(SarasvatiApplication):
         for toolbox in toolboxes:
             itm = toolbox.get(engine)
             QMetaObject.invokeMethod(container, "append", Qt.DirectConnection, Q_ARG(QVariant, itm))
+
+    def __on_message(self, args):
+        message, state = args
+        self.__processor.commandResult.emit(message, state)

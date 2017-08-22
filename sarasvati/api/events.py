@@ -9,4 +9,4 @@ class SarasvatiEventsApiComponent(Component):
         super().__init__(self.COMPONENT_NAME)
         self.thought_activated = Event()
         self.thought_changed = Event()
-
+        self.message = Event()
