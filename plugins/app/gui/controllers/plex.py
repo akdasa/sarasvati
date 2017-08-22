@@ -13,6 +13,7 @@ class PlexController(QObject):
 
         get_api().events.thought_activated.subscribe(self.__thought_activated)
         get_api().events.thought_changed.subscribe(self.__thought_changed)
+        get_api().events.thought_changing.subscribe(self.__thought_changed)
 
     command = pyqtSignal(dict, arguments=['command'])
 

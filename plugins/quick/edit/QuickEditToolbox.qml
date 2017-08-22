@@ -1,7 +1,9 @@
-import QtQuick 2.0
+import QtQuick 2.7
 import QuickEditToolbox 1.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
+
+import "controller.js" as Controller
 
 QuickEditToolbox {
     id: self
@@ -13,9 +15,8 @@ QuickEditToolbox {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            onEditingFinished: function() {
-                self.changed(title.text, description.text)
-            }
+            onEditingFinished: Controller.update()
+            onTextChanged: Controller.update(false)
         }
 
         TextArea {
@@ -23,9 +24,8 @@ QuickEditToolbox {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            onEditingFinished: function() {
-                self.changed(title.text, description.text)
-            }
+            onEditingFinished: Controller.update()
+            onTextChanged: Controller.update(false)
         }
     }
 
