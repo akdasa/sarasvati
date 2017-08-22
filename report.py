@@ -1,7 +1,6 @@
-import tkinter.messagebox
-
+import logging
+import traceback
 
 def show(ex):
-    root = tkinter.Tk()
-    root.withdraw()
-    tkinter.messagebox.showinfo("Sarasvati", ex.args[0])
+    logging.exception(ex)
+    print(traceback.format_exc())

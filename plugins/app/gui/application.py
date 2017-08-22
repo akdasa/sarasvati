@@ -1,3 +1,4 @@
+import logging
 import sys
 
 from PyQt5.QtCore import QMetaObject, Qt, Q_ARG, QVariant
@@ -39,9 +40,13 @@ class SarasvatiGuiApplication(SarasvatiApplication):
 
         toolboxes = self._api.plugins.find("toolbox")
         for toolbox in toolboxes:
-            toolbox.activate()
-            itm = toolbox.get(engine)
-            QMetaObject.invokeMethod(container, "append", Qt.DirectConnection, Q_ARG(QVariant, itm))
+            try:
+                toolbox.activate()
+                itm = toolbox.get(engine)
+                QMetaObject.invokeMethod(container, "append", Qt.DirectConnection, Q_ARG(QVariant, itm))
+            except Exception:
+                logging.error("Unable to instantiate {} toolbox".format(toolbox.__class__.__name__))
+                pass
 
     def __on_message(self, args):
         message, state = args

@@ -20,4 +20,8 @@ class QuickEditToolboxPlugin(ToolboxPlugin):
         component = QQmlComponent(engine)
         component.loadUrl(QUrl(self.__qml_path))
         item = component.create()
+
+        for error in component.errors():
+            raise Exception(error.toString())
+
         return item

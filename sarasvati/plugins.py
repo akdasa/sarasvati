@@ -73,6 +73,7 @@ class Plugin(YapsyPlugin):
     def __init__(self):
         super().__init__()
         self._api = get_api()
+        self.info = None
 
 
 class ApplicationPlugin(Plugin):

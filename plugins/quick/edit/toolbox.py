@@ -6,62 +6,63 @@ from sarasvati.commands import Transaction, SetTitleCommand, SetDescriptionComma
 
 
 class QuickEditToolbox(QQuickItem):
-    activated = pyqtSignal(str, str, arguments=['thought_title', 'thought_description'])
+    activated = pyqtSignal(str, str, bool, arguments=[
+        'thought_title', 'thought_description', 'enabled'])
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.__thought = None
-        self.__update_required = False
-        self.__new_title = None
-        self.__new_description = None
+        self.__thought = None  # active thought
+        self.__update_required = False  # changes required to be saved
+
+        self.__title = None
+        self.__description = None
 
         self.__api = get_api()
-        self.__changing = self.__api.events.thought_changing
-
-        self.__api.events.thought_before_activated.subscribe(self.__thought_before_activated)
-        self.__api.events.thought_activated.subscribe(self.__thought_activated)
-        self.__api.events.thought_changed.subscribe(self.__thought_changed)
+        self.__events = self.__api.events
+        self.__events.thought_before_activated.subscribe(self.__before_activated)
+        self.__events.thought_activated.subscribe(self.__activated)
+        self.__events.thought_changed.subscribe(self.__on_thought_changed)
 
     @pyqtSlot(str, str, name="changed")
     def __on_input_fields_changed(self, title, description):
         if not self.__thought:
             return
-        self.__new_title = title
-        self.__new_description = description
+        self.__title = title
+        self.__description = description
         self.__update_required = \
             self.__thought.title != title or \
             self.__thought.description != description
 
-        # notify thought is changing
-        self.__changing.notify({
+        self.__notify_changing(description, title)
+
+    def __notify_changing(self, description, title):
+        self.__events.thought_changing.notify({
             "key": self.__thought.key,
             "title": title,
             "description": description})
 
-    def __thought_before_activated(self, thought):
+    def __before_activated(self, thought):
         if self.__update_required:
             self.__update_thought()
 
-    def __thought_activated(self, thought):
+    def __activated(self, thought):
         self.__thought = None
         if thought is not None:
             self.activated.emit(thought.title,
-                                thought.description or "")
+                                thought.description or "", True)
         else:
-            self.activated.emit("", "")
+            self.activated.emit("", "", False)
         self.__thought = thought
 
-    def __thought_changed(self, thought):
-        if self.__thought == thought:
-            self.activated.emit(thought.title,
-                                thought.description or "")
+    def __on_thought_changed(self, thought):
+        if self.__thought == thought:  # activated thought changed
+            self.activated.emit(thought.title, thought.description or "", True)
 
     def __update_thought(self):
-        if self.__thought is not None:
-            t = Transaction()
-            c1 = SetTitleCommand(self.__thought, self.__new_title)
-            c2 = SetDescriptionCommand(self.__thought, self.__new_description)
-            self.__api.execute(c1, t)
-            self.__api.execute(c2, t)
-            self.__api.events.message.notify(("Updated", True))
-            self.__update_required = False
+        t = Transaction()
+        c1 = SetTitleCommand(self.__thought, self.__title)
+        c2 = SetDescriptionCommand(self.__thought, self.__description)
+        self.__api.execute(c1, t)
+        self.__api.execute(c2, t)
+        self.__api.events.message.notify(("'{}' updated".format(self.__thought.title), True))
+        self.__update_required = False
