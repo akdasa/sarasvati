@@ -38,15 +38,15 @@ def test_brain_cannot_execute_command_twice(brain, command):
 
 def test_brain_revert_command_with_transaction(brain, command, command2):
     t = Transaction()
-    brain.commands.execute(command, transaction=Transaction)
-    brain.commands.execute(command2, transaction=Transaction)
+    brain.commands.execute(command, transaction=t)
+    brain.commands.execute(command2, transaction=t)
     brain.commands.revert()
     assert len(brain.commands.history) == 0
 
 
 def test_brain_revert_command_with_different_transaction(brain, command, command2):
     t = Transaction()
-    brain.commands.execute(command, transaction=Transaction)
+    brain.commands.execute(command, transaction=t)
     brain.commands.execute(command2)
     brain.commands.revert()
     assert len(brain.commands.history) == 1
@@ -56,7 +56,7 @@ def test_brain_revert_command_with_different_transaction(brain, command, command
 def test_brain_revert_command_with_different_transaction_2(brain, command, command2):
     t = Transaction()
     brain.commands.execute(command)
-    brain.commands.execute(command2, transaction=Transaction)
+    brain.commands.execute(command2, transaction=t)
     brain.commands.revert()
     assert len(brain.commands.history) == 1
     assert brain.commands.history == [command]

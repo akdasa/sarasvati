@@ -2,7 +2,8 @@ from abc import abstractmethod, ABCMeta
 from collections import namedtuple
 
 from sarasvati import get_api
-from sarasvati.brain import Thought, LinkType
+from sarasvati.brain import Thought
+from sarasvati.brain.link import LinkType
 
 
 class Command(metaclass=ABCMeta):

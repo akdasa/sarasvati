@@ -97,9 +97,7 @@ class SerializationComponent(Component):
     def serialize(self):
         """
         Serializes object
-        :type options: dict
         :rtype: dict
-        :param options: User specified options
         :return: Dictionary
         """
 

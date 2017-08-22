@@ -1,5 +1,3 @@
-import logging
-
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtQuick import QQuickItem
 from pycopa.exception import PycopaException
