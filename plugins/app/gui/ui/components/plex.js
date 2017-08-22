@@ -23,6 +23,8 @@ function add(key, title, x ,y) {
         "title": title
     })
 
+    console.log("Error loading component:", nodeComponent.errorString());
+
     node.x = x + self.width / 2 - node.width/2
     node.y = y + self.height / 2 - node.height/2
 
@@ -43,7 +45,7 @@ function set_pos_to(key, x, y) {
 
 function remove(key) {
     var entity = nodes[key]
-    entity.destroyed123.connect(function() {
+    entity.destroying.connect(function() {
         delete_link(entity.key)
     })
     entity.selfDestroy()

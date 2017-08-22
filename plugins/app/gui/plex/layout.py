@@ -16,7 +16,7 @@ class PlexLayout:
         self.__pp = PlexLayoutPlacement()  # thought placements for previous state
         self.__state_idx = 0
 
-    def change_to(self, state):
+    def change_to(self, state, full=False):
         """
         Changes plex layout to new one
         :type state: PlexState
@@ -31,7 +31,7 @@ class PlexLayout:
         self.__np.place(state)
 
         # calculate difference between states
-        diffs = self.__differ.diff(self.__prev, state)
+        diffs = self.__differ.diff(self.__prev, state, full)
         for diff in diffs:
             if diff.old_state is None:  # new thought added
                 self.__add(diff, result)

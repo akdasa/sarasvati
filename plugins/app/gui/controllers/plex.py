@@ -10,6 +10,7 @@ class PlexController(QObject):
 
         self.__plex = Plex()
         self.__layout = PlexLayout()
+        self.__thought = None
 
         get_api().events.thought_activated.subscribe(self.__thought_activated)
         get_api().events.thought_changed.subscribe(self.__thought_changed)
@@ -40,9 +41,11 @@ class PlexController(QObject):
 
     def __thought_activated(self, thought):
         self.__change_state(thought)
+        self.__thought = thought
 
     def __thought_changed(self, thought):
         self.command.emit({"cmd": "change", "key": thought.key, "title": thought.title})
+        self.__change_state(self.__thought)
 
     def __thought_changing(self, data):
         emit_data = data.copy()

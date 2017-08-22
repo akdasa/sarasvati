@@ -4,7 +4,7 @@ from .state_diff_line import PlexStateDiffLine
 
 class PlexStateDiff:
     @staticmethod
-    def diff(old: PlexState, new: PlexState):
+    def diff(old: PlexState, new: PlexState, same=False):
         """
         Return difference between two specified view states
         :param old: Old state
@@ -23,6 +23,8 @@ class PlexStateDiff:
                 new_state_name = new_state.state if new_state else None
                 result.append(PlexStateDiffLine(thought, old_state_name, new_state_name))
             elif old_state.state != new_state.state:  # change thought state
+                result.append(PlexStateDiffLine(thought, old_state.state, new_state.state))
+            elif same:
                 result.append(PlexStateDiffLine(thought, old_state.state, new_state.state))
         return result
 

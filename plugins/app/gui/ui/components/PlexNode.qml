@@ -15,7 +15,7 @@ Rectangle {
     property alias title : textMetrics.text
     property string key
 
-    signal destroyed123()
+    signal destroying()
     signal moved()
 
     onXChanged: self.moved()
@@ -63,6 +63,8 @@ Rectangle {
         scaleAnimation.restart()
     }
 
+    Behavior on width { PropertyAnimation {} }
+    Behavior on height { PropertyAnimation {} }
 
     PathAnimation {
         id: moveAnimation
@@ -85,7 +87,7 @@ Rectangle {
 
         onRunningChanged: {
             if (!running) {
-                self.destroyed123();
+                self.destroying();
                 self.destroy();
             }
         }

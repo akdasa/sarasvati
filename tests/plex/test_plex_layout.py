@@ -8,6 +8,17 @@ def test_twice_empty(plex, layout, thoughts):
     equal(layout.change_to(state), [])
 
 
+def test_twice_full_not_empty(plex, layout, thoughts):
+    state = plex.activate(thoughts["Brain"])
+    layout.change_to(state)
+    state = plex.activate(thoughts["Brain"])
+    equal(layout.change_to(state, True), [
+        PlexLayoutAction(thoughts["Brain"], "move", [0, 0]),
+        PlexLayoutAction(thoughts["Recipes"], "move", [-100, 100]),
+        PlexLayoutAction(thoughts["Tasks"], "move", [100, 100]),
+    ])
+
+
 def test_root(api, plex, layout):
     root = api.execute("/c root").value
     state = plex.activate(root)
