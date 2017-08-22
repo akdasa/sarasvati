@@ -40,7 +40,6 @@ class QuickEditToolbox(QQuickItem):
                             thought.description or "")
         self.__thought = thought
 
-
     def __update_thought(self):
         if self.__thought:
             get_api().brain.storage.update(self.__thought)

@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtCore import QObject, pyqtSignal, QVariant
 
 from ..plex import Plex, PlexLayout
 from sarasvati import get_api
@@ -15,7 +15,7 @@ class PlexController(QObject):
         get_api().events.thought_changed.subscribe(self.__thought_changed)
         get_api().events.thought_changing.subscribe(self.__thought_changed)
 
-    command = pyqtSignal(dict, arguments=['command'])
+    command = pyqtSignal(QVariant, arguments=['command'])
 
     def __change_state(self, thought):
         new_state = self.__plex.activate(thought)
@@ -31,7 +31,7 @@ class PlexController(QObject):
             if cmd.name == "move":  # or cmd.name == "set_pos_to":
                 v["x"] = cmd.data[0]
                 v["y"] = cmd.data[1]
-            self.command.emit(v)
+            self.command.emit(QVariant(v))
 
         if thought:
             for links in thought.links.all:
