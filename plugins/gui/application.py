@@ -39,6 +39,7 @@ class SarasvatiGuiApplication(SarasvatiApplication):
 
         toolboxes = self._api.plugins.find("toolbox")
         for toolbox in toolboxes:
+            toolbox.activate()
             itm = toolbox.get(engine)
             QMetaObject.invokeMethod(container, "append", Qt.DirectConnection, Q_ARG(QVariant, itm))
 

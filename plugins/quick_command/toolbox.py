@@ -20,12 +20,7 @@ class QuickCommandToolbox(QQuickItem):
             result = self.__api.execute(line)
             if hasattr(result, "message"):
                 self.__send.notify((result.message, True))
-        except CommandException as ex:
-            logging.exception("Command exception")
-            self.__send.notify((ex.args[0], False))
         except PycopaException as ex:
-            logging.exception("Syntax error")
             self.__send.notify(("Syntax error: {}".format(ex.args[0]), False))
-        except Exception as ex:
-            logging.exception("Exception")
+        except (CommandException, Exception) as ex:
             self.__send.notify((ex.args[0], False))

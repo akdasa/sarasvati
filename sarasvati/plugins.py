@@ -54,15 +54,16 @@ class PluginManager:
 
     @staticmethod
     def __convert(obj):
-        obj.plugin_object.info = PluginInfo(obj.name, obj.version)
+        obj.plugin_object.info = PluginInfo(obj.name, obj.version, obj.path)
         return obj.plugin_object
 
 
 class PluginInfo:
-    def __init__(self, name, version, description=None):
+    def __init__(self, name, version, path, description=None):
         self.name = name
         self.version = version
         self.description = description
+        self.path = path
 
 
 class Plugin(YapsyPlugin):
