@@ -5,12 +5,12 @@ from sarasvati import get_api
 
 
 class QuickEditToolbox(QQuickItem):
+    activated = pyqtSignal(str, str, arguments=['thought_title', 'thought_description'])
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.__thought = None
         get_api().events.thought_activated.subscribe(self.__thought_activated)
-
-    activated = pyqtSignal(str, str, arguments=['thought_title', 'thought_description'])
 
     @pyqtSlot(str, str, name="changed")
     def changed(self, title, description):
