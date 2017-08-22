@@ -1,16 +1,18 @@
-import QtQuick 2.0
+import QtQuick 2.5
+import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.2
 
 Rectangle {
     id: self
 
     color: "whitesmoke"
-    width: childrenRect.width + 25
-    height: childrenRect.height + 10
+    width: title.width + 25
+    height: title.height + 10
     border.color: "grey"
     border.width: 1
-    radius: 10
+    radius: 5
 
-    property alias title : title.text
+    property alias title : textMetrics.text
     property string key
 
     signal destroyed123()
@@ -19,11 +21,20 @@ Rectangle {
     onXChanged: self.moved()
     onYChanged: self.moved()
 
+    TextMetrics {
+        id: textMetrics
+        text: "Hello World"
+        font.family: "Arial"
+        font.pointSize: 18
+        elide: Text.ElideRight
+        elideWidth: 250
+    }
 
     Text {
         id: title
         anchors.centerIn: parent
-        font.pointSize: 18
+        text: textMetrics.elidedText
+        font: textMetrics.font
     }
 
     MouseArea {

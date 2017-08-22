@@ -34,13 +34,15 @@ class QuickEditToolbox(QQuickItem):
     def __thought_activated(self, thought):
         if self.__update_required:
             self.__update_thought()
-            self.__update_required = False
 
-        self.__thought = thought
+        self.__thought = None
         self.activated.emit(thought.title,
                             thought.description or "")
+        self.__thought = thought
+
 
     def __update_thought(self):
         if self.__thought:
             get_api().brain.storage.update(self.__thought)
             get_api().events.message.notify(("Updated", True))
+            self.__update_required = False

@@ -15,7 +15,6 @@ QuickEditToolbox {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            onEditingFinished: Controller.update()
             onTextChanged: Controller.update(false)
         }
 
@@ -24,7 +23,6 @@ QuickEditToolbox {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            onEditingFinished: Controller.update()
             onTextChanged: Controller.update(false)
         }
     }
