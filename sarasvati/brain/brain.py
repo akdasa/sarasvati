@@ -272,7 +272,7 @@ class BrainStorageComponent(Component):
     def __init__(self, storage):
         super().__init__(self.COMPONENT_NAME)
         self.__storage = storage
-        self.cache = storage.cache
+        self.cache = storage.cache  # todo% Storage may have no cache
 
     def get(self, key):
         return self.__storage.get(key)

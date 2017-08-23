@@ -1,5 +1,6 @@
 import pytest
 
+from plugins.storage.local import LocalStorage
 from sarasvati.brain import Thought
 
 
@@ -27,5 +28,4 @@ def storage(api):
 
 @pytest.fixture
 def empty_storage(api):
-    return api.storage  # LocalStorage(None)
-
+    return api.storage

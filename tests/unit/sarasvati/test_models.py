@@ -1,6 +1,11 @@
 import pytest
 
-from sarasvati.models import Composite, Component
+from sarasvati.models import Component, Composite
+
+
+def test_component_init():
+    c = Component("My")
+    assert c.name == "My"
 
 
 def test_composite_has_no_components_after_init():

@@ -71,7 +71,20 @@ def test_remove_entity_links(api):
     assert api.storage.get("one") is None
 
 
-def test_load_linked_child(empty_storage, thought):
+def test_load_linked_child(empty_storage):
+    # Не работает поскольльку get_linked берёт хранилище из api.storage
+    thought = Thought("Root", key="Root")
+    child_thought = Thought("Child")
+    thought.links.add(child_thought, "child")
+    empty_storage.add(thought)
+    empty_storage.add(child_thought)
+    empty_storage.cache.clear()
+    assert empty_storage.get("Root").links.children[0].title == "Child"
+
+
+def test_load_linked_child(empty_storage):
+    # Не работает поскольльку get_linked берёт хранилище из api.storage
+    thought = Thought("Root", key="Root")
     child_thought = Thought("Child")
     thought.links.add(child_thought, "child")
     empty_storage.add(thought)

@@ -1,3 +1,5 @@
+from abc import abstractmethod, ABCMeta
+
 class Composite:
     def __init__(self, components=None):
         """
@@ -86,7 +88,8 @@ class Component:
         return self.__component_name
 
 
-class ComponentSerializer:
+class ComponentSerializer(metaclass=ABCMeta):
+    @abstractmethod
     def serialize(self, component):
         """
         Serializes component into dictionary.
@@ -96,10 +99,14 @@ class ComponentSerializer:
         """
         pass
 
+    @abstractmethod
     def deserialize(self, data, component=None):
         """
         Deserialize component from dictionary
+        :type data: dict
+        :type component: Type[Component]
         :param data: Data to deserialize from.
         :param component: Component to deserialize to. Creates new if None specified.
+        :rtype: Type[Component]
         """
         pass

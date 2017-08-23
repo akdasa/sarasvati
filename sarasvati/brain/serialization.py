@@ -40,7 +40,7 @@ class LinksComponentSerializer(ComponentSerializer):
             return None
         return result
 
-    def deserialize(self, data, component=None):
+    def deserialize(self, data, component=None, options=None):
         result = component or LinksComponent()
         links_count = len(data)
 
