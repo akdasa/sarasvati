@@ -19,8 +19,8 @@ class QuickEditToolbox(QQuickItem):
 
         self.__api = get_api()
         self.__events = self.__api.events
-        self.__events.thought_before_activated.subscribe(self.__before_activated)
-        self.__events.thought_activated.subscribe(self.__activated)
+        self.__events.activating.subscribe(self.__before_activated)
+        self.__events.activated.subscribe(self.__activated)
         self.__events.thought_changed.subscribe(self.__on_thought_changed)
 
     @pyqtSlot(str, str, name="changed")

@@ -171,11 +171,9 @@ class BrainCommandsComponent(Component):
         try:
             if not command.can_execute():
                 raise CommandException("Command can not be executed")
-            command.before_execution()
-
-            self.__commands.append(self.__history(command, transaction))
 
             result = command.execute()
+            self.__commands.append(self.__history(command, transaction))
             command.on_completed()
             return result
         except Exception as ex:
@@ -233,7 +231,9 @@ class BrainStateComponent(Component):
         Activates specified thought
         :param thought: Thought to be activated
         """
+        get_api().events.activating.notify(thought)
         self.__active_thought = thought
+        get_api().events.activated.notify(thought)
 
     @property
     def active_thought(self):
@@ -272,12 +272,14 @@ class BrainStorageComponent(Component):
     def __init__(self, storage):
         super().__init__(self.COMPONENT_NAME)
         self.__storage = storage
+        self.cache = storage.cache
 
     def get(self, key):
         return self.__storage.get(key)
 
     def add(self, thought):
         self.__storage.add(thought)
+        get_api().events.thought_created.notify(thought)  # todo
 
     def update(self, thought):
         self.__storage.update(thought)
@@ -285,3 +287,4 @@ class BrainStorageComponent(Component):
 
     def remove(self, thought):
         self.__storage.remove(thought)
+        get_api().events.thought_deleted.notify(thought)  # todo

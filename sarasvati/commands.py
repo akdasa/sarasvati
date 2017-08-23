@@ -11,6 +11,7 @@ class Command(metaclass=ABCMeta):
     def __init__(self):
         """Initializes new instance of the Command class."""
         self._api = get_api()
+        self._events = self._api.events
 
     @abstractmethod
     def execute(self):
@@ -30,10 +31,6 @@ class Command(metaclass=ABCMeta):
         :return: True - if command can be executed, otherwise False
         """
         return True
-
-    def before_execution(self):
-        """Calls before execution"""
-        pass
 
     def on_completed(self):
         """Calls when execution is completed"""
@@ -63,20 +60,12 @@ class ActivateCommand(Command):
         self.__thought = thought
         self.__prev = None
 
-        self.__before_activated = self._api.events.thought_before_activated
-        self.__activated = self._api.events.thought_activated
-
-    def before_execution(self):
-        self.__before_activated.notify(self.__thought)
-
     def execute(self):
         self.__prev = self._api.brain.state.active_thought
         self._api.brain.state.activate(self.__thought)
-        self.__activated.notify(self.__thought)
 
     def revert(self):
         self._api.brain.state.activate(self.__prev)
-        self.__activated.notify(self.__prev)
 
     @property
     def view(self):
@@ -124,6 +113,9 @@ class DeleteCommand(Command):
         # restore links
         for link in self.__links:
             link.source.links.add_link(link)
+            self._api.brain.storage.update(link.source)
+
+        self._api.brain.storage.update(self.__thought)
 
     @property
     def view(self):

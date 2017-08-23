@@ -12,15 +12,18 @@ class PlexController(QObject):
         self.__layout = PlexLayout()
         self.__thought = None
 
-        get_api().events.thought_activated.subscribe(self.__thought_activated)
+        get_api().events.activated.subscribe(self.__thought_activated)
         get_api().events.thought_changed.subscribe(self.__thought_changed)
+        get_api().events.thought_deleted.subscribe(self.__brain_changed)
+        get_api().events.thought_created.subscribe(self.__brain_changed)
         get_api().events.thought_changing.subscribe(self.__thought_changing)
+        #get_api().events.brain_changed.subscribe(self.__brain_changed)
 
     command = pyqtSignal(QVariant, arguments=['command'])
 
     def __change_state(self, thought):
         new_state = self.__plex.activate(thought)
-        actions = self.__layout.change_to(new_state)
+        actions = self.__layout.change_to(new_state, True)
 
         for cmd in actions:
             v = {"cmd": cmd.name, "key": cmd.thought.key}
@@ -51,3 +54,6 @@ class PlexController(QObject):
         emit_data = data.copy()
         emit_data["cmd"] = "change"
         self.command.emit(emit_data)
+
+    def __brain_changed(self, thought):
+        self.__change_state(self.__thought)

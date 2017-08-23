@@ -66,7 +66,7 @@ class PlexLayout:
         if diff.old_state != "root":
             opposite = LinkType.opposite(diff.old_state)
             linked = self.__linked(diff.thought, opposite)
-            new_pos = self.__np.get_pos(linked)
+            new_pos = self.__np.get_pos(linked) if linked else None
             if new_pos:
                 result.append(PlexLayoutAction(diff.thought, "move", new_pos))
             else:
