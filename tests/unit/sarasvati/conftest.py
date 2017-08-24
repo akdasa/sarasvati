@@ -1,3 +1,5 @@
+import pytest
+
 from sarasvati.models import Composite, Component, ComponentSerializer
 
 
@@ -9,7 +11,11 @@ class MyComposite(Composite):
 class MyComponent(Component):
     def __init__(self, name, data=None):
         super().__init__(name)
+        self.on_added_called = None
         self.data = data
+
+    def on_added(self, composite):
+        self.on_added_called = composite
 
 
 class MySerializer(ComponentSerializer):
@@ -20,3 +26,18 @@ class MySerializer(ComponentSerializer):
         result = component or MyComponent("test")
         result.data = data["data"]
         return result
+
+
+@pytest.fixture(name="composite")
+def __composite():
+    return MyComposite
+
+
+@pytest.fixture(name="component")
+def __component():
+    return MyComponent
+
+
+@pytest.fixture(name="serializer")
+def __serializer():
+    return MySerializer

@@ -1,14 +1,12 @@
-from sarasvati.models import Component
-
-
-def test_component_init():
+def test_init(component):
     """Init component with name"""
-    c = MyComponent("My")
+    c = component("My")
     assert c.name == "My"
 
-# Tests configuration
 
-
-class MyComponent(Component):
-    def __init__(self, name):
-        super().__init__(name)
+def test_on_added_called(composite, component):
+    """Init component with name"""
+    cc = composite()
+    ct = component("My")
+    cc.add_component(ct)
+    assert ct.on_added_called is cc

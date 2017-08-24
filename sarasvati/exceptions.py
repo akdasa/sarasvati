@@ -1,6 +1,3 @@
-class CommandException(Exception):
-    pass
-
 
 class SarasvatiException(Exception):
     def __init__(self, message):
@@ -9,3 +6,7 @@ class SarasvatiException(Exception):
     @property
     def message(self):
         return self.__message
+
+
+class CommandException(SarasvatiException):
+    pass

@@ -1,7 +1,6 @@
 import pytest
 
 from sarasvati.exceptions import SarasvatiException
-from sarasvati.models import Composite, Component, ComponentSerializer
 from sarasvati.serializer import Serializer
 
 
@@ -10,80 +9,57 @@ def test_init():
     assert Serializer() is not None
 
 
-def test_serialize():
+def test_serialize(composite, component, serializer):
     """Serializes"""
     s = Serializer()
-    s.register("test", MySerializer())
+    s.register("test", serializer())
 
-    ct = MyComponent("test", "test-data")
-    cc = MyComposite(components=[ct])
+    ct = component("test", "test-data")
+    cc = composite(components=[ct])
     rs = s.serialize(cc)
     assert rs == {"test": {"data": "test-data"}}
 
 
-def test_serializer_not_found():
+def test_serializer_not_found(composite, component):
     """Serializes"""
     s = Serializer()
-    ct = MyComponent("test", "test-data")
-    cc = MyComposite(components=[ct])
+    ct = component("test", "test-data")
+    cc = composite(components=[ct])
     with pytest.raises(SarasvatiException) as ex:
         s.serialize(cc)
     assert ex.value.message == "No serializer found for 'test'"
 
 
-def test_deserialize():
+def test_deserialize(composite, serializer):
     s = Serializer()
-    s.register("test", MySerializer())
+    s.register("test", serializer())
 
     dt = {"test": {"data": "test-data"}}
-    cc = MyComposite()
+    cc = composite()
     rs = s.deserialize(cc, dt)
 
     assert rs.has_component("test")
     assert rs.test.data == "test-data"
 
 
-def test_deserialize_with_component():
+def test_deserialize_with_component(composite, component, serializer):
     s = Serializer()
-    s.register("test", MySerializer())
+    s.register("test", serializer())
 
     dt = {"test": {"data": "test-data"}}
-    ct = MyComponent("test", None)
-    cc = MyComposite(components=[ct])
+    ct = component("test", None)
+    cc = composite(components=[ct])
     rs = s.deserialize(cc, dt)
 
     assert rs.has_component("test")
     assert rs.test.data == "test-data"
 
 
-def test_deserializer_not_found():
+def test_deserializer_not_found(composite, component):
     s = Serializer()
-    ct = MyComponent("test", "test-data")
-    cc = MyComposite(components=[ct])
+    ct = component("test", "test-data")
+    cc = composite(components=[ct])
     dt = {"test": {"data": "test-data"}}
     with pytest.raises(SarasvatiException) as ex:
         s.deserialize(cc, dt)
     assert ex.value.message == "No serializer found for 'test'"
-
-# Tests configuration
-
-
-class MyComposite(Composite):
-    def __init__(self, components=None):
-        super().__init__(components)
-
-
-class MyComponent(Component):
-    def __init__(self, name, data=None):
-        super().__init__(name)
-        self.data = data
-
-
-class MySerializer(ComponentSerializer):
-    def serialize(self, component):
-        return {"data": component.data}
-
-    def deserialize(self, data, component=None):
-        result = component or MyComponent("test")
-        result.data = data["data"]
-        return result
