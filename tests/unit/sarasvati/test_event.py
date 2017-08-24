@@ -1,9 +1,11 @@
 import pytest
 
 from sarasvati.event import Event
+from sarasvati.exceptions import SarasvatiException
 
 
-def test_event_notify(handler):
+def test_notify(handler):
+    """Notify should call handler function"""
     e = Event()
     e.subscribe(handler.func)
     e.notify("data")
@@ -11,14 +13,17 @@ def test_event_notify(handler):
     assert handler.args == "data"
 
 
-def test_unable_to_subscribe_same_handler_twice(handler):
+def test_subscribe_twice(handler):
+    """Second subscription on same handler should raise SarasvatiException"""
     e = Event()
     e.subscribe(handler.func)
-    with pytest.raises(Exception):
+    with pytest.raises(SarasvatiException) as ex:
         e.subscribe(handler.func)
+    assert ex.value.message == "Already subscribed on specified handler"
 
 
 def test_unsubscribe(handler):
+    """Handler should not be called after unsubscribe"""
     e = Event()
     e.subscribe(handler.func)
     e.unsubscribe(handler.func)
@@ -26,10 +31,12 @@ def test_unsubscribe(handler):
     assert handler.handled is False
 
 
-def test_unable_to_unsubscribe_not_subscribed(handler):
+def test_unsubscribe_empty(handler):
+    """Unsubscribe handler what not been subscribed should raise SarasvatiException"""
     e = Event()
-    with pytest.raises(Exception):
+    with pytest.raises(SarasvatiException) as ex:
         e.unsubscribe(handler.func)
+    assert ex.value.message == "Not subscribed on specified handler"
 
 
 # Tests configurations

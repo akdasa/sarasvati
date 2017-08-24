@@ -1,7 +1,10 @@
 from abc import abstractmethod, ABCMeta
 
+from sarasvati.exceptions import SarasvatiException
 
-class Composite:
+
+class Composite(metaclass=ABCMeta):
+    @abstractmethod
     def __init__(self, components=None):
         """
         Initializes new instance of the Composite class.
@@ -30,7 +33,7 @@ class Composite:
         :param component: Component to add
         """
         if self.has_component(component.name):
-            raise Exception("Component '" + component.name + "' already exist")
+            raise SarasvatiException("Component '" + component.name + "' already exist")
         self.__components[component.name] = component
         if hasattr(component, "on_added"):
             component.on_added(self)
@@ -52,7 +55,8 @@ class Composite:
         :return: Component
         """
         if name not in self.__components.keys():
-            raise Exception("Component '{}' not found for '{}'".format(name, str(self)))
+            raise SarasvatiException("Component '{}' not found for '{}'"
+                                     .format(name, str(self.__class__.__name__)))
 
         return self.__components[name]
 
@@ -68,10 +72,11 @@ class Composite:
         return self.get_component(item)
 
 
-class Component:
+class Component(metaclass=ABCMeta):
     """
     Provides interface for custom component.
     """
+    @abstractmethod
     def __init__(self, name):
         """
         Initializes new instance of the Component class.

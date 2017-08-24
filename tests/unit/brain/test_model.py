@@ -8,7 +8,7 @@ def test_model_init():
 
 
 def test_model_init_with_specified_components():
-    c = Component(name="dummy")
+    c = DummyComponent(name="dummy")
     m = Model(components=[c])
     assert m.get_component("dummy") is not None
 
@@ -34,3 +34,10 @@ def test_model_key_returns_identity():
 def test_model_string_representation():
     model = Model()
     assert str(model) == "<Model:" + model.key + ">"
+
+
+# Test configurations
+
+class DummyComponent(Component):
+    def __init__(self, name):
+        super().__init__(name)

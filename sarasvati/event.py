@@ -1,3 +1,5 @@
+from sarasvati.exceptions import SarasvatiException
+
 
 class Event:
     def __init__(self):
@@ -14,7 +16,7 @@ class Event:
         if handler not in self.handlers:
             self.handlers.append(handler)
         else:
-            raise ValueError("Already subscribed on specified handler")
+            raise SarasvatiException("Already subscribed on specified handler")
 
     def unsubscribe(self, handler):
         """
@@ -24,7 +26,7 @@ class Event:
         if handler in self.handlers:
             self.handlers.remove(handler)
         else:
-            raise ValueError("Not subscribed on specified handler")
+            raise SarasvatiException("Not subscribed on specified handler")
 
     def notify(self, args):
         """
