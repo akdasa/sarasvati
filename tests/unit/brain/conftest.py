@@ -1,10 +1,8 @@
 import pytest
 
-from plugins.storage.local import LocalStorage
 from sarasvati.brain import Brain, Thought
 from sarasvati.commands import Command, Transaction
 from sarasvati.models import Component
-from sarasvati.serialization import IdentityComponentSerializer, DefinitionComponentSerializer, LinksComponentSerializer
 
 
 class MyCommand(Command):
@@ -33,15 +31,8 @@ class MyComponent(Component):
 
 
 @pytest.fixture(name="brain")
-def __brain():
-    st = LocalStorage(None)
-    s = st.serializer
-
-    s.register("identity", IdentityComponentSerializer())
-    s.register("definition", DefinitionComponentSerializer())
-    s.register("links", LinksComponentSerializer(st))
-
-    return Brain(st)
+def __brain(storage):
+    return Brain(storage)
 
 
 @pytest.fixture(name="full_brain")

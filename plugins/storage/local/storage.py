@@ -1,4 +1,5 @@
 from sarasvati.brain import Thought
+from sarasvati.exceptions import SarasvatiException
 from sarasvati.serializer import Serializer
 from sarasvati.storage import Storage
 from .cache import StorageCache
@@ -53,7 +54,7 @@ class LocalStorage(Storage):
             self.__db.remove(thought.key)
             self.__cache.remove(thought)
         else:
-            raise Exception("Unable to remove a non-existent thought")
+            raise SarasvatiException("Unable to remove a non-existent thought")
 
     def search(self, query):
         """
@@ -89,7 +90,7 @@ class LocalStorage(Storage):
             "operator": "=",
             "value": key})
         if len(result) > 1:
-            raise Exception("Entity is not unique {}".format(key))
+            raise SarasvatiException("Entity is not unique {}".format(key))
         return result[0] if len(result) > 0 else None
 
     def contains(self, key):
@@ -130,7 +131,7 @@ class LocalStorage(Storage):
                 self.__serializer.deserialize(thought, db_entity)
             return thought
         except:
-            raise Exception("Error while processing DB entry")
+            raise SarasvatiException("Error while processing DB entry")
 
     def __try_get_from_cache(self, query):
         if query["field"] == "identity.key" and query["operator"] == "=":
@@ -145,6 +146,6 @@ class LocalStorage(Storage):
         for linked in lazy_links:
             db_data = self.__db.search({"field": "identity.key", "operator": "=", "value": linked.key})
             if len(db_data) == 0:
-                raise Exception("No link '{}' found".format(linked.key))
+                raise SarasvatiException("No link '{}' found".format(linked.key))
             self.__serializer.deserialize(linked, db_data[0])
             self.__cache.add(linked, lazy=False)
