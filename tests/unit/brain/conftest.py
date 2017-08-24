@@ -32,8 +32,8 @@ class MyComponent(Component):
         super().__init__(name)
 
 
-@pytest.fixture()
-def brain():
+@pytest.fixture(name="brain")
+def __brain():
     st = LocalStorage(None)
     s = st.serializer
 
@@ -44,8 +44,8 @@ def brain():
     return Brain(st)
 
 
-@pytest.fixture()
-def full_brain(brain):
+@pytest.fixture(name="full_brain")
+def __full_brain(brain):
     t1 = Thought(title="Thought one", description="desc")
     t2 = Thought(title="Thought two", description="other")
     brain.storage.add(t1)

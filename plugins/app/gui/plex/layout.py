@@ -19,6 +19,7 @@ class PlexLayout:
     def change_to(self, state, full=False):
         """
         Changes plex layout to new one
+        :param full: Generate full commands
         :type state: PlexState
         :param state: New layout state
         :return: Array of commands to change state to new

@@ -17,8 +17,7 @@ class PlexController(QObject):
         get_api().events.thought_deleted.subscribe(self.__brain_changed)
         get_api().events.thought_created.subscribe(self.__brain_changed)
         get_api().events.thought_changing.subscribe(self.__thought_changing)
-        #get_api().events.brain_changed.subscribe(self.__brain_changed)
-
+        
     command = pyqtSignal(QVariant, arguments=['command'])
 
     def __change_state(self, thought):

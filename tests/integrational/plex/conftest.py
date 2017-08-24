@@ -4,8 +4,8 @@ from plugins.app.gui.plex import Plex, PlexLayout, PlexStateDiff
 from sarasvati.brain import Brain
 
 
-@pytest.fixture
-def storage(api):
+@pytest.fixture(name="storage")
+def __storage(api):
     api.execute("/c Brain key:Brain")
     api.execute("/c Tasks parent:Brain key:Tasks")
     api.execute("/c Recipes parent:Brain key:Recipes")
@@ -21,18 +21,18 @@ def storage(api):
     return api.storage
 
 
-@pytest.fixture
-def brain(storage):
+@pytest.fixture(name="brain")
+def __brain(storage):
     return Brain(storage)
 
 
-@pytest.fixture
-def plex():
+@pytest.fixture(name="plex")
+def __plex():
     return Plex()
 
 
-@pytest.fixture
-def thoughts(brain):
+@pytest.fixture(name="thoughts")
+def __thoughts(brain):
     return {
         "Brain": brain.search.by_key("Brain"),
         "Tasks": brain.search.by_key("Tasks"),

@@ -74,7 +74,7 @@ class SarasvatiApi(Composite):
         """
         Opens brain from specified path
         :rtype: Brain
-        :param path: Path to oben brain from
+        :param path: Path to open brain from
         :return: Brain
         """
         logging.info("Opening brain from {}".format(path))

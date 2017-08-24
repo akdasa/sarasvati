@@ -1,6 +1,5 @@
 import pytest
 
-from plugins.storage.local import LocalStorage
 from sarasvati.brain import Thought
 
 

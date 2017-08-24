@@ -12,7 +12,7 @@ class StorageCache:
 
     def status(self, key):
         """
-        Returns thought by key, None if nothong found
+        Returns thought by key, None if nothing found
         :type key: str
         :rtype: Thought
         :param key: Key
@@ -22,7 +22,7 @@ class StorageCache:
 
     def get(self, key):
         """
-        Returns thought by key, None if nothong found
+        Returns thought by key, None if nothing found
         :type key: str
         :rtype: Thought
         :param key: Key

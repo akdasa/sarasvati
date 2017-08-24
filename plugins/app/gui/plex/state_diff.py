@@ -7,6 +7,7 @@ class PlexStateDiff:
     def diff(old: PlexState, new: PlexState, same=False):
         """
         Return difference between two specified view states
+        :param same: Keep lines with no state changes
         :param old: Old state
         :param new: New state
         :return: Array of PlexThoughtState
