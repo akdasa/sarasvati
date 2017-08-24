@@ -1,5 +1,6 @@
 from sarasvati.brain.link import Link
 from sarasvati.brain.model import Model
+from sarasvati.exceptions import SarasvatiException
 from sarasvati.models import Component
 
 
@@ -116,7 +117,7 @@ class LinksComponent(Component):
         :return: Link
         """
         if link.source is not self.__source:
-            raise ValueError("link.source: points to another thought")
+            raise SarasvatiException("link.source points to another thought")
         self.__links[link.destination] = link
         return link
 
@@ -133,11 +134,11 @@ class LinksComponent(Component):
         :return: Link
         """
         if destination in self.__links:
-            raise Exception("Link to specified thought already exist")
+            raise SarasvatiException("Link to specified thought already exist")
         if kind not in self.__correct_kinds:
-            raise ValueError("Link kind is not correct: " + kind)
+            raise SarasvatiException("Link kind is not correct: " + kind)
         if self.__source is destination:
-            raise ValueError("Unable link thought to itself")
+            raise SarasvatiException("Unable link thought to itself")
         link = Link(self.__source, destination, kind)
         return self.add_link(link)
 
@@ -149,7 +150,7 @@ class LinksComponent(Component):
         :raises Exception: If link to specified thought doesn't exist
         """
         if destination not in self.__links:
-            raise Exception("Link to specified thought does not exist")
+            raise SarasvatiException("Link to specified thought does not exist")
         del self.__links[destination]
 
     @property

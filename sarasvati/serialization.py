@@ -1,5 +1,6 @@
 from sarasvati.brain.model import IdentityComponent
 from sarasvati.brain.thought import DefinitionComponent, LinksComponent, Thought
+from sarasvati.exceptions import SarasvatiException
 from sarasvati.models import ComponentSerializer
 
 
@@ -10,7 +11,7 @@ class IdentityComponentSerializer(ComponentSerializer):
     def deserialize(self, data, component=None):
         result = component or IdentityComponent()
         if "key" not in data:
-            raise Exception("Required 'key' does not present in data")
+            raise SarasvatiException("Required 'key' does not present in data")
         result.key = data.get("key", None)
         return result
 
@@ -46,7 +47,7 @@ class LinksComponentSerializer(ComponentSerializer):
 
         # get storage to retrieve linked thoughts
         if self.__storage is None and links_count > 0:
-            raise Exception("No 'storage' specified to load linked thoughts from")
+            raise SarasvatiException("No 'storage' specified to load linked thoughts from")
 
         for link in data:  # create lazy Thoughts for each link
             thought = self.__get_linked(link["key"])

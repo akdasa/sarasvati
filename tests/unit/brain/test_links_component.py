@@ -1,10 +1,11 @@
 import pytest
 
 from sarasvati.brain import Thought, Link
+from sarasvati.exceptions import SarasvatiException
 from sarasvati.serialization import LinksComponentSerializer
 
 
-def test_links_component_add():
+def test_add():
     t1 = Thought()
     t2 = Thought()
     lk = t1.links.add(t2, "child")
@@ -13,15 +14,23 @@ def test_links_component_add():
     assert lk.kind == "child"
 
 
-def test_links_component_add_twice():
+def test_add_twice():
     t1 = Thought()
     t2 = Thought()
     t1.links.add(t2, "child")
-    with pytest.raises(Exception):
+    with pytest.raises(SarasvatiException) as ex:
         t1.links.add(t2, "child")
+    assert ex.value.message == "Link to specified thought already exist"
 
 
-def test_links_component_remove():
+def test_add_self():
+    t1 = Thought()
+    with pytest.raises(SarasvatiException) as ex:
+        t1.links.add(t1, "child")
+    assert ex.value.message == "Unable link thought to itself"
+
+
+def test_remove():
     t1 = Thought()
     t2 = Thought()
     t1.links.add(t2, "child")
@@ -29,20 +38,21 @@ def test_links_component_remove():
     assert t1.links.count == 0
 
 
-def test_links_component_remove_non_existent():
+def test_remove_not_exist():
     t1 = Thought()
-    with pytest.raises(Exception):
+    with pytest.raises(SarasvatiException) as ex:
         t1.links.remove(Thought())
+    assert ex.value.message == "Link to specified thought does not exist"
 
 
-def test_links_component_count():
+def test_count():
     t1 = Thought()
     assert t1.links.count == 0
     t1.links.add(Thought(), "child")
     assert t1.links.count == 1
 
 
-def test_links_component_children():
+def test_children():
     t1 = Thought()
     t2 = Thought()
     t1.links.add(t2, "child")
@@ -56,40 +66,35 @@ def test_parents():
     assert t1.links.parents[0] == t2
 
 
-def test_links_component_references():
+def test_references():
     t1 = Thought()
     t2 = Thought()
     t1.links.add(t2, "reference")
     assert t1.links.references[0] == t2
 
 
-def test_links_component_incorrect_kind():
+def test_incorrect_kind():
     t1 = Thought()
-    with pytest.raises(ValueError):
+    with pytest.raises(SarasvatiException) as ex:
         t1.links.add(Thought(), "incorrect")
+    assert ex.value.message == "Link kind is not correct: incorrect"
 
 
-def test_links_component_link_to_itself():
-    t1 = Thought()
-    with pytest.raises(ValueError):
-        t1.links.add(t1, "child")
-
-
-def test_links_component_linked_entity_without_storage_specified():
+def test_linked_entity_without_storage_specified():
     t1 = Thought()
     sr = LinksComponentSerializer()
-    with pytest.raises(Exception) as ex:
+    with pytest.raises(SarasvatiException) as ex:
         sr.deserialize([{"key": "test2", "kind": "child"}], t1.links)
-    assert ex.value.args[0] == "No 'storage' specified to load linked thoughts from"
+    assert ex.value.message == "No 'storage' specified to load linked thoughts from"
 
 
-def test_links_component_empty_links_without_storage_specified():
+def test_empty_links_without_storage_specified():
     t1 = Thought()
     sr = LinksComponentSerializer()
     sr.deserialize([], t1.links)  # should not raise exception
 
 
-def test_links_component_add_link():
+def test_add_link():
     t1 = Thought()
     t2 = Thought()
     l1 = Link(source=t1, destination=t2, kind="child")
@@ -101,10 +106,10 @@ def test_links_component_add_link():
     assert t1 in t2.links.parents
 
 
-def test_links_component_add_wrong_link():
+def test_add_link_wrong():
     t1 = Thought()
     t2 = Thought()
     l1 = Link(source=t2, destination=t1, kind="child")
-    with pytest.raises(ValueError) as ex:
+    with pytest.raises(SarasvatiException) as ex:
         t1.links.add_link(l1)
-    assert ex.value.args[0] == "link.source: points to another thought"
+    assert ex.value.message == "link.source points to another thought"

@@ -1,7 +1,7 @@
 from sarasvati.brain import Thought
 
 
-def test_thought_init():
+def test_init():
     t = Thought()
     assert t.title is None
     assert t.description is None
@@ -32,12 +32,11 @@ def test_set_description():
     assert t.description is "desc"
 
 
-def test_thought_has_generated_key():
+def test_has_generated_key():
     t = Thought()
     assert t.key is not None
 
 
-def test_thought_string_representation():
+def test_string_representation():
     t = Thought(title="title")
     assert str(t) == "<Thought:" + t.key + "/" + t.title + ">"
-

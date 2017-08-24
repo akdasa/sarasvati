@@ -3,7 +3,7 @@ import pytest
 from sarasvati.brain import Thought, Link
 
 
-def test_link_init():
+def test_init():
     t1 = Thought()
     t2 = Thought()
     ln = Link(t1, t2, "child")
@@ -13,7 +13,7 @@ def test_link_init():
     assert ln.kind == "child"
 
 
-def test_link_invalid_kind():
+def test_invalid_kind():
     with pytest.raises(Exception) as ex:
         t1 = Thought()
         t2 = Thought()
