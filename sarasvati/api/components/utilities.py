@@ -1,4 +1,4 @@
-from sarasvati.commands import CommandException
+from sarasvati.exceptions import CommandException
 from sarasvati.models import Component
 
 

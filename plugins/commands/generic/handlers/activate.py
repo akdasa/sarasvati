@@ -1,4 +1,5 @@
-from sarasvati.commands import CommandException, CommandResult, ActivateCommand
+from sarasvati.commands import CommandResult, ActivateCommand
+from sarasvati.exceptions import CommandException
 
 
 def activate(api, args):

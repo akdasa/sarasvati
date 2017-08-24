@@ -1,7 +1,7 @@
 import colored
 from colored import stylize
 
-from sarasvati.commands import CommandException
+from sarasvati.exceptions import CommandException
 
 __TITLE_STYLE = colored.fg("green")
 __LINK_STYLE = colored.fg("blue") + colored.attr("underlined")

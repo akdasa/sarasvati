@@ -2,8 +2,8 @@ from abc import abstractmethod, ABCMeta
 from collections import namedtuple
 
 from sarasvati import get_api
-from sarasvati.brain import Thought
 from sarasvati.brain.link import LinkType
+from sarasvati.brain.thought import Thought
 
 
 class Command(metaclass=ABCMeta):
@@ -41,10 +41,6 @@ class Command(metaclass=ABCMeta):
         """Return human readable representation of the command."""
         class_name = self.__class__.__name__
         return ''.join(map(lambda x: x if x.islower() else " " + x, class_name)).strip().replace(" Command", "")
-
-
-class CommandException(Exception):
-    pass
 
 
 class Transaction:

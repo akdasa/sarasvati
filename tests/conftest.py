@@ -1,8 +1,6 @@
 import pytest
 
-from plugins.storage.local import LocalStorage
 from sarasvati.api import SarasvatiApi
-from sarasvati.brain import Brain
 
 
 class TestsSarasvatiApi(SarasvatiApi):
@@ -11,10 +9,6 @@ class TestsSarasvatiApi(SarasvatiApi):
         self.storage = None
         self.open_brain(None)
 
-    def open_brain(self, path):
-        self.storage = LocalStorage(path)
-        self.brain = Brain(self.storage)
-        return self.brain
 
 _d = TestsSarasvatiApi()
 

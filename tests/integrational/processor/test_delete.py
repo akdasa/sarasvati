@@ -1,6 +1,6 @@
 import pytest
 
-from sarasvati.commands import CommandException
+from sarasvati.exceptions import CommandException
 
 
 def test_delete(api):

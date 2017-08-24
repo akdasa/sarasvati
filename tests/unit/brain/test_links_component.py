@@ -1,7 +1,7 @@
 import pytest
 
 from sarasvati.brain import Thought, Link
-from sarasvati.brain.serialization import LinksComponentSerializer
+from sarasvati.serialization import LinksComponentSerializer
 
 
 def test_links_component_add():
@@ -80,7 +80,7 @@ def test_links_component_linked_entity_without_storage_specified():
     sr = LinksComponentSerializer()
     with pytest.raises(Exception) as ex:
         sr.deserialize([{"key": "test2", "kind": "child"}], t1.links)
-    assert ex.value.args[0] == "No 'get_linked' specified to load linked thoughts"
+    assert ex.value.args[0] == "No 'storage' specified to load linked thoughts from"
 
 
 def test_links_component_empty_links_without_storage_specified():

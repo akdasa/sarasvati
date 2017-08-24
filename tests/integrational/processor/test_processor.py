@@ -1,6 +1,6 @@
 import pytest
 
-from sarasvati.commands import CommandException
+from sarasvati.exceptions import CommandException
 
 
 def test_processor_unknown_command(api):

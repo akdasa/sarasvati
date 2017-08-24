@@ -1,5 +1,6 @@
 from abc import abstractmethod, ABCMeta
 
+
 class Composite:
     def __init__(self, components=None):
         """

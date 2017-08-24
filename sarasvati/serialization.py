@@ -1,5 +1,5 @@
 from sarasvati.brain.model import IdentityComponent
-from sarasvati.brain.thought import DefinitionComponent, LinksComponent
+from sarasvati.brain.thought import DefinitionComponent, LinksComponent, Thought
 from sarasvati.models import ComponentSerializer
 
 
@@ -28,8 +28,8 @@ class DefinitionComponentSerializer(ComponentSerializer):
 
 
 class LinksComponentSerializer(ComponentSerializer):
-    def __init__(self, get_linked=None):
-        self.__get_linked = get_linked
+    def __init__(self, storage=None):
+        self.__storage = storage
 
     def serialize(self, component):
         result = []
@@ -45,11 +45,20 @@ class LinksComponentSerializer(ComponentSerializer):
         links_count = len(data)
 
         # get storage to retrieve linked thoughts
-        if not self.__get_linked and links_count > 0:
-            raise Exception("No 'get_linked' specified to load linked thoughts")
+        if self.__storage is None and links_count > 0:
+            raise Exception("No 'storage' specified to load linked thoughts from")
 
         for link in data:  # create lazy Thoughts for each link
             thought = self.__get_linked(link["key"])
             result.add(thought, link["kind"])
 
         return result
+
+    def __get_linked(self, key):
+        cached = self.__storage.cache.get(key)
+        if not cached:
+            thought = Thought("<LAZY>", key=key)
+            self.__storage.cache.add(thought, lazy=True)
+            return thought
+        else:
+            return cached

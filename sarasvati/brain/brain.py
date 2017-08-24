@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from sarasvati import get_api
 from sarasvati.models import Composite, Component
-from sarasvati.commands import CommandException
+from sarasvati.exceptions import CommandException
 
 
 class Brain(Composite):

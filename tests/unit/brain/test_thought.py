@@ -5,8 +5,6 @@ def test_thought_init():
     t = Thought()
     assert t.title is None
     assert t.description is None
-
-    assert t.serialization is not None
     assert t.definition is not None
     assert t.links is not None
 
@@ -43,9 +41,3 @@ def test_thought_string_representation():
     t = Thought(title="title")
     assert str(t) == "<Thought:" + t.key + "/" + t.title + ">"
 
-
-def test_thought_basic_serialization():
-    model = Thought("title", "desc")
-    assert model.serialization.serialize() == {
-        "identity": {"key": model.key},
-        "definition": {"title": "title", "description": "desc"}}

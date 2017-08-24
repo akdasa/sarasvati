@@ -1,9 +1,10 @@
 import logging
+
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from pycopa.exception import PycopaException
 
 from sarasvati import get_api
-from sarasvati.commands import CommandException
+from sarasvati.exceptions import CommandException
 
 
 class ProcessorController(QObject):

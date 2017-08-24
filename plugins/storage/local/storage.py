@@ -1,11 +1,12 @@
 from sarasvati.brain import Thought
+from sarasvati.serializer import Serializer
 from sarasvati.storage import Storage
 from .cache import StorageCache
 from .internal import InternalStorage
 
 
 class LocalStorage(Storage):
-    def __init__(self, path="db.json"):
+    def __init__(self, path):
         """
         Initializes new instance of the LocalStorage class
         :param path: path
@@ -13,6 +14,7 @@ class LocalStorage(Storage):
         super().__init__()
         self.__cache = StorageCache()
         self.__db = InternalStorage(path)
+        self.__serializer = Serializer()
 
     def add(self, thought):
         """
@@ -22,7 +24,7 @@ class LocalStorage(Storage):
         """
         if self.contains(thought.key):
             raise Exception("Thought with same key '{}/{}' already exist".format(thought.key, thought.title))
-        data = thought.serialization.serialize()
+        data = self.__serializer.serialize(thought)
         self.__db.insert(data)
         self.__cache.add(thought)
 
@@ -32,7 +34,7 @@ class LocalStorage(Storage):
         :type thought: Thought
         :param thought: Thought to update 
         """
-        data = thought.serialization.serialize()
+        data = self.__serializer.serialize(thought)
         self.__db.update(thought.key, data)
 
     def remove(self, thought):
@@ -112,10 +114,12 @@ class LocalStorage(Storage):
 
     @property
     def cache(self):
-        """
-        Returns cache
-        """
+        """Returns cache"""
         return self.__cache
+
+    @property
+    def serializer(self):
+        return self.__serializer
 
     def __process_db_entry(self, db_entity):
         try:
@@ -123,7 +127,7 @@ class LocalStorage(Storage):
             cached, lazy = self.__cache.status(key)
             thought = cached or Thought()
             if not cached or lazy:
-                thought.serialization.deserialize(db_entity)
+                self.__serializer.deserialize(thought, db_entity)
             return thought
         except:
             raise Exception("Error while processing DB entry")
@@ -142,5 +146,5 @@ class LocalStorage(Storage):
             db_data = self.__db.search({"field": "identity.key", "operator": "=", "value": linked.key})
             if len(db_data) == 0:
                 raise Exception("No link '{}' found".format(linked.key))
-            linked.serialization.deserialize(db_data[0])
+            self.__serializer.deserialize(linked, db_data[0])
             self.__cache.add(linked, lazy=False)

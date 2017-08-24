@@ -40,6 +40,7 @@ class PluginManager:
     def get(self, category):
         """
         Returns one plugin of category. Raises exception if none or more than one found
+        :rtype: Type[Plugin]
         :param category: Category
         :return: Plugin
         """
@@ -82,6 +83,12 @@ class ApplicationPlugin(Plugin):
 
 class StoragePlugin(Plugin):
     def open(self, path):
+        """
+        Opens storage
+        :type path: str
+        :rtype: Type[Storage]
+        :param path: Path to open storage from
+        """
         pass
 
 

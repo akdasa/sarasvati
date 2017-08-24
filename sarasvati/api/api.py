@@ -1,14 +1,10 @@
 import logging
-import os
 
 from sarasvati import set_api
-from sarasvati.api.commands import SarasvatiCommandsApiComponent
-from sarasvati.api.events import SarasvatiEventsApiComponent
-from sarasvati.api.plugins import SarasvatiPluginsApiComponent
-from sarasvati.api.serialization import SarasvatiSerializationApiComponent
-from sarasvati.api.utilities import SarasvatiUtilitiesApiComponent
+from sarasvati.api.components import *
 from sarasvati.brain import Brain
 from sarasvati.models import Composite
+from sarasvati.serialization import *
 
 
 class SarasvatiApi(Composite):
@@ -24,7 +20,6 @@ class SarasvatiApi(Composite):
 
         self.add_components([
             SarasvatiPluginsApiComponent(),
-            SarasvatiSerializationApiComponent(),
             SarasvatiUtilitiesApiComponent(),
             SarasvatiEventsApiComponent(),
             SarasvatiCommandsApiComponent()
@@ -38,15 +33,6 @@ class SarasvatiApi(Composite):
         :return: Plugins component
         """
         return self.get_component(SarasvatiPluginsApiComponent.COMPONENT_NAME)
-
-    @property
-    def serialization(self):
-        """
-        Returns serialization component
-        :rtype: SarasvatiSerializationApiComponent
-        :return: Serialization component
-        """
-        return self.get_component(SarasvatiSerializationApiComponent.COMPONENT_NAME)
 
     @property
     def utilities(self):
@@ -92,8 +78,12 @@ class SarasvatiApi(Composite):
         :return: Brain
         """
         logging.info("Opening brain from {}".format(path))
-        storage_path = os.path.join(path, "db.json")
         storage_plugin = self.plugins.get("storage")
-        self.storage = storage_plugin.open(storage_path)
+        self.storage = storage_plugin.open(path)
+
+        self.storage.serializer.register("identity", IdentityComponentSerializer())
+        self.storage.serializer.register("definition", DefinitionComponentSerializer())
+        self.storage.serializer.register("links", LinksComponentSerializer(self.storage))
+
         self.brain = Brain(self.storage)
         return self.brain

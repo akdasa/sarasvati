@@ -1,4 +1,5 @@
-from sarasvati.commands import CommandException, CommandResult, SetTitleCommand, SetDescriptionCommand
+from sarasvati.commands import CommandResult, SetTitleCommand, SetDescriptionCommand
+from sarasvati.exceptions import CommandException
 
 
 def update(api, args):

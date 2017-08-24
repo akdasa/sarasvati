@@ -1,34 +1,33 @@
+import pytest
+
 from sarasvati.brain import Thought
 from sarasvati.brain.model import Model
+from sarasvati.serialization import IdentityComponentSerializer, DefinitionComponentSerializer, LinksComponentSerializer
+from sarasvati.serializer import Serializer
 
 
-def test_serialization_component_is_accessible():
-    t = Thought()
-    assert t.serialization is not None
-
-
-def test_serialization():
+def test_serialization(serializer):
     t = Thought("Root", "Description")
-    r = t.serialization.serialize()
+    r = serializer.serialize(t)
     assert r == {
         "identity": {"key": t.key},
         "definition": {"title": "Root", "description": "Description"}}
 
 
-def test_serialization_links():
+def test_serialization_links(serializer):
     t = Thought("Root", "Description")
     a = Thought("Another", "Thought")
     t.links.add(a, "child")
-    r = t.serialization.serialize()
+    r = serializer.serialize(t)
     assert r == {
         "identity": {"key": t.key},
         "definition": {"title": "Root", "description": "Description"},
         "links": [{"key": a.key, "kind": "child"}]}
 
 
-def test_deserialization():
+def test_deserialization(serializer):
     t = Thought()
-    t.serialization.deserialize({
+    serializer.deserialize(t, {
         "identity": {"key": "my-id"},
         "definition": {"title": "root", "description": "some text"}})
     assert t.key == "my-id"
@@ -36,9 +35,9 @@ def test_deserialization():
     assert t.description == "some text"
 
 
-def test_deserialization_create_component():
+def test_deserialization_create_component(serializer):
     m = Model()
-    m.serialization.deserialize({
+    serializer.deserialize(m, {
         "definition": {"title": "component", "description": "should create"}
     })
     assert m.get_component("definition") is not None
@@ -47,9 +46,18 @@ def test_deserialization_create_component():
     assert m.definition.description == "should create"
 
 
-def test_deserialization_component_with_init_params():
+def test_deserialization_component_with_init_params(serializer):
     m = Model()
-    m.serialization.deserialize({
+    serializer.deserialize(m, {
         "links": {}
     })
     assert m.links is not None
+
+
+@pytest.fixture(name="serializer")
+def __serializer():
+    s = Serializer()
+    s.register("identity", IdentityComponentSerializer())
+    s.register("definition", DefinitionComponentSerializer())
+    s.register("links", LinksComponentSerializer(storage=None))
+    return s

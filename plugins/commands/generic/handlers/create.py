@@ -1,5 +1,6 @@
-from sarasvati.commands import CommandException, CommandResult, Transaction, CreateCommand, SetDescriptionCommand, \
+from sarasvati.commands import CommandResult, Transaction, CreateCommand, SetDescriptionCommand, \
     LinkCommand
+from sarasvati.exceptions import CommandException
 
 
 def create(api, args):

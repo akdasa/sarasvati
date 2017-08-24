@@ -3,7 +3,7 @@ from PyQt5.QtQuick import QQuickItem
 from pycopa.exception import PycopaException
 
 from sarasvati import get_api
-from sarasvati.commands import CommandException
+from sarasvati.exceptions import CommandException
 
 
 class QuickCommandToolbox(QQuickItem):

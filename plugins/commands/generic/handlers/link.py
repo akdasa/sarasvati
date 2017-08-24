@@ -1,4 +1,5 @@
-from sarasvati.commands import CommandException, CommandResult, LinkCommand
+from sarasvati.commands import CommandResult, LinkCommand
+from sarasvati.exceptions import CommandException
 
 
 def link(api, args):

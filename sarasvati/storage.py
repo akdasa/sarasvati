@@ -76,3 +76,11 @@ class Storage(metaclass=ABCMeta):
         Returns cache
         """
         pass
+
+    @property
+    @abstractmethod
+    def serializer(self):
+        """
+        Returns cache
+        """
+        pass

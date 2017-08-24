@@ -1,6 +1,6 @@
 from pycopa import parse
 
-from sarasvati.commands import CommandException
+from sarasvati.exceptions import CommandException
 
 
 class Processor:
