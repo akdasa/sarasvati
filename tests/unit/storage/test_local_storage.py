@@ -87,10 +87,13 @@ def test_load_linked_child(storage_one):
 
 def test_cache_linked(storage_one):
     """Far thoughts are marked as lazy and not loaded"""
-    storage_one.get("root")
+    storage_one.get("child")
     assert storage_one.cache.is_cached("root") is True
     assert storage_one.cache.is_cached("child") is True
-    assert storage_one.cache.is_lazy("child") is False
+    assert storage_one.cache.is_cached("child2") is True
+    assert not storage_one.cache.is_lazy("root")
+    assert not storage_one.cache.is_lazy("child")
+    assert not storage_one.cache.is_lazy("child2")
 
 
 def test_cache_linked_lazy(storage_one):
@@ -109,6 +112,17 @@ def test_cache_root_and_far(storage_one):
     assert child2.links.parents[0].links.parents[0] == root
     assert storage_one.cache.is_cached("child")
     assert not storage_one.cache.is_lazy("child")
+
+
+def test_cache_load_all(storage_one):
+    """Load all thoughts one by one. No thoughts should be lazy"""
+    storage_one.get("root")
+    storage_one.get("child")
+    storage_one.get("child2")
+
+    assert not storage_one.cache.is_lazy("root")
+    assert not storage_one.cache.is_lazy("child")
+    assert not storage_one.cache.is_lazy("child2")
 
 
 def test_db_same_key(get_storage):
@@ -133,3 +147,25 @@ def test_db_link_error(get_storage):
     with pytest.raises(SarasvatiException) as ex:
         s.get("123")
     assert ex.value.message == "No link 'wrong_key' found in db"
+
+
+def test_storage_search_contains(storage):
+    thought = Thought("/c CaSe SeNsItIvE TiTlE")
+    storage.add(thought)
+
+    result = storage.search({
+        "field": "definition.title",
+        "operator": "~",
+        "value": "eNsItIv"})
+    assert result[0] == thought
+
+
+def test_storage_search_contains_case(storage):
+    thought = Thought("/c CaSe SeNsItIvE TiTlE")
+    storage.add(thought)
+
+    result = storage.search({
+            "field": "definition.title",
+            "operator": "~~",
+            "value": "sensitive"})
+    assert result[0] == thought

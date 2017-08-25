@@ -12,14 +12,14 @@ def __thought():
 
 @pytest.fixture(name="get_storage")
 def __get_storage():
-    def __get_storage(path):
+    def __impl_get_storage(path):
         storage = LocalStorage(path)
         sr = storage.serializer
         sr.register("identity", IdentityComponentSerializer())
         sr.register("definition", DefinitionComponentSerializer())
         sr.register("links", LinksComponentSerializer(storage))
         return storage
-    return __get_storage
+    return __impl_get_storage
 
 
 @pytest.fixture(name="storage")

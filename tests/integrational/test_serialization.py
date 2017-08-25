@@ -1,9 +1,5 @@
-import pytest
-
 from sarasvati.brain import Thought
 from sarasvati.brain.model import Model
-from sarasvati.serialization import IdentityComponentSerializer, DefinitionComponentSerializer, LinksComponentSerializer
-from sarasvati.serializer import Serializer
 
 
 def test_serialization(serializer):
@@ -52,12 +48,3 @@ def test_deserialization_component_with_init_params(serializer):
         "links": {}
     })
     assert m.links is not None
-
-
-@pytest.fixture(name="serializer")
-def __serializer():
-    s = Serializer()
-    s.register("identity", IdentityComponentSerializer())
-    s.register("definition", DefinitionComponentSerializer())
-    s.register("links", LinksComponentSerializer(storage=None))
-    return s

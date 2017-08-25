@@ -1,5 +1,8 @@
 import pytest
 
+from sarasvati.serialization import IdentityComponentSerializer, DefinitionComponentSerializer, LinksComponentSerializer
+from sarasvati.serializer import Serializer
+
 
 @pytest.fixture(name="storage")
 def __storage(api):
@@ -18,3 +21,22 @@ def __storage(api):
     api.storage.cache.clear()
 
     return api.storage
+
+
+@pytest.fixture(name="serializer")
+def __serializer():
+    s = Serializer()
+    s.register("identity", IdentityComponentSerializer())
+    s.register("definition", DefinitionComponentSerializer())
+    s.register("links", LinksComponentSerializer(storage=None))
+    return s
+
+
+@pytest.fixture(name="script")
+def __script(api):
+    def __impl_execute(cmds, clear_cache=False):
+        for cmd in cmds:
+            api.execute(cmd)
+        if clear_cache:
+            api.storage.cache.clear()
+    return __impl_execute
