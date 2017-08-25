@@ -83,7 +83,7 @@ class PlexLayout:
 
     def __linked(self, thought, kind=None):
         linked = thought.links.by_kind(kind) if kind else thought.links.all
-        linked_on_board = [x for x in linked if self.__s().get_state_by_thought_id(x.key)]
+        linked_on_board = [x for x in linked if self.__s().by_key(x.key)]
         linked_on_board_s = sorted(linked_on_board, key=lambda x: (self.__np.distance(thought, x) or 9999, x.key))
         if linked_on_board_s:
             return linked_on_board[0]

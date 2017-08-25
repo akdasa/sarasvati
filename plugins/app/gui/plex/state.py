@@ -23,7 +23,7 @@ class PlexState:
         """
         return self.state.copy()
 
-    def get_thoughts_by_state(self, state):
+    def by_state(self, state):
         """
         Returns array of thoughts using specified state
         :param state: State
@@ -31,7 +31,7 @@ class PlexState:
         """
         return [e.thought for e in self.state if e.state == state]
 
-    def get_state_by_thought_id(self, tid):
+    def by_key(self, tid):
         # TODO: refactor using next()
         """
         Returns state by specified thought id

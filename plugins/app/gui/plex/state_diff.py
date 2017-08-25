@@ -15,8 +15,8 @@ class PlexStateDiff:
         result = []
 
         for key in PlexStateDiff.__get_keys(new, old):
-            old_state = old.get_state_by_thought_id(key)
-            new_state = new.get_state_by_thought_id(key)
+            old_state = old.by_key(key)
+            new_state = new.by_key(key)
             thought = (old_state if old_state else new_state).thought
 
             if not (old_state and new_state):  # add or remove thought

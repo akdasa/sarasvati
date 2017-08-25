@@ -12,7 +12,7 @@ class PlexLayoutPlacement:
         self.__offset = {"child_x": 0, "parent_x": 0, "jump_y": 0}
         self.__result = {}
         for state in ["root", "parent", "child", "reference"]:
-            thoughts = plex_state.get_thoughts_by_state(state)
+            thoughts = plex_state.by_state(state)
             thoughts = sorted(thoughts, key=lambda t: t.title)
 
             pos = self.__get_pos(state, thoughts)
