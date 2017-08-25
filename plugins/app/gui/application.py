@@ -1,53 +1,22 @@
-import logging
-import sys
-
-from PyQt5.QtCore import QMetaObject, Qt, Q_ARG, QVariant
-from PyQt5.QtGui import QGuiApplication
-from PyQt5.QtQml import QQmlApplicationEngine
-from PyQt5.QtQuick import QQuickItem
-
 from sarasvati.application import SarasvatiApplication
+from .client import Client
 from .controllers import *
 
 
 class SarasvatiGuiApplication(SarasvatiApplication):
-    def __init__(self):
+    def __init__(self, brain_path="db.json"):
         super().__init__()
-        self.__app = None
-        self.__plex = PlexController()
-        self.__processor = ProcessorController()
-        self.__brain = BrainController()
-        self._api.events.message.subscribe(self.__on_message)
+        self._api.open_brain(brain_path)
 
-    # noinspection PyUnresolvedReferences
+        self.plex = PlexController()
+        self.processor = ProcessorController()
+        self.brain = BrainController()
+
+        self.__client = Client(self._api, controllers={
+            "processor": self.processor,
+            "brain": self.brain,
+            "plex": self.plex
+        })
+
     def run(self):
-        self.__app = QGuiApplication(sys.argv)
-        engine = QQmlApplicationEngine()
-        engine.rootContext().setContextProperty("plex", self.__plex)
-        engine.rootContext().setContextProperty("processor", self.__processor)
-        engine.rootContext().setContextProperty("brain", self.__brain)
-
-        engine.load("plugins/app/gui/ui/views/App.qml")  # todo
-        engine.quit.connect(self.__app.quit)
-
-        self.__init_panel(engine)
-
-        sys.exit(self.__app.exec_())
-
-    def __init_panel(self, engine):
-        window = engine.rootObjects()[0]
-        container = window.findChild(QQuickItem, "panel")
-
-        toolboxes = self._api.plugins.find("toolbox")
-        for toolbox in toolboxes:
-            try:
-                toolbox.activate()
-                itm = toolbox.get(engine)
-                QMetaObject.invokeMethod(container, "append", Qt.DirectConnection, Q_ARG(QVariant, itm))
-            except Exception:
-                logging.error("Unable to instantiate {} toolbox".format(toolbox.__class__.__name__))
-                pass
-
-    def __on_message(self, args):
-        message, state = args
-        self.__processor.commandResult.emit(message, state)
+        self.__client.run()

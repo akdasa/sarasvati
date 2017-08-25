@@ -15,6 +15,7 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
 
     def __init__(self):
         super().__init__()
+        self._api.open_brain("db.json")
 
     def run(self):
         query = None
@@ -32,7 +33,7 @@ class SarasvatiConsoleApplication(SarasvatiApplication):
             print(stylize("Syntax error: " + str(e), self.__ERROR_STYLE))
 
     def __prompt_state(self):
-        thought = self._brain.state.active_thought
+        thought = self._api.brain.state.active_thought
         if thought:
             return thought.title + "> "
         return "> "

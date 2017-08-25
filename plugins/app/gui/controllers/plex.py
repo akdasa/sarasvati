@@ -11,6 +11,7 @@ class PlexController(QObject):
         self.__plex = Plex()
         self.__layout = PlexLayout()
         self.__thought = None
+        self.state = None
 
         get_api().events.activated.subscribe(self.__thought_activated)
         get_api().events.thought_changed.subscribe(self.__thought_changed)
@@ -23,6 +24,7 @@ class PlexController(QObject):
     def __change_state(self, thought):
         new_state = self.__plex.activate(thought)
         actions = self.__layout.change_to(new_state, True)
+        self.state = new_state
 
         for cmd in actions:
             v = {"cmd": cmd.name, "key": cmd.thought.key}
