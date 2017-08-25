@@ -1,0 +1,15 @@
+{
+  "_default": {
+    "1": {
+      "identity": {
+        "key": "123"
+      },
+      "links": [
+        {
+          "key": "wrong_key",
+          "kind": "child"
+        }
+      ]
+    }
+  }
+}

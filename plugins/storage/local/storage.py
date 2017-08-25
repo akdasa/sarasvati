@@ -24,7 +24,7 @@ class LocalStorage(Storage):
         :param thought: Thought
         """
         if self.contains(thought.key):
-            raise Exception("Thought with same key '{}/{}' already exist".format(thought.key, thought.title))
+            raise SarasvatiException("Thought with same key '{}/{}' already exist".format(thought.key, thought.title))
         data = self.__serializer.serialize(thought)
         self.__db.insert(data)
         self.__cache.add(thought)
@@ -130,8 +130,8 @@ class LocalStorage(Storage):
             if not cached or lazy:
                 self.__serializer.deserialize(thought, db_entity)
             return thought
-        except:
-            raise SarasvatiException("Error while processing DB entry")
+        except Exception as ex:
+            raise SarasvatiException("Error while processing DB entry: {}".format(ex.args[0]))
 
     def __try_get_from_cache(self, query):
         if query["field"] == "identity.key" and query["operator"] == "=":
@@ -146,6 +146,6 @@ class LocalStorage(Storage):
         for linked in lazy_links:
             db_data = self.__db.search({"field": "identity.key", "operator": "=", "value": linked.key})
             if len(db_data) == 0:
-                raise SarasvatiException("No link '{}' found".format(linked.key))
+                raise SarasvatiException("No link '{}' found in db".format(linked.key))
             self.__serializer.deserialize(linked, db_data[0])
             self.__cache.add(linked, lazy=False)

@@ -1,0 +1,10 @@
+{
+  "_default": {
+    "1": {
+      "identity": {
+        "key": "123"
+      },
+      "wrong_component": {}
+    }
+  }
+}
