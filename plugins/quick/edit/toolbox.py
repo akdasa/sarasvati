@@ -35,6 +35,11 @@ class QuickEditToolbox(QQuickItem):
 
         self.__notify_changing(description, title)
 
+    @pyqtSlot(str, name="create")
+    def __on_create(self, kind):
+        self.__update_thought()
+        self.__api.execute("/c new as:{}".format(kind))
+
     def __notify_changing(self, description, title):
         self.__events.thought_changing.notify({
             "key": self.__thought.key,
@@ -59,6 +64,9 @@ class QuickEditToolbox(QQuickItem):
             self.activated.emit(thought.title, thought.description or "", True)
 
     def __update_thought(self):
+        if self.__update_required is False:
+            return
+
         t = Transaction()
         c1 = SetTitleCommand(self.__thought, self.__title)
         c2 = SetDescriptionCommand(self.__thought, self.__description)

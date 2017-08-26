@@ -9,6 +9,9 @@ QuickEditToolbox {
     id: self
 
     ColumnLayout {
+        anchors.left: parent.left
+        anchors.right: parent.right
+
         // Title
         TextField {
             id: title
@@ -29,12 +32,35 @@ QuickEditToolbox {
 
             onTextChanged: Controller.update()
         }
+
+        // Create thought buttons
+        RowLayout {
+            id: buttonsRow
+            anchors.left: parent.left
+            anchors.right: parent.right
+            enabled: false
+
+            Button {
+                text: "Child"
+                Layout.fillWidth: true
+                onClicked: Controller.create("child")
+            }
+            Button {
+                text: "Parent"
+                onClicked: Controller.create("parent")
+            }
+            Button {
+                text: "Reference"
+                onClicked: Controller.create("reference")
+            }
+        }
     }
 
     Connections {
         onActivated: {
             title.enabled = enabled
             description.enabled = enabled
+            buttonsRow.enabled = enabled
 
             title.text = thought_title
             description.text = thought_description

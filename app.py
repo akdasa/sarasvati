@@ -25,8 +25,11 @@ except Exception as ex:
     report.show(ex)
 
 # used by py2app to find all dependencies
-# from plugins.commands import *
-# from plugins.gui import *
-# from plugins.processor import *
-# from plugins.shell_commands import *
-# from plugins.storage import *
+from plugins.app.gui import *
+from plugins.app.shell import *
+from plugins.commands.generic import *
+from plugins.commands.shell import *
+from plugins.processor.generic import *
+from plugins.quick.command import *
+from plugins.quick.edit import *
+from plugins.storage.local import *
