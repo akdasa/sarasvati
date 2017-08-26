@@ -10,7 +10,7 @@ Sarasvati is a personal knowledge database. It starts with a single Thought and 
 [![showcase](http://i.imgur.com/6AwuUIA.png)](https://www.youtube.com/watch?v=U1goORYJ6SA "Sarasvati showcase #1")
 
 Console UI for geeks:
-[![asciicast](http://i.imgur.com/RD7g3sZ.png)](https://asciinema.org/a/124554)
+[![asciicast](http://i.imgur.com/RD7g3sZ.png)](https://asciinema.org/a/124554?speed=2)
 
 # Build
 Builds are tested on mac only
