@@ -7,8 +7,8 @@ class PlexLayoutPlacement:
     def __init__(self):
         self.__offset = {"child_x": 0, "parent_x": 0, "jump_y": 0}
         self.__result = {}
-        self.__width = 200
-        self.__height = 200
+        self.__width = 275
+        self.__height = 275
         self.__step = 50
 
     def set_size(self, width, height):
@@ -57,7 +57,7 @@ class PlexLayoutPlacement:
                     result[v[0].key] = [0, y]
                 else:
                     for idx, t in enumerate(v):
-                        width = self.__width *.75
+                        width = self.__width/1.375
                         x = (width / (thoughts_to_place-1)) * idx
                         result[t.key] = [x - width / 2, y]
 
