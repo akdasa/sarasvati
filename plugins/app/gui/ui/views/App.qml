@@ -35,6 +35,10 @@ ApplicationWindow {
         }
     }
 
+    Component.onCompleted: {
+        plex.on_resize(p.width, p.height)
+    }
+
     onWidthChanged: {
         plex.on_resize(p.width, p.height)
     }
