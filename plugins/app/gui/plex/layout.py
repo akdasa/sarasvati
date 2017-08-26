@@ -16,6 +16,10 @@ class PlexLayout:
         self.__pp = PlexLayoutPlacement()  # thought placements for previous state
         self.__state_idx = 0
 
+    def set_size(self, width, height):
+        self.__np.set_size(width, height)
+        self.__pp.set_size(width, height)
+
     def change_to(self, state, full=False):
         """
         Changes plex layout to new one

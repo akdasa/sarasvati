@@ -7,6 +7,13 @@ class PlexLayoutPlacement:
     def __init__(self):
         self.__offset = {"child_x": 0, "parent_x": 0, "jump_y": 0}
         self.__result = {}
+        self.__width = 200
+        self.__height = 200
+        self.__step = 50
+
+    def set_size(self, width, height):
+        self.__width = width
+        self.__height = height
 
     def place(self, plex_state: PlexState):
         self.__offset = {"child_x": 0, "parent_x": 0, "jump_y": 0}
@@ -32,26 +39,27 @@ class PlexLayoutPlacement:
         if pos1 and pos2:
             return sqrt(pow(pos2[0]-pos1[0], 2) + pow(pos2[1]-pos1[1], 2))
 
-    @staticmethod
-    def __get_pos(state, thoughts):
+    def __get_pos(self, state, thoughts):
         if state == "root" and len(thoughts) > 0:
             return {thoughts[0].key: [0, 0]}
 
         result = {}
         if state in ["child", "parent"]:
-            y = -100 if state == "parent" else 100
+            y = -self.__height/2.75 if state == "parent" else self.__height/2.75
             count = min(3, len(thoughts))
             while count > 0:
                 v = []
                 for x in range(0, count):
                     v.append(thoughts.pop(0))
+                thoughts_to_place = len(v)
 
-                if len(v) == 1:
+                if thoughts_to_place == 1:
                     result[v[0].key] = [0, y]
                 else:
                     for idx, t in enumerate(v):
-                        x = (200 / (len(v)-1))*idx
-                        result[t.key] = [x-100, y]
+                        width = self.__width *.75
+                        x = (width / (thoughts_to_place-1)) * idx
+                        result[t.key] = [x - width / 2, y]
 
                 y += 50
                 count = min(3, len(thoughts))
@@ -59,7 +67,7 @@ class PlexLayoutPlacement:
         if state in ["reference"]:
             y = 0
             for rt in thoughts:
-                result[rt.key] = [-100, y]
+                result[rt.key] = [-self.__width/2.75, y]
                 y -= 50
 
         return result

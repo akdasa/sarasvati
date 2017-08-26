@@ -15,6 +15,7 @@ ApplicationWindow {
         orientation: Qt.Horizontal
 
         Plex {
+            id: p
             Layout.fillWidth: true
         }
 
@@ -32,5 +33,12 @@ ApplicationWindow {
             var link = component.createObject(root, {"message": message, "x": 10, "y": 10})
             //console.log("Error loading component:", component.errorString());
         }
+    }
+
+    onWidthChanged: {
+        plex.on_resize(p.width, p.height)
+    }
+    onHeightChanged: {
+        plex.on_resize(p.width, p.height)
     }
 }
