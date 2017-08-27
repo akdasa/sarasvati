@@ -1,6 +1,6 @@
 
 def test_activate_brain(plex, thoughts):
-    state = plex.activate(thoughts["Brain"])
+    state = plex.activate(thoughts["Brain"]).state
     assert _s(state.by_state("root")) == _s([thoughts["Brain"]])
     assert _s(state.by_state("child")) == _s([thoughts["Tasks"], thoughts["Recipes"]])
     assert _s(state.by_state("parent")) == _s([])
@@ -9,7 +9,7 @@ def test_activate_brain(plex, thoughts):
 
 
 def test_activate_tasks(plex, thoughts):
-    state = plex.activate(thoughts["Tasks"])
+    state = plex.activate(thoughts["Tasks"]).state
     assert _s(state.by_state("root")) == _s([thoughts["Tasks"]])
     assert _s(state.by_state("child")) == _s([thoughts["Task1"], thoughts["Task2"]])
     assert _s(state.by_state("parent")) == _s([thoughts["Brain"]])
@@ -18,7 +18,7 @@ def test_activate_tasks(plex, thoughts):
 
 
 def test_activate_task1(plex, thoughts):
-    state = plex.activate(thoughts["Task1"])
+    state = plex.activate(thoughts["Task1"]).state
     assert _s(state.by_state("root")) == _s([thoughts["Task1"]])
     assert _s(state.by_state("child")) == _s([])
     assert _s(state.by_state("parent")) == _s([thoughts["Tasks"]])
@@ -27,7 +27,7 @@ def test_activate_task1(plex, thoughts):
 
 
 def test_activate_task2(plex, thoughts):
-    state = plex.activate(thoughts["Task2"])
+    state = plex.activate(thoughts["Task2"]).state
     assert _s(state.by_state("root")) == _s([thoughts["Task2"]])
     assert _s(state.by_state("child")) == _s([])
     assert _s(state.by_state("parent")) == _s([thoughts["Tasks"], thoughts["Party"]])
@@ -36,7 +36,7 @@ def test_activate_task2(plex, thoughts):
 
 
 def test_activate_recipe1(plex, thoughts):
-    state = plex.activate(thoughts["Recipe1"])
+    state = plex.activate(thoughts["Recipe1"]).state
     assert _s(state.by_state("root")) == _s([thoughts["Recipe1"]])
     assert _s(state.by_state("child")) == _s([])
     assert _s(state.by_state("parent")) == _s([thoughts["Recipes"]])
@@ -45,7 +45,7 @@ def test_activate_recipe1(plex, thoughts):
 
 
 def test_activate_recipe2(plex, thoughts):
-    state = plex.activate(thoughts["Recipe2"])
+    state = plex.activate(thoughts["Recipe2"]).state
     assert _s(state.by_state("root")) == _s([thoughts["Recipe2"]])
     assert _s(state.by_state("child")) == _s([])
     assert _s(state.by_state("parent")) == _s([thoughts["Recipes"]])
@@ -54,7 +54,7 @@ def test_activate_recipe2(plex, thoughts):
 
 
 def test_activate_party(plex, thoughts):
-    state = plex.activate(thoughts["Party"])
+    state = plex.activate(thoughts["Party"]).state
     assert _s(state.by_state("root")) == _s([thoughts["Party"]])
     assert _s(state.by_state("child")) == _s([thoughts["Task2"], thoughts["Guests"]])
     assert _s(state.by_state("parent")) == _s([])

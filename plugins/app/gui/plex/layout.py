@@ -3,7 +3,7 @@ from .layout_action import PlexLayoutAction
 from .layout_placement import PlexLayoutPlacement
 from .placement_options import PlacementOptions
 from .placement_result import PlacementResult
-from .plex import PlexState
+from .state import PlexState
 from .state_diff import PlexStateDiff
 
 

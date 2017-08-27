@@ -1,7 +1,8 @@
 from PyQt5.QtCore import QObject, pyqtSignal, QVariant, pyqtSlot
 
 from sarasvati import get_api
-from ..plex import Plex, PlexLayout
+from sarasvati.event import Event
+from ..plex import Plex
 
 
 class PlexController(QObject):
@@ -9,24 +10,27 @@ class PlexController(QObject):
 
     def __init__(self):
         QObject.__init__(self)
-
         self.__plex = Plex()
-        self.__layout = PlexLayout()
-        self.__thought = None
-        self.state = None
 
-        get_api().events.activated.subscribe(self.__on_activated)
-        get_api().events.changing.subscribe(self.__on_changing)
-        get_api().events.changed.subscribe(self.__on_changed)
-        get_api().events.created.subscribe(self.__on_brain_changed)
-        get_api().events.deleted.subscribe(self.__on_brain_changed)
+        self.changed = Event()
+
+        # subscribe for events
+        e = get_api().events
+        e.activated.subscribe(self.__on_activated)
+        e.changing.subscribe(self.__on_changing)
+        e.changed.subscribe(self.__on_changed)
+        e.created.subscribe(self.__on_brain_changed)
+        e.deleted.subscribe(self.__on_brain_changed)
+
+    @property
+    def plex(self):
+        return self.__plex
 
     def __update(self, thought):
         if thought is None:
             return
-        new_state = self.__plex.activate(thought)
-        actions = self.__layout.change_to(new_state, True)
-        self.state = new_state
+        state, actions = self.__plex.activate(thought, True)
+        self.changed.notify(state, actions)
 
         for cmd in actions:
             v = {"cmd": cmd.name, "key": cmd.thought.key}
@@ -48,18 +52,17 @@ class PlexController(QObject):
     @pyqtSlot(int, int, name="on_resize")
     def __on_resize(self, width, height):
         """On application window resize"""
-        self.__layout.set_size(width, height)
-        self.__update(self.__thought)
+        self.__plex.layout.set_size(width, height)
+        self.__update(self.__plex.thought)
 
     def __on_activated(self, thought):
         """On thought activated"""
-        self.__thought = thought
         self.__update(thought)
 
     def __on_changed(self, thought):
         """On thought changing"""
         self.__command.emit({"cmd": "change", "key": thought.key, "title": thought.title})
-        self.__update(self.__thought)
+        self.__update(self.__plex.thought)
 
     def __on_changing(self, thought, data):
         """On thought changing"""
@@ -70,4 +73,4 @@ class PlexController(QObject):
 
     def __on_brain_changed(self, thought):
         """On brain changed"""
-        self.__update(self.__thought)
+        self.__update(self.__plex.thought)
