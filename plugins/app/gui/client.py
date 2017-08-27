@@ -25,11 +25,17 @@ class Client:
         engine.load("plugins/app/gui/ui/views/App.qml")  # todo
         engine.quit.connect(self.__app.quit)
 
-        self.__init_panel(engine)
-
         self.__api.events.message.subscribe(self.__on_message)
+        self.__init_panel(engine)
+        self.__create_root_thought()
 
         sys.exit(self.__app.exec_())
+
+    def __create_root_thought(self):
+        # Create root thought
+        if not self.__api.storage.contains("Root"):
+            self.__api.execute("/c Root key:Root")
+        self.__api.execute("/a key:Root")
 
     def __init_panel(self, engine):
         window = engine.rootObjects()[0]
