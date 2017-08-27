@@ -103,3 +103,16 @@ def test_create_wrong_as(api):
     with pytest.raises(CommandException) as exc:
         api.execute("/c title as:wrong")
     assert exc.value.args[0] == "Wrong link type in 'as' argument"
+
+
+def test_create_key(api):
+    api.execute("/c title key:new")
+    found = api.execute("/a key:new").value
+    assert found.title == "title"
+
+
+def test_create_same_key(api):
+    api.execute("/c title key:new")
+    with pytest.raises(CommandException) as ex:
+        api.execute("/c title key:new")
+    assert ex.value.args[0] == "Thought with same key 'new/title' already exist"
