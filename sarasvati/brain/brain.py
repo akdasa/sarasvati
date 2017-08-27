@@ -279,12 +279,12 @@ class BrainStorageComponent(Component):
 
     def add(self, thought):
         self.__storage.add(thought)
-        get_api().events.thought_created.notify(thought)  # todo
+        get_api().events.created.notify(thought)  # todo
 
     def update(self, thought):
         self.__storage.update(thought)
-        get_api().events.thought_changed.notify(thought)  # todo
+        get_api().events.changed.notify(thought)  # todo
 
     def remove(self, thought):
         self.__storage.remove(thought)
-        get_api().events.thought_deleted.notify(thought)  # todo
+        get_api().events.deleted.notify(thought)  # todo

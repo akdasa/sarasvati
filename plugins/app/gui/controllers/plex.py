@@ -1,10 +1,12 @@
 from PyQt5.QtCore import QObject, pyqtSignal, QVariant, pyqtSlot
 
-from ..plex import Plex, PlexLayout
 from sarasvati import get_api
+from ..plex import Plex, PlexLayout
 
 
 class PlexController(QObject):
+    __command = pyqtSignal(QVariant, arguments=['command'], name="command")
+
     def __init__(self):
         QObject.__init__(self)
 
@@ -13,22 +15,15 @@ class PlexController(QObject):
         self.__thought = None
         self.state = None
 
-        get_api().events.activated.subscribe(self.__thought_activated)
-        get_api().events.thought_changed.subscribe(self.__thought_changed)
-        get_api().events.thought_deleted.subscribe(self.__brain_changed)
-        get_api().events.thought_created.subscribe(self.__brain_changed)
-        get_api().events.thought_changing.subscribe(self.__thought_changing)
-        
-    command = pyqtSignal(QVariant, arguments=['command'])
+        get_api().events.activated.subscribe(self.__on_activated)
+        get_api().events.changing.subscribe(self.__on_changing)
+        get_api().events.changed.subscribe(self.__on_changed)
+        get_api().events.created.subscribe(self.__on_brain_changed)
+        get_api().events.deleted.subscribe(self.__on_brain_changed)
 
-    @pyqtSlot(int, int, name="on_resize")
-    def __on_resize(self, width, height):
-        print(width, height)
-        self.__layout.set_size(width, height)
-        if self.__thought:
-            self.__change_state(self.__thought)
-
-    def __change_state(self, thought):
+    def __update(self, thought):
+        if thought is None:
+            return
         new_state = self.__plex.activate(thought)
         actions = self.__layout.change_to(new_state, True)
         self.state = new_state
@@ -43,25 +38,36 @@ class PlexController(QObject):
             if cmd.name == "move":  # or cmd.name == "set_pos_to":
                 v["x"] = cmd.data[0]
                 v["y"] = cmd.data[1]
-            self.command.emit(QVariant(v))
+            self.__command.emit(QVariant(v))
 
         if thought:
             for links in thought.links.all:
-                self.command.emit({"cmd": "link", "from": thought.key, "to": links.key,
-                                   "ft": thought.title, "tt": links.title})
+                self.__command.emit({"cmd": "link", "from": thought.key, "to": links.key,
+                                     "ft": thought.title, "tt": links.title})
 
-    def __thought_activated(self, thought):
-        self.__change_state(thought)
+    @pyqtSlot(int, int, name="on_resize")
+    def __on_resize(self, width, height):
+        """On application window resize"""
+        self.__layout.set_size(width, height)
+        self.__update(self.__thought)
+
+    def __on_activated(self, thought):
+        """On thought activated"""
         self.__thought = thought
+        self.__update(thought)
 
-    def __thought_changed(self, thought):
-        self.command.emit({"cmd": "change", "key": thought.key, "title": thought.title})
-        self.__change_state(self.__thought)
+    def __on_changed(self, thought):
+        """On thought changing"""
+        self.__command.emit({"cmd": "change", "key": thought.key, "title": thought.title})
+        self.__update(self.__thought)
 
-    def __thought_changing(self, data):
-        emit_data = data.copy()
-        emit_data["cmd"] = "change"
-        self.command.emit(emit_data)
+    def __on_changing(self, thought, data):
+        """On thought changing"""
+        self.command.emit({
+            "cmd": "change", "key": thought.key,
+            "title": data["title"]
+        })
 
-    def __brain_changed(self, thought):
-        self.__change_state(self.__thought)
+    def __on_brain_changed(self, thought):
+        """On brain changed"""
+        self.__update(self.__thought)

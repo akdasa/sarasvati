@@ -10,8 +10,9 @@ class SarasvatiEventsApiComponent(Component):
         self.activating = Event()
         self.activated = Event()
 
-        self.thought_changing = Event()
-        self.thought_changed = Event()
-        self.thought_deleted = Event()
-        self.thought_created = Event()
+        self.changing = Event()
+        self.changed = Event()
+        self.deleted = Event()
+        self.created = Event()
+
         self.message = Event()

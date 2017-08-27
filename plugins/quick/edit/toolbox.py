@@ -21,7 +21,7 @@ class QuickEditToolbox(QQuickItem):
         self.__events = self.__api.events
         self.__events.activating.subscribe(self.__before_activated)
         self.__events.activated.subscribe(self.__activated)
-        self.__events.thought_changed.subscribe(self.__on_thought_changed)
+        self.__events.changed.subscribe(self.__on_thought_changed)
 
     @pyqtSlot(str, str, name="changed")
     def __on_input_fields_changed(self, title, description):
@@ -41,8 +41,7 @@ class QuickEditToolbox(QQuickItem):
         self.__api.execute("/c new as:{}".format(kind))
 
     def __notify_changing(self, description, title):
-        self.__events.thought_changing.notify({
-            "key": self.__thought.key,
+        self.__events.changing.notify(self.__thought, {
             "title": title,
             "description": description})
 

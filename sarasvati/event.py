@@ -28,10 +28,10 @@ class Event:
         else:
             raise SarasvatiException("Not subscribed on specified handler")
 
-    def notify(self, args):
+    def notify(self, *args):
         """
         Notify subscribers
         :param args: Event arguments
         """
         for handler in self.handlers:
-            handler(args)
+            handler(*args)
