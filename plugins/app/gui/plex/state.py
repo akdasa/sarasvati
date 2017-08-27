@@ -6,7 +6,7 @@ class PlexState:
         """
         Initializes new instance of the PlexState class
         """
-        self.state = []
+        self.__state = []
 
     def add(self, thought, state):
         """
@@ -14,14 +14,14 @@ class PlexState:
         :param thought: Thought
         :param state: State
         """
-        self.state.append(PlexThoughtState(thought, state))
+        self.__state.append(PlexThoughtState(thought, state))
 
     def get_state(self):
         """
         Returns state
         :return: Array of PlexThoughtState
         """
-        return self.state.copy()
+        return self.__state.copy()
 
     def by_state(self, state):
         """
@@ -29,15 +29,15 @@ class PlexState:
         :param state: State
         :return: Array of thoughts
         """
-        return [e.thought for e in self.state if e.state == state]
+        return [e.thought for e in self.__state if e.state == state]
 
-    def by_key(self, tid):
+    def by_key(self, key):
         # TODO: refactor using next()
         """
-        Returns state by specified thought id
-        :param tid: Thought id
+        Returns state by specified thought key
+        :param key: Thought key
         :return: PlexThoughtState
         """
-        for ptp in self.state:
-            if ptp.thought.key == tid:
+        for ptp in self.__state:
+            if ptp.thought.key == key:
                 return ptp
