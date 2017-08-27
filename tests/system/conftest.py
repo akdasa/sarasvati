@@ -13,3 +13,11 @@ def empty_brain_path():
     import tempfile
     with tempfile.NamedTemporaryFile(dir='/tmp', delete=False) as file:
         return file.name
+
+
+@pytest.fixture
+def script(app):
+    def __script(lines):
+        for line in lines:
+            app.api.execute(line)
+    return __script

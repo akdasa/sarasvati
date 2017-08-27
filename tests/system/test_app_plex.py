@@ -18,3 +18,14 @@ def test_create_and_activate_2(api, app):
 
     assert plex_state.by_state("root") == [root]
     assert plex_state.by_state("child") == [child]
+
+
+def test_create_and_delete(app, script):
+    """Deleted node not present in plex"""
+    script([
+        "/c Root",
+        "/c Child parent:Root",
+        "/a Root",
+        "/d Child"])
+
+    assert app.plex.state.by_state("child") == []
