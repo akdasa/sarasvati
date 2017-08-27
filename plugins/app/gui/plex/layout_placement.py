@@ -1,66 +1,64 @@
-from math import sqrt, pow
-
-from .state import PlexState
+from .placement_options import PlacementOptions
+from .placement_result import PlacementResult
 
 
 class PlexLayoutPlacement:
     def __init__(self):
-        self.__offset = {"child_x": 0, "parent_x": 0, "jump_y": 0}
-        self.__result = {}
+        """Initializes new instance of the PlexLayoutPlacement class."""
+        self.__kinds = ["root", "parent", "child", "reference"]
+        self.__default_options = PlacementOptions()
 
-    def place(self, plex_state: PlexState):
-        self.__offset = {"child_x": 0, "parent_x": 0, "jump_y": 0}
-        self.__result = {}
-        for state in ["root", "parent", "child", "reference"]:
-            thoughts = plex_state.by_state(state)
+    def place(self, state, options=None):
+        """
+        Returns positions for thoughts from specified state.
+        :rtype: plugins.app.gui.plex.placement_result.PlacementResult
+        :type options: PlacementOptions
+        :type state: PlexState
+        :param state: State to calculate positions for
+        :param options: Options
+        :return: Placement result
+        """
+        options = options or self.__default_options
+        result = {}
+        for kind in self.__kinds:
+            thoughts = state.by_state(kind)
             thoughts = sorted(thoughts, key=lambda t: t.title)
+            position = self.__position(kind, thoughts, options)
+            result.update(position)
 
-            pos = self.__get_pos(state, thoughts)
-            self.__result.update(pos)
-
-        return self.__result
-
-    def get_pos(self, thought):
-        if not thought:
-            raise ValueError("Thought is not specified to get position for")
-        return self.__result.get(thought.key, None)
-
-    def distance(self, t1, t2):
-        pos1 = self.get_pos(t1)
-        pos2 = self.get_pos(t2)
-
-        if pos1 and pos2:
-            return sqrt(pow(pos2[0]-pos1[0], 2) + pow(pos2[1]-pos1[1], 2))
+        return PlacementResult(result)
 
     @staticmethod
-    def __get_pos(state, thoughts):
+    def __position(state, thoughts, options):
         if state == "root" and len(thoughts) > 0:
             return {thoughts[0].key: [0, 0]}
 
         result = {}
         if state in ["child", "parent"]:
-            y = -100 if state == "parent" else 100
+            y = -options.height/2.75 if state == "parent" else options.height/2.75
             count = min(3, len(thoughts))
             while count > 0:
                 v = []
                 for x in range(0, count):
                     v.append(thoughts.pop(0))
+                thoughts_to_place = len(v)
 
-                if len(v) == 1:
+                if thoughts_to_place == 1:
                     result[v[0].key] = [0, y]
                 else:
                     for idx, t in enumerate(v):
-                        x = (200 / (len(v)-1))*idx
-                        result[t.key] = [x-100, y]
+                        width = options.width/1.375
+                        x = (width / (thoughts_to_place-1)) * idx
+                        result[t.key] = [x - width / 2, y]
 
-                y += 50
+                y += options.step
                 count = min(3, len(thoughts))
 
         if state in ["reference"]:
             y = 0
             for rt in thoughts:
-                result[rt.key] = [-100, y]
-                y -= 50
+                result[rt.key] = [-options.width/2.75, y]
+                y -= options.step
 
         return result
 

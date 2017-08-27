@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QObject, pyqtSignal, QVariant
+from PyQt5.QtCore import QObject, pyqtSignal, QVariant, pyqtSlot
 
 from ..plex import Plex, PlexLayout
 from sarasvati import get_api
@@ -20,6 +20,13 @@ class PlexController(QObject):
         get_api().events.thought_changing.subscribe(self.__thought_changing)
         
     command = pyqtSignal(QVariant, arguments=['command'])
+
+    @pyqtSlot(int, int, name="on_resize")
+    def __on_resize(self, width, height):
+        print(width, height)
+        self.__layout.set_size(width, height)
+        if self.__thought:
+            self.__change_state(self.__thought)
 
     def __change_state(self, thought):
         new_state = self.__plex.activate(thought)

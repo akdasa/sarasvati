@@ -1,6 +1,8 @@
 from sarasvati.brain import LinkType
 from .layout_action import PlexLayoutAction
 from .layout_placement import PlexLayoutPlacement
+from .placement_options import PlacementOptions
+from .placement_result import PlacementResult
 from .plex import PlexState
 from .state_diff import PlexStateDiff
 
@@ -12,9 +14,15 @@ class PlexLayout:
         self.__prev = PlexState()
         self.__state = PlexState()
         self.__differ = PlexStateDiff()
-        self.__np = PlexLayoutPlacement()  # thought placements for new state
-        self.__pp = PlexLayoutPlacement()  # thought placements for previous state
+        self.__placer = PlexLayoutPlacement()
+        self.__placer_options = PlacementOptions()
+        self.__np = PlacementResult({})  # thought placements for new state
+        self.__pp = PlacementResult({})  # thought placements for previous state
         self.__state_idx = 0
+
+    def set_size(self, width, height):
+        self.__placer_options.width = width
+        self.__placer_options.height = height
 
     def change_to(self, state, full=False):
         """
@@ -28,8 +36,8 @@ class PlexLayout:
         self.__state = state
 
         # calculates placements for current and previous states
-        self.__pp.place(self.__prev)
-        self.__np.place(state)
+        self.__pp = self.__placer.place(self.__prev, self.__placer_options)
+        self.__np = self.__placer.place(state, self.__placer_options)
 
         # calculate difference between states
         diffs = self.__differ.diff(self.__prev, state, full)
@@ -51,14 +59,14 @@ class PlexLayout:
             opposite = LinkType.opposite(diff.new_state)
             linked = self.__linked(diff.thought, opposite)
             if linked:
-                pos = self.__p().get_pos(linked)
+                pos = self.__p().position(linked)
                 data = {"pos": pos, "key": linked.key}
 
         result.append(PlexLayoutAction(diff.thought, "add", data))
         self.__move(diff.thought, result, not_to=data["pos"])
 
     def __change(self, diff, result):
-        pos = self.__np.get_pos(diff.thought)
+        pos = self.__np.position(diff.thought)
         result.append(PlexLayoutAction(diff.thought, "move", pos))
 
     def __remove(self, diff, result):
@@ -67,7 +75,7 @@ class PlexLayout:
         if diff.old_state != "root":
             opposite = LinkType.opposite(diff.old_state)
             linked = self.__linked(diff.thought, opposite)
-            new_pos = self.__np.get_pos(linked) if linked else None
+            new_pos = self.__np.position(linked) if linked else None
             if new_pos:
                 result.append(PlexLayoutAction(diff.thought, "move", new_pos))
             else:
@@ -77,7 +85,7 @@ class PlexLayout:
         self.__move(diff.thought, result)
 
     def __move(self, thought, result, not_to=None):
-        pos = self.__np.get_pos(thought)
+        pos = self.__np.position(thought)
         if pos and pos != not_to:
             result.append(PlexLayoutAction(thought, "move", pos))
 
